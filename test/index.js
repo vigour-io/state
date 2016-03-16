@@ -5,13 +5,25 @@ var subscribe = require('../subscribe')
 
 // module.exports = function (target, subscription, handler, tree) {
 test('simple subscription', function (t) {
-  var state = s({ field: true })
+  var state = s({ field: true, something: false })
   // support functions in subscriptiosn
-  var tree = subscribe(state, { field: true }, function () {
-    console.log('hey!', arguments)
-  })
+  var tree = subscribe(
+    state,
+    { field: true },
+    function (type, event) {
+      console.log('update:', this, 'type:', type)
+    }
+  )
 
-  console.log(tree)
+  console.log(state, tree)
 
-  // state.field.val = 'yuzi'
+  state.field.val = 'yuzi'
+
+  console.log(state, tree)
+
+  state.field.remove()
+
+  console.log(state, tree)
+
+  t.end()
 })
