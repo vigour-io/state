@@ -1,2 +1,3 @@
 # state
-Change and state management
+Change and state management on obervables
+Inspired by vritual-dom like diffing algorithms, build for performance
