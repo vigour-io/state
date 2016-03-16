@@ -24,7 +24,7 @@
     "url": "https://github.com/vigour-io/state/issues"
   },
   "dependencies": {
-    "vigour-observable": "^2.0.0",
+    "vigour-observable": "^1.0.0",
     "vigour-util": "^1.0.0"
   },
   "devDependencies": {
