@@ -5,11 +5,20 @@ var subscribe = require('../subscribe')
 
 // module.exports = function (target, subscription, handler, tree) {
 test('simple subscription', function (t) {
-  var state = s({ field: true, something: false })
+  var state = s({
+    field: true,
+    something: false
+  })
   // support functions in subscriptiosn
   var tree = subscribe(
     state,
-    { field: true },
+    {
+      field: true,
+      other: {
+        val: true,
+        yuzi: true
+      }
+    },
     function (type, event) {
       console.log('update:', this, 'type:', type)
     }
