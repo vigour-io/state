@@ -14,6 +14,7 @@ test('simple subscription', function (t) {
     state,
     {
       field: true,
+      // idea is if you pass an observable here it will just use the subs map from that observable
       other: {
         val: true,
         yuzi: true
@@ -51,6 +52,15 @@ test('simple subscription', function (t) {
   })
 
   console.log(state, tree)
+
+  console.log('\n\n\n---------------------')
+
+  state.set({
+    field: 'monkey ballz',
+    other: {
+      yuzi: 'yuzi extreme!'
+    }
+  })
 
   t.end()
 })
