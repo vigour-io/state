@@ -9,14 +9,14 @@ test('simple subscription', function (t) {
     field: true,
     something: false
   })
-  // support functions in subscriptiosn
+  // support functions in subs
+  // idea is if you pass an observable here it will just use the subs map from that observable
   var tree = subscribe(
     state,
     {
-      // idea is if you pass an observable here it will just use the subs map from that observable
       field: true,
       other: {
-        val: true,
+        // val: true, -- this is so nice gives any nested update -- may need to limit to value?
         yuzi: true,
         fields: {
           '*': { title: true }
@@ -28,12 +28,19 @@ test('simple subscription', function (t) {
     }
   )
 
+  console.log('#set coll')
+
   state.set({
     other: {
       fields: [{ title: 'james' }, { title: 'yuz' }]
     }
   })
 
+  console.log('#set field')
+
+  state.other.fields[0].title.set('smurts')
+
+  console.log('#tree')
   console.log(JSON.stringify(tree, false, 2))
 
   t.end()
