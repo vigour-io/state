@@ -7,7 +7,7 @@
   },
   "main": "lib/index.js",
   "scripts": {
-    "test": "node test",
+    "test": "node test | tap-difflet"
   },
   "repository": {
     "type": "git",
@@ -23,11 +23,10 @@
   "bugs": {
     "url": "https://github.com/vigour-io/hub/issues"
   },
-  "directories": {
-    "lib": "./lib"
+  "dependencies": {
+    "vigour-observable": "^2.0.0"
   },
   "devDependencies": {
-    "vigour-observable": "^2.0.0",
     "tape": "4.4.0"
   },
   "homepage": "https://github.com/vigour-io/state#readme"
