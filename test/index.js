@@ -29,7 +29,6 @@ test('simple subscription', function (t) {
   )
 
   console.log('#set coll')
-
   state.set({
     other: {
       fields: [{ title: 'james' }, { title: 'yuz' }]
@@ -37,8 +36,10 @@ test('simple subscription', function (t) {
   })
 
   console.log('#set field')
-
   state.other.fields[0].title.set('smurts')
+
+  console.log('#remove field')
+  state.other.fields[0].remove()
 
   console.log('#tree')
   console.log(JSON.stringify(tree, false, 2))
