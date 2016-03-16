@@ -34,5 +34,23 @@ test('simple subscription', function (t) {
 
   console.log(state, tree)
 
+  state.set({
+    other: 'hello'
+  })
+
+  console.log(state, tree)
+
+  state.set({
+    other: { x: true, yuzi: 'its yuzi!' }
+  })
+
+  console.log(state, tree)
+
+  state.set({
+    field: 'funny bussiness'
+  })
+
+  console.log(state, tree)
+
   t.end()
 })
