@@ -13,11 +13,14 @@ test('simple subscription', function (t) {
   var tree = subscribe(
     state,
     {
-      field: true,
       // idea is if you pass an observable here it will just use the subs map from that observable
+      field: true,
       other: {
         val: true,
-        yuzi: true
+        yuzi: true,
+        fields: {
+          '*': { title: true }
+        }
       }
     },
     function (type, event) {
@@ -25,42 +28,13 @@ test('simple subscription', function (t) {
     }
   )
 
-  console.log(state, tree)
-
-  state.field.val = 'yuzi'
-
-  console.log(state, tree)
-
-  state.field.remove()
-
-  console.log(state, tree)
-
   state.set({
-    other: 'hello'
-  })
-
-  console.log(state, tree)
-
-  state.set({
-    other: { x: true, yuzi: 'its yuzi!' }
-  })
-
-  console.log(state, tree)
-
-  state.set({
-    field: 'funny bussiness'
-  })
-
-  console.log(state, tree)
-
-  console.log('\n\n\n---------------------')
-
-  state.set({
-    field: 'monkey ballz',
     other: {
-      yuzi: 'yuzi extreme!'
+      fields: [{ title: 'james' }, { title: 'yuz' }]
     }
   })
+
+  console.log(JSON.stringify(tree, false, 2))
 
   t.end()
 })
