@@ -1,26 +1,25 @@
 'use strict'
 var test = require('tape')
-var s = require('../s')
 var subsTest = require('./test')
 
 test('basic subscription', function (t) {
-  var state = s({
-    field: true,
-    something: false
-  })
-
-  var subs = subsTest(t, state, {
-    field: true,
-    other: {
-      yuzi: true,
-      fields: { '*': { title: true } }
+  // use this for .val and normal fields then add collection as a separate
+  var subs = subsTest(
+    t,
+    { field: true, something: false },
+    {
+      field: true,
+      other: {
+        yuzi: true,
+        fields: { '*': { title: true } }
+      }
     }
-  })
+  )
 
   subs(
     'initial subscription',
     [{ path: 'field', type: 'new' }],
-    { field: 16 }
+    { field: 1 }
   )
 
   subs(
@@ -30,13 +29,13 @@ test('basic subscription', function (t) {
       { path: 'other/fields/1/title', type: 'new' }
     ],
     {
-      field: 16,
+      field: 1,
       other: {
-        $: 17,
+        $: 2,
         fields: {
-          0: { $: 17, title: 17 },
-          1: { $: 17, title: 17 },
-          $: 17
+          0: { $: 2, title: 2 },
+          1: { $: 2, title: 2 },
+          $: 2
         }
       }
     },
@@ -54,37 +53,33 @@ test('basic subscription', function (t) {
     'specific field in a collection',
     [ { path: 'other/fields/0/title', type: 'update' } ],
     {
-      field: 16,
+      field: 1,
       other: {
-        $: 19,
+        $: 4,
         fields: {
-          0: { $: 19, title: 19 },
-          1: { $: 17, title: 17 },
-          $: 19
+          0: { $: 4, title: 4 },
+          1: { $: 2, title: 2 },
+          $: 4
         }
       }
     },
-    {
-      other: { fields: [ { title: 'smurts' } ] }
-    }
+    { other: { fields: [ { title: 'smurts' } ] } }
   )
 
   subs(
     'remove field in a collection',
     [ { path: 'other/fields/0', type: 'remove' } ],
     {
-      field: 16,
+      field: 1,
       other: {
-        $: 21,
+        $: 6,
         fields: {
-          1: { $: 17, title: 17 },
-          $: 21
+          1: { $: 2, title: 2 },
+          $: 6
         }
       }
     },
-    {
-      other: { fields: [ null ] }
-    }
+    { other: { fields: [ null ] } }
   )
 
   t.end()

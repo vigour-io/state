@@ -1,24 +1,24 @@
 'use strict'
 var test = require('tape')
-var s = require('../s')
 var subsTest = require('./test')
 
 test('root subscription', function (t) {
-  var state = s({
-    field: true,
-    something: false
-  })
-
-  var subs = subsTest(t, state, {
-    field: true,
-    other: {
-      yuzi: true,
-      something: {
-        a: true,
-        b: { '~': { james: true } }
+  var subs = subsTest(
+    t,
+    { field: true, something: false },
+    {
+      field: true,
+      other: {
+        field: true,
+        something: {
+          a: true,
+          b: { '~': { james: true } }
+        }
       }
     }
-  })
+  )
+
+  // subs()
 
   t.end()
-}
+})
