@@ -26,11 +26,14 @@ test('root subscription', function (t) {
   }
 
   var tree = subscribe(state, subs, function (type) {
-    console.log('#lets go!', type, this.path.join('/'))
+    console.log('# ---------->>>>>> lets go!', type, this.path.join('/'))
   })
 
   // state.something.set({ b: true })
   // state.something.set({ b: { c: true } })
+  console.log(JSON.stringify(tree, false, 2))
+
+  state.james.val = 'hello!'
   console.log(JSON.stringify(tree, false, 2))
 
   t.end()
