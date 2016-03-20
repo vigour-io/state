@@ -25,7 +25,7 @@ module.exports = function (t, state, subs) {
     )
     resolveStamps(testtree, seed)
     t.deepEqual(tree, testtree, label + ' results in correct tree')
-    console.log('tree:', tree)
+    console.log('tree:', JSON.stringify(tree, false, 2))
   }
 }
 
@@ -33,7 +33,7 @@ function resolveStamps (tree, seed) {
   for (var key in tree) {
     if (typeof tree[key] === 'object') {
       resolveStamps(tree[key], seed)
-    } else {
+    } else if (key !== 'val') {
       tree[key] = tree[key] + seed
     }
   }

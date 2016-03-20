@@ -16,7 +16,16 @@ test('root subscription', function (t) {
 
   subs(
     'initial subscription', [],
-    { something: { $: 1, b: { $: 1 } } }
+    {
+      something: {
+        $: 1,
+        $r: { james: { val: true } },
+        b: {
+          $: 1,
+          $r: { james: { val: true } }
+        }
+      }
+    }
   )
 
   // if root (or parent) walk parent tree (wal till root obj)
