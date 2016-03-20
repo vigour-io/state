@@ -9,7 +9,7 @@ test('root subscription', function (t) {
     {
       something: {
         a: true,
-        b: { '~': { james: true } }
+        b: { '~': { james: true } } // can be more but does not matter
       }
     }
   )
@@ -24,11 +24,17 @@ test('root subscription', function (t) {
 
   subs(
     'create root field',
-    [ { path: 'b', type: 'update' } ],
-    // just add the number colleciton change is way too small anyways
-
+    [ { path: 'b', type: 'update' } ], // or new?
     // something(1) + james(2)
-    { something: { $: 3, b: { $: 3 } }, james: 2 },
+    // only use val for leafs? for now at least for composite subs
+    {
+      something: {
+        $: 3,
+        $r: { james: { val: true } }, // is more speficic
+        b: { $: 3, $r: { james: { val: true } } } // how to do the up-walking
+      },
+      james: 2
+    },
     { james: true }
   )
 
