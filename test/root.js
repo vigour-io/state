@@ -33,7 +33,6 @@ test('root subscription', function (t) {
   subs(
     'create root field',
     [ { path: 'something/b', type: 'update' } ],
-    // something(1) + james(2)
     {
       something: {
         $: [1, 2],
