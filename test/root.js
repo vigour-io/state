@@ -28,23 +28,19 @@ test('root subscription', function (t) {
     }
   )
 
-  // if root (or parent) walk parent tree (wal till root obj)
-  // add hasComposite:  //what does it have inside? prob a function
-
   console.log('#handle update')
 
   subs(
     'create root field',
-    [ { path: 'b', type: 'update' } ], // or new?
+    [ { path: 'something/b', type: 'update' } ],
     // something(1) + james(2)
-    // only use val for leafs? for now at least for composite subs
     {
       something: {
-        $: 3,
-        $r: { james: { val: true } }, // is more speficic
-        b: { $: 3, $r: { james: { val: true } } } // how to do the up-walking
-      },
-      james: 2
+        $: [1, 2],
+        $r: { james: { val: true, $: 2 } },
+        b: { $: [1, 2], $r: { james: { val: true, $: 2 } } }
+      }
+      // james: 2 <-- this will become the prefered way
     },
     { james: true }
   )

@@ -31,10 +31,18 @@ module.exports = function (t, state, subs) {
 
 function resolveStamps (tree, seed) {
   for (var key in tree) {
-    if (typeof tree[key] === 'object') {
+    if (typeof tree[key] === 'object' && key !== '$') {
       resolveStamps(tree[key], seed)
     } else if (key !== 'val') {
-      tree[key] = tree[key] + seed
+      if (tree[key] instanceof Array) {
+        let val = 0
+        for (let i in tree[key]) {
+          val += (tree[key][i] + seed)
+        }
+        tree[key] = val
+      } else {
+        tree[key] = tree[key] + seed
+      }
     }
   }
 }
