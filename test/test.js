@@ -40,7 +40,7 @@ function resolveStamps (tree, seed) {
           val += (tree[key][i] + seed)
         }
         tree[key] = val
-      } else {
+      } else if (tree[key] !== true) {
         tree[key] = tree[key] + seed
       }
     }
