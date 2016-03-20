@@ -6,29 +6,32 @@ var s = require('../s')
 
 test('root subscription', function (t) {
   var state = s({
-    something: { b: true },
+    something: {
+      a: true
+      // b: true
+    }, // enable c get more depth
     james: true
   })
 
   var subs = {
     something: {
-      a: true,
-      b: {
-        '~': { james: true },
-        c: { '~': { james: { hello: true } } }
+      a: {
+        '~': { james: true }
       }
+      // b: {
+        // '~': { james: true },
+        // c: { '~': { james: { hello: true } } }
+      // }
     }
   }
 
   var tree = subscribe(state, subs, function (type) {
-    console.log('lets go!', type, this.path.join('/'))
+    console.log('#lets go!', type, this.path.join('/'))
   })
 
-  console.log(
-    JSON.stringify(
-      tree, false, 2
-    )
-  )
+  // state.something.set({ b: true })
+  // state.something.set({ b: { c: true } })
+  console.log(JSON.stringify(tree, false, 2))
 
   t.end()
 })
