@@ -31,6 +31,8 @@ test('root subscription', function (t) {
   // if root (or parent) walk parent tree (wal till root obj)
   // add hasComposite:  //what does it have inside? prob a function
 
+  console.log('#handle update')
+
   subs(
     'create root field',
     [ { path: 'b', type: 'update' } ], // or new?
