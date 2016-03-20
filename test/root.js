@@ -1,6 +1,7 @@
 'use strict'
 var test = require('tape')
 var subsTest = require('./test')
+var Event = require('vigour-event')
 
 test('root subscription', function (t) {
   var subs = subsTest(
@@ -37,11 +38,26 @@ test('root subscription', function (t) {
       something: {
         $: [1, 2],
         $r: { james: { val: true, $: 2 } },
+        // dont do double better to add to james -- at least share the $r from father to child
         b: { $: [1, 2], $r: { james: { val: true, $: 2 } } }
       }
-      // james: 2 <-- this will become the prefered way
     },
     { james: true }
+  )
+
+  console.log('#second update')
+
+  subs('update james',
+    [ { path: 'something/b', type: 'update' } ],
+    {
+      something: {
+        $: [1, 3],
+        $r: { james: { val: true, $: 3 } },
+        // dont do double better to add to james -- at least share the $r from father to child
+        b: { $: [1, 3], $r: { james: { val: true, $: 3 } } }
+      }
+    },
+    { james: false }
   )
 
   t.end()

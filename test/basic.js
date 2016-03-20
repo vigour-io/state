@@ -55,11 +55,11 @@ test('basic subscription', function (t) {
     {
       field: 1,
       other: {
-        $: 4,
+        $: 3,
         fields: {
-          0: { $: 4, title: 4 },
+          0: { $: 3, title: 3 },
           1: { $: 2, title: 2 },
-          $: 4
+          $: 3
         }
       }
     },
@@ -72,10 +72,10 @@ test('basic subscription', function (t) {
     {
       field: 1,
       other: {
-        $: 6,
+        $: 4,
         fields: {
           1: { $: 2, title: 2 },
-          $: 6
+          $: 4
         }
       }
     },
