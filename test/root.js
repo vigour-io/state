@@ -17,22 +17,26 @@ test('root subscription', function (t) {
     something: {
       a: {
         '~': { james: true }
+      },
+      b: {
+        '~': { james: true },
+        c: { '~': { james: { hello: true } } }
       }
-      // b: {
-        // '~': { james: true },
-        // c: { '~': { james: { hello: true } } }
-      // }
     }
   }
 
   var tree = subscribe(state, subs, function (type) {
-    console.log('# ---------->>>>>> lets go!', type, this.path.join('/'))
+    console.log('#update:', type, this.path.join('/'))
   })
 
-  // state.something.set({ b: true })
-  // state.something.set({ b: { c: true } })
   console.log(JSON.stringify(tree, false, 2))
 
+  console.log('#set b')
+  state.something.set({ b: true })
+  // state.something.set({ b: { c: true } })  // does not work yet
+  console.log(JSON.stringify(tree, false, 2))
+
+  console.log('#update james')
   state.james.val = 'hello!'
   console.log(JSON.stringify(tree, false, 2))
 
