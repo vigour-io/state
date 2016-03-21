@@ -16,29 +16,42 @@ test('root subscription', function (t) {
   var subs = {
     something: {
       a: {
-        '~': { james: true }
-      },
-      b: {
-        '~': { james: true },
-        c: { '~': { james: { hello: true } } }
+        '~': { james: { hello: true } }
       }
+      // b: {
+        // '~': { james: true },
+        // c: { '~': { james: { hello: true } } }
+      // }
     }
   }
 
   var tree = subscribe(state, subs, function (type) {
-    console.log('#update:', type, this.path.join('/'))
+    console.log('#listener fires:', type, this.path.join('/'))
   })
 
-  console.log(JSON.stringify(tree, false, 2))
+  // should not fire
 
-  console.log('#set b')
-  state.something.set({ b: true })
+  // console.log(JSON.stringify(tree, false, 2))
+
+  // console.log('#set b')
+  // state.something.set({ b: true })
   // state.something.set({ b: { c: true } })  // does not work yet
+  // c should not fire
+
+  // console.log(JSON.stringify(tree, false, 2))
+
+  console.log('#set james should not fire')
+  state.james.val = 'hello!'
+  // should not fire
+
   console.log(JSON.stringify(tree, false, 2))
 
-  console.log('#update james')
-  state.james.val = 'hello!'
+  console.log('#set james/hello now should fire')
+  // should fire
+  state.james.set({ hello: 'hello!' })
+
   console.log(JSON.stringify(tree, false, 2))
+  // console.log('#update on nested james field')
 
   t.end()
 })
