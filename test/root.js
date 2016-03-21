@@ -26,7 +26,7 @@ test('root subscription', function (t) {
   }
 
   var tree = subscribe(state, subs, function (type) {
-    console.log('listener fires:', type, this.path.join('/'))
+    // console.log('listener fires:', type, this.path.join('/'))
   })
 
   // should not fire
@@ -55,7 +55,19 @@ test('root subscription', function (t) {
   // correct behaviour
 
   console.log(JSON.stringify(tree, false, 2))
-  // console.log('#update on nested james field')
 
+  // speed tests
+  console.time('10k updates')
+  var h = state.james.hello
+  for (var i = 0; i < 1e4; i++) {
+    h.set(i)
+  }
+  // subs obj is only 70ms! fix obs
+  // get this faster!
+  console.timeEnd('10k updates')
+
+  // diffing is rly good observable is going ultra slow on this!
+
+  // console.log('#update on nested james field')
   t.end()
 })
