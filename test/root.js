@@ -7,7 +7,7 @@ var s = require('../s')
 test('root subscription', function (t) {
   var state = s({
     something: {
-      a: true,
+      a: true
       // b: true
     }, // enable c get more depth
     james: true
@@ -42,8 +42,6 @@ test('root subscription', function (t) {
   // c should not fire
   // console.log(JSON.stringify(tree, false, 2))
   // console.log(JSON.stringify(tree, false, 2))
-
-
   console.log('#set james should not fire a, should fire b, should not fire c')
   state.james.val = 'hello!'
   // should not fire
@@ -56,7 +54,7 @@ test('root subscription', function (t) {
   state.james.set({ hello: 'hello!' })
   // correct behaviour
 
-  // console.log(JSON.stringify(tree, false, 2))
+  console.log(JSON.stringify(tree, false, 2))
   // console.log('#update on nested james field')
 
   t.end()
