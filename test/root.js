@@ -7,7 +7,7 @@ var s = require('../s')
 test('root subscription', function (t) {
   var state = s({
     something: {
-      a: true
+      a: true,
       // b: true
     }, // enable c get more depth
     james: true
@@ -17,11 +17,11 @@ test('root subscription', function (t) {
     something: {
       a: {
         '~': { james: { hello: true } }
-      }
-      // b: {
-        // '~': { james: true },
+      },
+      b: {
+        '~': { james: true }
         // c: { '~': { james: { hello: true } } }
-      // }
+      }
     }
   }
 
@@ -33,22 +33,22 @@ test('root subscription', function (t) {
 
   // console.log(JSON.stringify(tree, false, 2))
 
-  // console.log('#set b')
-  // state.something.set({ b: true })
+  console.log('#set b')
+
+  // difference is setting it later fix it
+  state.something.set({ b: true })
   // state.something.set({ b: { c: true } })  // does not work yet
   // c should not fire
+  // console.log(JSON.stringify(tree, false, 2))
+  // console.log('#set james should not fire')
+  // state.james.val = 'hello!'
+  // should not fire
 
   // console.log(JSON.stringify(tree, false, 2))
 
-  console.log('#set james should not fire')
-  state.james.val = 'hello!'
-  // should not fire
-
-  console.log(JSON.stringify(tree, false, 2))
-
-  console.log('#set james/hello now should fire')
+  // console.log('#set james/hello now should fire')
   // should fire
-  state.james.set({ hello: 'hello!' })
+  // state.james.set({ hello: 'hello!' })
 
   console.log(JSON.stringify(tree, false, 2))
   // console.log('#update on nested james field')
