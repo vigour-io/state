@@ -19,8 +19,8 @@ test('root subscription', function (t) {
         '~': { james: { hello: true } }
       },
       b: {
-        '~': { james: true }
-        // c: { '~': { james: { hello: true } } }
+        '~': { james: true },
+        c: { '~': { james: { hello: true } } }
       }
     }
   }
@@ -46,9 +46,10 @@ test('root subscription', function (t) {
 
   // console.log(JSON.stringify(tree, false, 2))
 
-  // console.log('#set james/hello now should fire')
+  console.log('#set james/hello now should fire')
   // should fire
-  // state.james.set({ hello: 'hello!' })
+  state.james.set({ hello: 'hello!' })
+  // correct behaviour
 
   console.log(JSON.stringify(tree, false, 2))
   // console.log('#update on nested james field')
