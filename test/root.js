@@ -33,17 +33,17 @@ test('root subscription', function (t) {
 
   // console.log(JSON.stringify(tree, false, 2))
 
-  console.log('#set b')
 
   // difference is setting it later fix it
   // state.something.set({ b: true })
   state.james.set({ hello: 'hello?' })
 
+  console.log('#set b/c')
   state.something.set({ b: { c: true } })  // does not work yet
   // c should not fire
   // console.log(JSON.stringify(tree, false, 2))
-  console.log('#set james should not fire a, should fire b')
-  state.james.val = 'hello!'
+  // console.log('#set james should not fire a, should fire b')
+  // state.james.val = 'hello!'
   // should not fire
 
   // console.log(JSON.stringify(tree, false, 2))
