@@ -11,7 +11,7 @@ test('basic subscription', function (t) {
       field: true,
       other: {
         yuzi: true,
-        fields: { '*': { title: true } }
+        fields: { $any: { title: true } }
       }
     }
   )

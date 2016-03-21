@@ -15,12 +15,12 @@ test('root subscription', function (t) {
 
   var subs = {
     something: {
-      a: {
-        '~': { james: { hello: true } }
-      },
+      // a: {
+        // '~': { james: { hello: true } }
+      // },
       b: {
-        '~': { james: true },
-        c: { '~': { james: { hello: true } } }
+        // '~': { james: true },
+        c: { $root: { james: { hello: true } } }
       }
     }
   }
@@ -36,8 +36,10 @@ test('root subscription', function (t) {
   console.log('#set b')
 
   // difference is setting it later fix it
-  state.something.set({ b: true })
-  // state.something.set({ b: { c: true } })  // does not work yet
+  // state.something.set({ b: true })
+  state.james.set({ hello: 'hello?' })
+
+  state.something.set({ b: { c: true } })  // does not work yet
   // c should not fire
   // console.log(JSON.stringify(tree, false, 2))
   console.log('#set james should not fire a, should fire b')
