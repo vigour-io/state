@@ -4,6 +4,8 @@ var test = require('tape')
 var subscribe = require('../subscribe')
 var s = require('../s')
 
+var Event = require('vigour-event')
+
 test('root subscription', function (t) {
   var state = s({
     something: {
@@ -57,16 +59,22 @@ test('root subscription', function (t) {
   console.log(JSON.stringify(tree, false, 2))
 
   // speed tests
-  console.time('10k updates')
+  console.time('100k updates')
   var h = state.james.hello
-  for (var i = 0; i < 1e4; i++) {
+  // var ev = new Event()
+  for (var i = 0; i < 1e5; i++) {
     h.set(i)
   }
+  // tree diff is ery fast 400ms for 100k -- totatly within range (for this hard case 3 tracks updating)
+  // do some tests tmrw with dom as well (prelimmenary start!)
+
+  // ev.trigger()
   // subs obj is only 70ms! fix obs
   // get this faster!
-  console.timeEnd('10k updates')
+  console.timeEnd('100k updates')
 
   // diffing is rly good observable is going ultra slow on this!
+  // tree at +/- 60ms
 
   // console.log('#update on nested james field')
   t.end()
