@@ -16,15 +16,16 @@ test('root subscription', function (t) {
   })
 
   var subs = {
-    something: {
-      a: {
-        $root: { james: { hello: true } }
-      },
-      b: {
-        $root: { james: true },
-        c: { $root: { james: { hello: true } } }
-      }
-    }
+    // something: {
+    james: { hello: true }
+      // a: {
+      //   $root: { james: { hello: true } }
+      // },
+      // b: {
+      //   $root: { james: true },
+      //   c: { $root: { james: { hello: true } } }
+      // }
+    // }
   }
 
   var cnt = 0
@@ -64,7 +65,7 @@ test('root subscription', function (t) {
   console.time('100k updates')
   // // var tt = process.hrtime()
   var h = state.james.hello
-  for (var i = 0; i < 1e5; i++) {
+  for (var i = 0; i < 1e6; i++) {
     h.set(i)
   }
 
