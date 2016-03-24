@@ -78,8 +78,12 @@ test('root subscription', function (t) {
   // // var tl = process.hrtime(tt)
   // // will use hrtime for perf tests
   // // console.log(tl)
+
+  // this thing became at least 10 times faster!
+
   console.timeEnd('100k updates')
   console.log('fired', cnt)
+  // console.log(JSON.stringify(tree, false, 2))
 
   // var a = new Observable({
   //   on: {
