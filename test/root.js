@@ -6,8 +6,6 @@ var s = require('../s')
 
 var Observable = require('vigour-observable')
 
-var Event = require('vigour-event')
-
 test('root subscription', function (t) {
   var state = s({
     something: {
@@ -29,8 +27,10 @@ test('root subscription', function (t) {
     }
   }
 
+  var cnt = 0
   var tree = subscribe(state, subs, function (type) {
-    // console.log('listener fires:', type, this.path.join('/'))
+    cnt++
+    // console.log('listener fires:', type, this.path().join('/'))
   })
 
   // should not fire
@@ -61,13 +61,14 @@ test('root subscription', function (t) {
   console.log(JSON.stringify(tree, false, 2))
 
   // speed tests
-  // console.time('100k updates')
+  console.time('100k updates')
   // // var tt = process.hrtime()
-  // var h = state.james.hello
-  // // var ev = new Event()
-  // for (var i = 0; i < 1e5; i++) {
-  //   h.set(i)
-  // }
+  var h = state.james.hello
+  for (var i = 0; i < 1e5; i++) {
+    h.set(i)
+  }
+
+  // back to 43 ms :D
   // // tree diff is ery fast 400ms for 100k -- totatly within range (for this hard case 3 tracks updating)
   // // do some tests tmrw with dom as well (prelimmenary start!)
 
@@ -77,23 +78,28 @@ test('root subscription', function (t) {
   // // var tl = process.hrtime(tt)
   // // will use hrtime for perf tests
   // // console.log(tl)
-  // console.timeEnd('100k updates')
-
-  var a = new Observable({
-    on: {
-      data () {
-
-      }
-    }
-  })
-
-  console.time('100k updates')
-  for (var i = 0; i < 1e5; i++) {
-    // var ev = new Event()
-    // ev.trigger()
-    a.set(i)
-  }
   console.timeEnd('100k updates')
+  console.log('fired', cnt)
+
+  // var a = new Observable({
+  //   on: {
+  //     data () {
+
+  //     }
+  //   }
+  // })
+
+  // console.time('10k updates')
+  // for (var i = 0; i < 1e4; i++) {
+  //   a.set(i)
+  // }
+  // console.timeEnd('10k updates')
+
+  // console.time('10k updates')
+  // for (var i = 0; i < 1e4; i++) {
+  //   a.set(i)
+  // }
+  // console.timeEnd('10k updates')
 
   // diffing is rly good observable is going ultra slow on this!
   // tree at +/- 60ms /10k --- obs 220ms -- not acceptable! -- tree should be heaviest part
