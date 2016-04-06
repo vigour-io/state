@@ -17,10 +17,11 @@ test('root subscription', function (t) {
 
   var subs = {
     // something: {
-    james: { hello: true }
-      // a: {
-      //   $root: { james: { hello: true } }
-      // },
+    something: {},
+    // james: { hello: true },
+    // a: {
+    //   $root: { james: { hello: true } }
+    // }
       // b: {
       //   $root: { james: true },
       //   c: { $root: { james: { hello: true } } }
@@ -28,46 +29,90 @@ test('root subscription', function (t) {
     // }
   }
 
+  var amount = 15000
+
+  for (var i = 0; i < amount; i++) {
+    // h.set(i)
+    subs.something[i] = { val: true }
+  }
+  console.log(subs)
+
   var cnt = 0
-  var tree = subscribe(state, subs, function (type) {
-    cnt++
-    // console.log('listener fires:', type, this.path().join('/'))
-  })
 
-  // should not fire
+  // var array = []
+  // var h = document.createElement('div')
 
-  // console.log(JSON.stringify(tree, false, 2))
+  // var template = document.createElement('div')
+  // template.style.display = 'inline-block'
+  // template.style.width = '50px'
+  // template.style.height = '50px'
+  // template.appendChild(document.createTextNode('text'))
 
-  // difference is setting it later fix it
-  // state.something.set({ b: true })
-  state.james.set({ hello: 'hello?' })
-
-  console.log('#set b/c')
-  state.something.set({ b: { c: true } })  // does not work yet
-  // c should not fire
-  // console.log(JSON.stringify(tree, false, 2))
-  // console.log(JSON.stringify(tree, false, 2))
-  console.log('#set james should not fire a, should fire b, should not fire c')
-  state.james.val = 'hello!'
-  // should not fire
-  // console.log(JSON.stringify(tree, false, 2))
-
-  // console.log(JSON.stringify(tree, false, 2))
-
-  console.log('#set james/hello now should fire')
-  // should fire
-  state.james.set({ hello: 'hello!' })
-  // correct behaviour
-
-  console.log(JSON.stringify(tree, false, 2))
+  // for (var i = 0; i < amount; i ++) {
+  //   array.push(template.cloneNode(true))
+  //   h.appendChild(array[i])
+  // }
+  // document.body.appendChild(h)
+  var x = {}
+  for (var i = 0; i < amount; i++) {
+    x[i] = i
+  }
+  state.something.set(x)
+  // init does not fire correctly! -- fix it -- strange that it does not fire
 
   // speed tests
-  console.time('100k updates')
-  // // var tt = process.hrtime()
-  var h = state.james.hello
-  for (var i = 0; i < 1e6; i++) {
-    h.set(i)
+  console.time('1m updates')
+
+  var cntx = 0
+  var cntxx = document.createElement('div')
+  cntxx.style.border = '1px solid red'
+
+  // function goRender() {
+  //   document.body.innerHTML = ''
+  //   cntx++
+  //   for (var i = 0; i < amount; i++) {
+  //     x[i] = i + cntx
+  //   }
+  //   state.something.set(x)
+  //   document.body.appendChild(cntxx)
+  //   document.body.appendChild(h)
+  //   window.requestAnimationFrame(goRender)
+  // }
+
+  // goRender()
+
+  var canvas = document.createElement('canvas')
+  canvas.id = 'canvas'
+  canvas.width = 1000
+  canvas.height = 1000
+  document.body.appendChild(canvas)
+  var ctx = canvas.getContext('2d')
+  var dir = 3
+  var o = dir
+  cntx = 0
+  var color = 'rgba(0, 0, 0, 0.1)'
+  function goCanvas () {
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    cntx += dir
+    if (cntx > 1000) {
+      dir = -1 * o
+    } else if (cntx < 1) {
+      dir = o
+    }
+    for (var i = 0; i < amount; i++) {
+      x[i] = i + cntx
+    }
+    state.something.set(x)
+    window.requestAnimationFrame(goCanvas)
   }
+  var tree = subscribe(state, subs, function (type) {
+    var x = Math.sin(this.val / 5 + cntx / 40) * 300 + 400 + this.key * 0.01 + Math.cos(this.val + cntx / (40 - this.key / 1000)) * 10
+    var y = Math.cos(this.val / 10) * 300 + this.key * 0.01 + 400 + Math.sin(this.val + cntx/(40 - this.key / 1000)) * 10
+    ctx.fillStyle = color
+    ctx.fillRect( x, y, 3, 3)
+  })
+  goCanvas()
+
 
   // back to 43 ms :D
   // // tree diff is ery fast 400ms for 100k -- totatly within range (for this hard case 3 tracks updating)
@@ -82,10 +127,10 @@ test('root subscription', function (t) {
 
   // this thing became at least 10 times faster!
 
-  console.timeEnd('100k updates')
-  console.log('fired', cnt)
+  console.timeEnd('1m updates')
+  console.log('fired:', cnt)
   // console.log(JSON.stringify(tree, false, 2))
-
+  console.log(state, tree)
   // var a = new Observable({
   //   on: {
   //     data () {
@@ -95,13 +140,13 @@ test('root subscription', function (t) {
   // })
 
   // console.time('10k updates')
-  // for (var i = 0; i < 1e4; i++) {
+  // for (var i = 0; i < amount; i++) {
   //   a.set(i)
   // }
   // console.timeEnd('10k updates')
 
   // console.time('10k updates')
-  // for (var i = 0; i < 1e4; i++) {
+  // for (var i = 0; i < amount; i++) {
   //   a.set(i)
   // }
   // console.timeEnd('10k updates')
