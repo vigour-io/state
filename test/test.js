@@ -9,7 +9,7 @@ module.exports = function (t, state, subs) {
     state,
     subs,
     function (type, event) {
-      updates.push({ path: this.path.join('/'), type: type })
+      updates.push({ path: this.path().join('/'), type: type })
     }
   )
   var seed = state._lstamp - 1
