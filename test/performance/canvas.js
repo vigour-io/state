@@ -4,7 +4,7 @@ var s = require('../../s')
 
 var state = s({ something: {} })
 var subs = { something: {} }
-var amount = 15000
+var amount = 10000
 
 for (var i = 0; i < amount; i++) {
   subs.something[i] = { val: true }
@@ -19,7 +19,7 @@ state.something.set(x)
 
 var Stats = require('stats-js')
 var stats = new Stats()
-stats.setMode(1)
+stats.setMode(0)
 stats.domElement.style.position = 'absolute'
 stats.domElement.style.left = '0px'
 stats.domElement.style.top = '0px'
