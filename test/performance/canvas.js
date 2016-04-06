@@ -3,7 +3,7 @@ var subscribe = require('../../subscribe')
 var s = require('../../s')
 var state = s({ something: {} })
 var subs = { something: {} }
-var amount = 1
+var amount = 1e4
 // -------------------------
 for (var i = 0; i < amount; i++) {
   subs.something[i] = { val: true }
@@ -40,10 +40,11 @@ function goCanvas () {
   }
   state.something.set(x)
   stats.end()
-  // window.requestAnimationFrame(goCanvas)
+  window.requestAnimationFrame(goCanvas)
 }
 // -------------------------
 var tree = subscribe(state, subs, function (type) {
+  // console.log('FIRE FIRE FIRE!', type, this)
   var val = this.val
   var i = this.key
   var x = Math.sin(val / 5 + cnt / 40) * 300 + 400 +
