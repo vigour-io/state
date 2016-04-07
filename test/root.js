@@ -2,35 +2,47 @@
 var test = require('tape')
 var subsTest = require('./test')
 var subscribe = require('../subscribe')
-var s = require('../s')
 
 test('root subscription', function (t) {
-  var state = s({
+  var subscription = {
     something: {
-      a: true
-      // b: true
-    }, // enable c get more depth
-    james: true
-  })
-
-  var subs = {
-    something: {
-      james: { hello: true },
+      // james: { hello: true },
       a: {
+        // this should not fire!
         $root: { james: { hello: true } }
       },
-      b: {
-        $root: { james: true },
-        c: { $root: { james: { hello: true } } }
-      }
+      // b: {
+      //   $root: { james: true },
+      //   c: { $root: { james: { hello: true } } }
+      // }
     }
   }
 
-  var cnt = 0
-  var tree = subscribe(state, subs, function (type) {
-    cnt++
-    console.log('FIRED:', type, cnt, this.path())
-  })
-  console.log('TREE', JSON.stringify(tree, false, 2))
+  var subs = subsTest(
+    t,
+    {
+      something: { a: true },
+      james: true
+    },
+    subscription
+  )
+
+  subs(
+    'initial subscription', [],
+    {
+      something: {
+        $: 1,
+        a: {
+          $: 1,
+          $r: {
+            james: { hello: true }
+          }
+        },
+        $c: { a: 'root' }
+      },
+      james: { $: 1 }
+    }
+  )
+
   t.end()
 })

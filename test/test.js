@@ -1,6 +1,7 @@
 'use strict'
 var subscribe = require('../lib/subscribe')
 var s = require('../s')
+var isNumber = require('vigour-util/is/number')
 
 module.exports = function (t, state, subs) {
   state = state.type === 'state' ? state : s(state)
@@ -8,12 +9,14 @@ module.exports = function (t, state, subs) {
   var tree = subscribe(
     state,
     subs,
-    function (type, event) {
+    function (type, stamp) {
+      console.log('FIRE!', type, stamp, this.path())
       updates.push({ path: this.path().join('/'), type: type })
     }
   )
   var seed = state._lstamp - 1
   return function test (label, updated, testtree, val) {
+    console.log('#RUN!', label)
     if (val) {
       updates = []
       state.set(val)
@@ -25,7 +28,7 @@ module.exports = function (t, state, subs) {
     )
     resolveStamps(testtree, seed)
     t.deepEqual(tree, testtree, label + ' results in correct tree')
-    // console.log('tree:', JSON.stringify(tree, false, 2))
+    console.log('tree:', JSON.stringify(tree, false, 2))
   }
 }
 
@@ -40,7 +43,7 @@ function resolveStamps (tree, seed) {
           val += (tree[key][i] + seed)
         }
         tree[key] = val
-      } else if (tree[key] !== true) {
+      } else if (isNumber(tree[key])) {
         tree[key] = tree[key] + seed
       }
     }

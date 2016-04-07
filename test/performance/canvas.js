@@ -7,7 +7,7 @@ document.body.appendChild(stats.domElement)
 var subscribe = require('../../subscribe')
 var s = require('../../s')
 var state = s({ something: {} })
-var amount = 1e4
+var amount = 8e3
 // -------------------------
 var cnt = 0
 var canvas = document.createElement('canvas')
