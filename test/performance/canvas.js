@@ -1,4 +1,5 @@
 'use strict'
+// -------------------------
 var Stats = require('stats-js')
 var stats = new Stats()
 stats.setMode(0)
@@ -14,10 +15,11 @@ var canvas = document.createElement('canvas')
 canvas.id = 'canvas'
 canvas.width = 1000
 canvas.height = 1000
+document.body.style.backgroundColor = 'rgb(38,50,56)'
 document.body.appendChild(canvas)
 var context = canvas.getContext('2d')
 var dir = 2
-context.fillStyle = 'rgba(100, 100, 100, 1)'
+context.fillStyle = 'rgb(128,263,192)'
 // -------------------------
 function goCanvas () {
   stats.begin()
@@ -40,11 +42,11 @@ function listen (type) {
   var i = this.key
   var x =
     Math.sin(val / 5 + cnt / 40) * 300 +
-    i * 0.02 + 400 +
+    i * 0.02 + 500 +
     Math.cos(val + cnt / (40 - i / 1000)) * 10
   var y =
     Math.cos(val / 10) * 300 +
-    i * 0.02 + 400 +
+    i * 0.02 + 500 +
     Math.sin(val + cnt / (40 - i / 1000)) * 10
   context.fillRect(x, y, 1, 1)
 }
