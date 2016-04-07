@@ -7,7 +7,7 @@ test('reference subscription', function (t) {
   // use this for .val and normal fields then add collection as a separate
   var subs = subsTest(
     t,
-    { a: 'a', b: { ref: '$/a' } },
+    { a: 'a', b: { ref: '$root.a' } },
     { b: { ref: true } }
   )
 
