@@ -27,8 +27,9 @@ module.exports = function (t, state, subs) {
       'fires updates for ' + label
     )
     resolveStamps(testtree, seed)
+    console.log('testtree:', JSON.stringify(testtree, false, 2).replace(/"(.+)":/g, '$1:'))
     t.deepEqual(tree, testtree, label + ' results in correct tree')
-    console.log('tree:', JSON.stringify(tree, false, 2))
+    console.log('tree:', JSON.stringify(tree, false, 2).replace(/"(.+)":/g, '$1:'))
   }
 }
 
