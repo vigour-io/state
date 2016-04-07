@@ -23,7 +23,7 @@ function goCanvas () {
   stats.begin()
   context.clearRect(0, 0, canvas.width, canvas.height)
   cnt += dir
-  if (cnt > 1000 || cnt < 1) {
+  if (cnt > 2500 || cnt < 1) {
     dir = -1 * dir
   }
   var x = {}
@@ -37,7 +37,6 @@ function goCanvas () {
 // -------------------------
 function listen (type) {
   var val = this.compute()
-  // var val = this.val
   var i = this.key
   var x =
     Math.sin(val / 5 + cnt / 40) * 300 +
