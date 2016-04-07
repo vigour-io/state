@@ -24,12 +24,15 @@ module.exports = function (t, state, subs) {
     t.deepEqual(
       updates,
       updated,
-      'fires updates for ' + label
+      (updated.length === 0 ? 'does not fire updates for ' : 'fires updates for ') + '"' + label + '"'
     )
-    resolveStamps(testtree, seed)
-    console.log('testtree:', JSON.stringify(testtree, false, 2).replace(/"(.+)":/g, '$1:'))
-    t.deepEqual(tree, testtree, label + ' results in correct tree')
-    console.log('tree:', JSON.stringify(tree, false, 2).replace(/"(.+)":/g, '$1:'))
+    if (testtree) {
+      testtree = JSON.parse(JSON.stringify(testtree))
+      resolveStamps(testtree, seed)
+      // console.log('testtree:', JSON.stringify(testtree, false, 2).replace(/"(.+)":/g, '$1:'))
+      t.deepEqual(tree, testtree, '"' + label + '" results in correct tree')
+    }
+    // console.log('tree:', JSON.stringify(tree, false, 2).replace(/"(.+)":/g, '$1:'))
   }
 }
 

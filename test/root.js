@@ -1,7 +1,6 @@
 'use strict'
 var test = require('tape')
 var subsTest = require('./test')
-var subscribe = require('../subscribe')
 
 test('root subscription', function (t) {
   var subscription = {
@@ -75,6 +74,56 @@ test('root subscription', function (t) {
     },
     { james: { hello: true } }
   )
+
+  subs('set james hello to false', [
+    { path: 'james/hello', type: 'update' },
+    { path: 'something/a', type: 'update' }
+  ], false, { james: { hello: false } })
+
+  subs(
+    'set a to false',
+    [],
+    {
+      something: {
+        $: [ 4, 4 ],
+        a: {
+          $: [ 3, 4 ],
+          $r: {
+            james: {
+              hello: true,
+              $: 3
+            },
+            $: 3
+          }
+        },
+        $c: {
+          a: 'root',
+          $: 4
+        }
+      },
+      james: {
+        $: 3,
+        hello: 3
+      }
+    },
+    { something: { a: false } }
+  )
+
+  subs('set b field', [
+    { path: 'something/b', type: 'new' }
+  ], false, { something: { b: true } })
+
+  subs('set b.c field', [
+    { path: 'something/b/c', type: 'new' }
+  ], false, { something: { b: { c: true } } })
+
+  subs('set james hello to false', [
+    { path: 'james/hello', type: 'update' },
+    { path: 'something/a', type: 'update' },
+    { path: 'something/b', type: 'update' },
+    { path: 'something/b/c', type: 'update' }
+  ], false, { james: { hello: true } })
+  // removal has to remove tree
 
   t.end()
 })

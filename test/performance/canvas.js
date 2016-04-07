@@ -37,7 +37,7 @@ function goCanvas () {
   window.requestAnimationFrame(goCanvas)
 }
 // -------------------------
-function listen (type) {
+function listen (type, stamp) {
   var val = this.compute()
   var i = this.key
   var x =
