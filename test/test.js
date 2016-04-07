@@ -25,7 +25,7 @@ module.exports = function (t, state, subs) {
     )
     resolveStamps(testtree, seed)
     t.deepEqual(tree, testtree, label + ' results in correct tree')
-    console.log('tree:', JSON.stringify(tree, false, 2))
+    // console.log('tree:', JSON.stringify(tree, false, 2))
   }
 }
 
