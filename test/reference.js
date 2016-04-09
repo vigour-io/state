@@ -2,7 +2,7 @@
 var test = require('tape')
 var subsTest = require('./test')
 
-test('reference subscription', function (t) {
+test('reference', function (t) {
   // need to reset event stamp :/
   // use this for .val and normal fields then add collection as a separate
   var subs = subsTest(

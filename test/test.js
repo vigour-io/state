@@ -2,6 +2,7 @@
 var subscribe = require('../lib/subscribe')
 var s = require('../s')
 var isNumber = require('vigour-util/is/number')
+var vstamp = require('vigour-stamp')
 
 module.exports = function (t, state, subs) {
   state = state.type === 'state' ? state : s(state)
@@ -13,7 +14,7 @@ module.exports = function (t, state, subs) {
       updates.push({ path: this.path().join('/'), type: type })
     }
   )
-  var seed = state._lstamp - 1
+  var seed = !state._lstamp ? vstamp.cnt : state._lstamp - 1
   return function test (label, updated, testtree, val) {
     if (val) {
       updates = []

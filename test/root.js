@@ -2,7 +2,7 @@
 var test = require('tape')
 var subsTest = require('./test')
 
-test('root subscription', function (t) {
+test('root', function (t) {
   var subscription = {
     james: { hello: true },
     something: {
@@ -126,7 +126,7 @@ test('root subscription', function (t) {
 
   subs(
     'remove something/b',
-    [],
+    [], // think about this do you really dont want to fire when root subs? probably yes
     {
       james: {
         $: 7,
