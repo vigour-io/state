@@ -126,7 +126,7 @@ test('root subscription', function (t) {
 
   subs(
     'remove something/b',
-    [ { path: 'something/b', type: 'remove' } ],
+    [],
     {
       james: {
         $: 7,
