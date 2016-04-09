@@ -8,7 +8,8 @@ test('collection', function (t) {
     t,
     {},
     {
-      fields: { $any: { title: true } }
+      fields: { $any: { title: true } },
+      $any: { id: true }
     }
   )
 
@@ -59,6 +60,21 @@ test('collection', function (t) {
     },
     { fields: [ null ] }
   )
+
+  subs(
+    'toplevel id collection subscription',
+    [ { path: 'a/id', type: 'new' } ],
+    {
+      fields: {
+        1: { $: 1, title: 1 },
+        $: 3
+      },
+      a: { $: 4, id: 4 }
+    },
+    { a: { id: true } }
+  )
+
+  // any subscription on root level do we want this to work?
 
   t.end()
 })

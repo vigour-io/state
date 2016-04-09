@@ -6,12 +6,10 @@ test('basic', function (t) {
   // use this for .val and normal fields then add collection as a separate
   var subs = subsTest(
     t,
-    { field: true, something: false },
+    { field: true },
     {
       field: true,
-      other: {
-        yuzi: true
-      }
+      other: { yuzi: true }
     }
   )
 
@@ -26,10 +24,7 @@ test('basic', function (t) {
     [ { path: 'other/yuzi', type: 'new' } ],
     {
       field: 1,
-      other: {
-        $: 2,
-        yuzi: 2
-      }
+      other: { $: 2, yuzi: 2 }
     },
     { other: { yuzi: true } }
   )
@@ -39,9 +34,7 @@ test('basic', function (t) {
     [ { path: 'other/yuzi', type: 'remove' } ],
     {
       field: 1,
-      other: {
-        $: 3
-      }
+      other: { $: 3 }
     },
     { other: { yuzi: null } }
   )
@@ -51,14 +44,12 @@ test('basic', function (t) {
     [ { path: 'other/yuzi', type: 'new' } ],
     {
       field: 1,
-      other: {
-        $: 4,
-        yuzi: 4
-      }
+      other: { $: 4, yuzi: 4 }
     },
     { other: { yuzi: true } }
   )
 
+  // so by default this will not fire if there are no remove listeners????
   subs(
     'remove other',
     [ { path: 'other/yuzi', type: 'remove' } ],
