@@ -123,7 +123,37 @@ test('root subscription', function (t) {
     { path: 'something/b', type: 'update' },
     { path: 'something/b/c', type: 'update' }
   ], false, { james: { hello: true } })
-  // removal has to remove tree
 
+  subs(
+    'remove something/b',
+    [ { path: 'something/b', type: 'remove' } ],
+    {
+      james: {
+        $: 7,
+        hello: 7
+      },
+      something: {
+        // 6 is self, 7 from b, 7 from a (both from root/james)
+        $: [ 9, 8, 7 ],
+        a: {
+          $: [ 4, 7 ],
+          $r: {
+            james: {
+              hello: true,
+              $: 7
+            },
+            $: 7
+          }
+        },
+        $c: {
+          a: 'root',
+          $: 8, // how does this one get build up??? (it is 8 but dont understand) so it becomes 8 -- the number of c
+          $$: [ 9, 7 ] // this is the calculated cache
+        }
+      }
+    },
+    { something: { b: null } }
+  )
+  // removal has to remove tree
   t.end()
 })

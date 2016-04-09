@@ -32,13 +32,25 @@ module.exports = function (t, state, subs) {
       // console.log('testtree:', JSON.stringify(testtree, false, 2).replace(/"(.+)":/g, '$1:'))
       t.deepEqual(tree, testtree, '"' + label + '" results in correct tree')
     }
-    // console.log('tree:', JSON.stringify(tree, false, 2).replace(/"(.+)":/g, '$1:'))
+    console.log('tree:', JSON.stringify(tree, false, 2).replace(/"(.+)":/g, '$1:'))
+    if (state.get('something.b')) {
+      console.log(
+        'seed:', seed,
+        'something:', state.something.b._lstamp - seed,
+        'a:', state.something.a._lstamp - seed,
+        'b:', state.something.b._lstamp - seed,
+        'james:', state.james._lstamp - seed
+      )
+      if (state.something.b.c) {
+        console.log('c:', state.something.b.c._lstamp - seed)
+      }
+    }
   }
 }
 
 function resolveStamps (tree, seed) {
   for (var key in tree) {
-    if (typeof tree[key] === 'object' && key !== '$') {
+    if (typeof tree[key] === 'object' && key !== '$' && key !== '$$') {
       resolveStamps(tree[key], seed)
     } else if (key !== 'val') {
       if (tree[key] instanceof Array) {
