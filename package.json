@@ -32,7 +32,9 @@
     "stats-js": "1.0.0-alpha1",
     "tape": "^4.4.0",
     "tap-difflet": "0.4.0",
-    "vigour-performance": "^1.0.0"
+    "vigour-performance": "^1.0.0",
+    "lodash.set": "^4.1.0",
+    "lodash.merge": "^4.1.0"
   },
   "homepage": "https://github.com/vigour-io/state#readme"
 }
