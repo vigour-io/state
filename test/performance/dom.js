@@ -1,26 +1,22 @@
 'use strict'
-var Stats = require('stats-js')
-var stats = new Stats()
-stats.setMode(0)
-document.body.appendChild(stats.domElement)
+require('./style.less')
 // -------------------------
 var subscribe = require('../../subscribe')
 var s = require('../../s')
+
 var state = s({
   field: {
-    something: 100
+    name: 'dbDevil',
+    amount: 100,
+    fps: { val: 0, $add: ' fps' }
   }
 })
 
-var amount = 3e3
-
-
 var obj = {}
-for (var i = 0; i < amount; i++) {
+for (var i = 0; i < state.field.amount.compute(); i++) {
   obj[i] = i
 }
 state.set({ collection: obj }, false)
-
 
 var Observable = require('vigour-observable')
 // -------------------------
@@ -29,7 +25,9 @@ var Element = new Observable({
   properties: {
     $: true,
     $any: true,
-    text: true
+    text: true,
+    nodeType: true,
+    state: true
   },
   inject: require('./map'),
   Child: 'Constructor'
@@ -40,22 +38,56 @@ var app = new Element({
   a: {
     b: {
       $: [ 'field' ], // multiple need to be able to do that of course...
-      c: {
-        $: [ 'something' ],
+      name: {
+        $: [ 'name' ],
+        text: true
+      },
+      amount: {
+        $: [ 'amount' ],
+        text: true,
+        nodeType: 'textarea',
+        on: {
+          keyup () {
+            this.state.set(this._node.value)
+          }
+        }
+      },
+      fps: {
+        $: [ 'fps' ],
         text: true
       }
     },
     c: {
       $: 'collection',
       $any: { val: true },
-      Child: { text: true }
+      Child: {
+        css (val) {
+          if (val > 990) {
+            return 'thing color'
+          }
+          return 'thing'
+        },
+        text: true
+      }
     }
   }
 })
 
-function walk (elem, key) {
-  var node = document.createElement('div')
-  node.className = key
+function walk (elem) {
+  var node = document.createElement(elem.nodeType || 'div')
+  node.className = elem.key
+  if (elem._on) {
+    if (elem._on.keyup) {
+      elem._on._keys = null
+      // console.log('---- this is wrong in obs / base fix it!!! -----')
+    }
+    elem._on.each((p, key) => {
+      node.addEventListener(key, function (e) {
+        // create stamp
+        p.fn.val.call(elem, e)
+      })
+    })
+  }
   if (elem.$) { elem._node = node }
   elem.each(function (p) {
     node.appendChild(walk(p))
@@ -63,34 +95,45 @@ function walk (elem, key) {
   return node
 }
 // isnt it a million times easier to just parse the subs and show that??? this can be very very heavy im affraid
-
 var appelem = walk(app)
-
-console.warn('yo yo yo', app.$map())
-
 // -------------------------
-
 // need to batch it
 function listen (type, stamp, subs, tree) {
   if (subs.$) {
     if (subs.$.$any) {
-      if (subs.$.Child) {
-        if (type === 'new') {
-          var x = walk(subs.$.Child.prototype)
-          if (subs.$.Child.prototype.text) {
+      var proto = subs.$.Child.prototype
+      if (proto) {
+        if (type === 'remove') {
+          if (tree._node) {
+            tree._node.parentNode.removeChild(tree._node)
+          }
+        } else if (type === 'new') {
+          var x = walk(proto)
+          if (proto.text) {
             x.innerText = this.compute()
           }
           subs.$._node.appendChild(x)
           tree._node = x
         } else {
-          if (tree._node && subs.$.Child.prototype.text) {
-            tree._node.innerText = this.compute()
+          if (tree._node && proto.text) {
+            let v = this.compute()
+            tree._node.innerText = v
+            if (proto.css) {
+              tree._node.className = proto.css.compute(v)
+            }
           }
         }
       }
     }
     if (subs.$.text) {
-      subs.$._node.innerText = this.compute()
+      if (subs.$.type === 'textarea') {
+        subs.$._node.value = this.compute()
+      } else {
+        subs.$._node.innerText = this.compute()
+      }
+    }
+    if (subs.$._on.keyup) {
+      subs.$.state = this
     }
   }
 }
@@ -112,30 +155,26 @@ var c = appelem.childNodes[0]
 console.log(coll)
 
 var x = 0
-
+var lcompute = state.field.amount.compute()
 var raf = window.requestAnimationFrame
 function run () {
-  stats.begin()
-  // ss.collection.$
-  // c.innerHTML = ''
-  // coll.outerHTML = ''
-  // c.removeChild(coll)
-  // coll.innerHTML = ''
-  // coll = document.createElement('div')
+  var ms = Date.now()
   var obj = {}
   x++
-  for (var i = 0; i < amount; i++) {
-    obj[i] = i + x
+  var c = state.field.amount.compute()
+  if (lcompute > c) {
+    for (var i = 0; i < lcompute; i++) {
+     obj[i] = null
+    }
   }
-  app.a.c._node = coll
-  // tree.collection._node = coll
-  // state.set({ collection: obj })
+  for (var i = 0; i < c; i++) {
+    obj[i] = Math.round(Math.random() * 1000)
+  }
+  lcompute = c
   state.collection.set(obj)
-  c.appendChild(coll)
-  // console.log(coll)
-  stats.end()
+  var calc = Date.now() - ms
+  state.field.fps.set(Math.round(1000 / calc))
   raf(run)
-  // console.timeEnd('update')
 }
 
 run()
@@ -146,4 +185,4 @@ console.timeEnd('START')
 global.state = state
 // -------------------------
 console.log('TREE', tree)
-console.log('START ' + amount)
+console.log('START ' + state.field.amount.compute())
