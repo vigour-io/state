@@ -8,6 +8,7 @@ var s = require('../../s')
 var state = s({
   field: {
     name: 'dbDevil',
+    ms: { val: 0, $add: ' ms (js exec time)' },
     amount: {
       val: 100,
       $transform (val) { return val > -1 && val < 2e4 ? val : 100 }
@@ -55,6 +56,10 @@ var app = new Element({
       },
       fps: {
         $: [ 'fps' ],
+        text: true
+      },
+      ms: {
+        $: [ 'ms' ],
         text: true
       }
     },
@@ -146,6 +151,7 @@ var ms = Date.now()
 var lcompute = state.field.amount.compute()
 function run () {
   var obj = {}
+  var startms = Date.now()
   var c = state.field.amount.compute()
   if (lcompute > c) {
     for (let i = 0; i < lcompute; i++) {
@@ -157,8 +163,11 @@ function run () {
     obj[i] = Math.round(Math.random() * 1000)
   }
   lcompute = c
-  state.collection.set(obj)
-  state.field.fps.set(Math.round(1000 / (Date.now() - ms)))
+  state.set({
+    field: { fps: Math.round(1000 / (Date.now() - ms)) },
+    collection: obj
+  })
+  state.field.ms.set(Date.now() - startms)
   ms = Date.now()
   raf(run)
 }
