@@ -17,7 +17,7 @@ test('root', function (t) {
     }
   }
 
-  var subs = subsTest(
+  var s = subsTest(
     t,
     {
       something: { a: true },
@@ -26,7 +26,7 @@ test('root', function (t) {
     subscription
   )
 
-  subs(
+  s(
     'initial subscription', [],
     {
       something: {
@@ -43,7 +43,7 @@ test('root', function (t) {
     }
   )
 
-  subs(
+  s(
     'set james hello to true',
     [
       { path: 'james/hello', type: 'new' },
@@ -75,12 +75,12 @@ test('root', function (t) {
     { james: { hello: true } }
   )
 
-  subs('set james hello to false', [
+  s('set james hello to false', [
     { path: 'james/hello', type: 'update' },
     { path: 'something/a', type: 'update' }
   ], false, { james: { hello: false } })
 
-  subs(
+  s(
     'set a to false',
     [],
     {
@@ -109,22 +109,22 @@ test('root', function (t) {
     { something: { a: false } }
   )
 
-  subs('set b field', [
+  s('set b field', [
     { path: 'something/b', type: 'new' }
   ], false, { something: { b: true } })
 
-  subs('set b.c field', [
+  s('set b.c field', [
     { path: 'something/b/c', type: 'new' }
   ], false, { something: { b: { c: true } } })
 
-  subs('set james hello to false', [
+  s('set james hello to false', [
     { path: 'james/hello', type: 'update' },
     { path: 'something/a', type: 'update' },
     { path: 'something/b', type: 'update' },
     { path: 'something/b/c', type: 'update' }
   ], false, { james: { hello: true } })
 
-  subs(
+  s(
     'remove something/b',
     [], // think about this do you really dont want to fire when root subs? probably yes
     {

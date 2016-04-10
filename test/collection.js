@@ -4,7 +4,7 @@ var subsTest = require('./test')
 
 test('collection', function (t) {
   // use this for .val and normal fields then add collection as a separate
-  var subs = subsTest(
+  var s = subsTest(
     t,
     {},
     {
@@ -13,9 +13,9 @@ test('collection', function (t) {
     }
   )
 
-  subs('initial subscription', [], {})
+  s('initial subscription', [], {})
 
-  subs(
+  s(
     'create a collection',
     [
       { path: 'fields/0/title', type: 'new' },
@@ -36,7 +36,7 @@ test('collection', function (t) {
     }
   )
 
-  subs(
+  s(
     'specific field in a collection',
     [ { path: 'fields/0/title', type: 'update' } ],
     {
@@ -49,7 +49,7 @@ test('collection', function (t) {
     { fields: [ { title: 'smurts' } ] }
   )
 
-  subs(
+  s(
     'remove field in a collection',
     // zit er nog bij -- "fields/0", "fields/0/title" why suddenly 2??
     [
@@ -64,7 +64,7 @@ test('collection', function (t) {
     { fields: [ null ] }
   )
 
-  subs(
+  s(
     'toplevel id collection subscription',
     [ { path: 'a/id', type: 'new' } ],
     {
@@ -82,7 +82,7 @@ test('collection', function (t) {
 
 test('collection using true', function (t) {
   // use this for .val and normal fields then add collection as a separate
-  var subs = subsTest(
+  var s = subsTest(
     t,
     {},
     // make true work
@@ -90,9 +90,9 @@ test('collection using true', function (t) {
     { $any: { val: true } }
   )
 
-  var s = subs('initial subscription', [], {})
+  s('initial subscription', [], {})
 
-  subs(
+  s(
     'create fields',
     [
       { path: 'a', type: 'new' },
@@ -105,7 +105,7 @@ test('collection using true', function (t) {
     }
   )
 
-  subs(
+  s(
     'remove field',
     [
       { path: 'a', type: 'remove' }

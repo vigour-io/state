@@ -5,20 +5,20 @@ var subsTest = require('./test')
 test('reference', function (t) {
   // need to reset event stamp :/
   // use this for .val and normal fields then add collection as a separate
-  var subs = subsTest(
+  var s = subsTest(
     t,
     { a: 'a', b: { ref: '$root.a' } },
     { b: { ref: true } }
   )
 
   // need to reset stamps this sucks!
-  subs(
+  s(
     'initial subscription',
     [{ path: 'b/ref', type: 'new' }],
     { b: { $: 1, ref: 1 } }
   )
 
-  subs(
+  s(
     'referenced field origin',
     [{ path: 'b/ref', type: 'update' }],
     { b: { $: 2, ref: 2 } },

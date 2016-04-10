@@ -4,7 +4,7 @@ var subsTest = require('./test')
 
 test('basic', function (t) {
   // use this for .val and normal fields then add collection as a separate
-  var subs = subsTest(
+  var s = subsTest(
     t,
     { field: true },
     {
@@ -13,13 +13,13 @@ test('basic', function (t) {
     }
   )
 
-  subs(
+  s(
     'initial subscription',
     [{ path: 'field', type: 'new' }],
     { field: 1 }
   )
 
-  subs(
+  s(
     'update nested field',
     [ { path: 'other/yuzi', type: 'new' } ],
     {
@@ -29,7 +29,7 @@ test('basic', function (t) {
     { other: { yuzi: true } }
   )
 
-  subs(
+  s(
     'remove field',
     [ { path: 'other/yuzi', type: 'remove' } ],
     {
@@ -39,7 +39,7 @@ test('basic', function (t) {
     { other: { yuzi: null } }
   )
 
-  subs(
+  s(
     'reset yuzi',
     [ { path: 'other/yuzi', type: 'new' } ],
     {
@@ -49,8 +49,10 @@ test('basic', function (t) {
     { other: { yuzi: true } }
   )
 
-  // so by default this will not fire if there are no remove listeners????
-  subs(
+  // dus for now dit gewoon lekker laten werken -- wel lastig
+  // aangzien je dingen wordne geremoved en je toch nog nested moet checken :/
+
+  s(
     'remove other',
     [ { path: 'other/yuzi', type: 'remove' } ],
     { field: 1 },
