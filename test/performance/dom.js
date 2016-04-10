@@ -15,16 +15,13 @@ var state = s({
     fps: { val: 0, $add: ' fps' }
   }
 })
-
 var obj = {}
 for (var i = 0; i < state.field.amount.compute(); i++) {
   obj[i] = i
 }
 state.set({ collection: obj }, false)
-
-var Observable = require('vigour-observable')
 // -------------------------
-
+var Observable = require('vigour-observable')
 var Element = new Observable({
   properties: {
     $: true,
@@ -143,13 +140,12 @@ function listen (type, stamp, subs, tree) {
 }
 // -------------------------
 console.time('START')
+// -------------------------
 var tree = subscribe(state, app.$map(), listen)
-var x = 0
+var ms = Date.now()
 var lcompute = state.field.amount.compute()
 function run () {
-  var ms = Date.now()
   var obj = {}
-  x++
   var c = state.field.amount.compute()
   if (lcompute > c) {
     for (let i = 0; i < lcompute; i++) {
@@ -163,15 +159,13 @@ function run () {
   lcompute = c
   state.collection.set(obj)
   state.field.fps.set(Math.round(1000 / (Date.now() - ms)))
+  ms = Date.now()
   raf(run)
 }
-
-run()
-
-document.body.appendChild(appelem)
-console.timeEnd('START')
-
-global.state = state
 // -------------------------
+document.body.appendChild(appelem)
+run()
+// -------------------------
+console.timeEnd('START')
+global.state = state
 console.log('TREE', tree)
-console.log('START ' + state.field.amount.compute())
