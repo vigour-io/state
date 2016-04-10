@@ -1,13 +1,17 @@
 'use strict'
 require('./style.less')
 // -------------------------
+var raf = window.requestAnimationFrame
+// -------------------------
 var subscribe = require('../../subscribe')
 var s = require('../../s')
-
 var state = s({
   field: {
     name: 'dbDevil',
-    amount: 100,
+    amount: {
+      val: 100,
+      $transform (val) { return val > -1 && val < 2e4 ? val : 100 }
+    },
     fps: { val: 0, $add: ' fps' }
   }
 })
@@ -126,7 +130,7 @@ function listen (type, stamp, subs, tree) {
       }
     }
     if (subs.$.text) {
-      if (subs.$.type === 'textarea') {
+      if (subs.$.nodeType === 'textarea') {
         subs.$._node.value = this.compute()
       } else {
         subs.$._node.innerText = this.compute()
@@ -138,42 +142,27 @@ function listen (type, stamp, subs, tree) {
   }
 }
 // -------------------------
-// so what we want is a hidden tree??? -- its strange but also makes tons of sense
-
 console.time('START')
-// make this extra heavy
-var ss = app.$map()
-var tree = subscribe(
-  state,
-  ss,
-  listen
-)
-
-console.log(appelem)
-var coll = appelem.childNodes[0].childNodes[1]
-var c = appelem.childNodes[0]
-console.log(coll)
-
+var tree = subscribe(state, app.$map(), listen)
 var x = 0
 var lcompute = state.field.amount.compute()
-var raf = window.requestAnimationFrame
 function run () {
   var ms = Date.now()
   var obj = {}
   x++
   var c = state.field.amount.compute()
   if (lcompute > c) {
-    for (var i = 0; i < lcompute; i++) {
-     obj[i] = null
+    for (let i = 0; i < lcompute; i++) {
+      // temp can be fixed better -- e.g in the handler
+      obj[i] = null
     }
   }
-  for (var i = 0; i < c; i++) {
+  for (let i = 0; i < c; i++) {
     obj[i] = Math.round(Math.random() * 1000)
   }
   lcompute = c
   state.collection.set(obj)
-  var calc = Date.now() - ms
-  state.field.fps.set(Math.round(1000 / calc))
+  state.field.fps.set(Math.round(1000 / (Date.now() - ms)))
   raf(run)
 }
 
