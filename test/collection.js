@@ -23,9 +23,9 @@ test('collection', function (t) {
     ],
     {
       fields: {
-        0: { $: 1, title: 1 },
-        1: { $: 1, title: 1 },
-        $: 1
+        0: { $: 2, title: 2 },
+        1: { $: 2, title: 2 },
+        $: 2
       }
     },
     {
@@ -41,9 +41,9 @@ test('collection', function (t) {
     [ { path: 'fields/0/title', type: 'update' } ],
     {
       fields: {
-        0: { $: 2, title: 2 },
-        1: { $: 1, title: 1 },
-        $: 2
+        0: { $: 3, title: 3 },
+        1: { $: 2, title: 2 },
+        $: 3
       }
     },
     { fields: [ { title: 'smurts' } ] }
@@ -57,8 +57,8 @@ test('collection', function (t) {
     ],
     {
       fields: {
-        1: { $: 1, title: 1 },
-        $: 3
+        1: { $: 2, title: 2 },
+        $: 4
       }
     },
     { fields: [ null ] }
@@ -69,10 +69,10 @@ test('collection', function (t) {
     [ { path: 'a/id', type: 'new' } ],
     {
       fields: {
-        1: { $: 1, title: 1 },
-        $: 3
+        1: { $: 2, title: 2 },
+        $: 4
       },
-      a: { $: 4, id: 4 }
+      a: { $: 5, id: 5 }
     },
     { a: { id: true } }
   )
