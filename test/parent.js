@@ -21,14 +21,10 @@ test('parent', function (t) {
     }
   )
   var result = s('initial subscription', [], false)
-
-  s('create c field', [
-      { path: 'a/b/c', type: 'update' }
-    ],
+  s('create c field', [ { path: 'a/b/c', type: 'update' } ],
     false,
     { a: { d: true } }
   )
-
-  console.log('TREE:', JSON.stringify(result.tree, false, 2))
+  // console.log('TREE:', JSON.stringify(result.tree, false, 2))
   t.end()
 })
