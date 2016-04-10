@@ -51,7 +51,10 @@ test('collection', function (t) {
 
   subs(
     'remove field in a collection',
-    [ { path: 'fields/0', type: 'remove' } ],
+    // zit er nog bij -- "fields/0", "fields/0/title" why suddenly 2??
+    [
+      { path: 'fields/0/title', type: 'remove' }
+    ],
     {
       fields: {
         1: { $: 1, title: 1 },
@@ -74,7 +77,42 @@ test('collection', function (t) {
     { a: { id: true } }
   )
 
-  // any subscription on root level do we want this to work?
+  t.end()
+})
+
+test('collection using true', function (t) {
+  // use this for .val and normal fields then add collection as a separate
+  var subs = subsTest(
+    t,
+    {},
+    // make true work
+    // { $any: true }
+    { $any: { val: true } }
+  )
+
+  var s = subs('initial subscription', [], {})
+
+  subs(
+    'create fields',
+    [
+      { path: 'a', type: 'new' },
+      { path: 'b', type: 'new' }
+    ],
+    false,
+    {
+      a: {}, // emit does not fire for empty objects why?? we want that!
+      b: {}
+    }
+  )
+
+  subs(
+    'remove field',
+    [
+      { path: 'a', type: 'remove' }
+    ],
+    false,
+    { a: null }
+  )
 
   t.end()
 })
