@@ -79,17 +79,19 @@ var app = new Element({
   }
 })
 
+// console.log(app.a.b.amount._on.keys())
+// wtf is going on
+
 function walk (elem) {
   var node = document.createElement(elem.nodeType || 'div')
   node.className = elem.key
   if (elem._on) {
     if (elem._on.keyup) {
-      elem._on._keys = null
-      // console.log('---- this is wrong in obs / base fix it!!! -----')
+      // wtf is the difference...
+      console.log('---->', elem._on.keys())
     }
     elem._on.each((p, key) => {
       node.addEventListener(key, function (e) {
-        // create stamp
         p.fn.val.call(elem, e)
       })
     })
@@ -102,6 +104,13 @@ function walk (elem) {
 }
 // isnt it a million times easier to just parse the subs and show that??? this can be very very heavy im affraid
 var appelem = walk(app)
+
+/*
+  few cases
+  refs and switcher using property defintionw
+  DONT WANT TO DO TREE FOR NON-CHANGING DOM HANDLES
+*/
+
 // -------------------------
 // need to batch it
 function listen (type, stamp, subs, tree) {
@@ -138,7 +147,7 @@ function listen (type, stamp, subs, tree) {
         subs.$._node.innerText = this.compute()
       }
     }
-    if (subs.$._on.keyup) {
+    if (subs.$._on._keys) {
       subs.$.state = this
     }
   }
