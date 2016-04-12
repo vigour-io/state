@@ -7,7 +7,8 @@
   },
   "main": "lib/index.js",
   "scripts": {
-    "test": "node test | tap-difflet"
+    "test": "node test | tap-difflet",
+    "watch": "nodemon test | tap-difflet"
   },
   "repository": {
     "type": "git",
@@ -34,7 +35,8 @@
     "tap-difflet": "0.4.0",
     "vigour-performance": "^1.0.0",
     "lodash.set": "^4.1.0",
-    "lodash.merge": "^4.1.0"
+    "lodash.merge": "^4.1.0",
+    "nodemon": "^1.9.1"
   },
   "homepage": "https://github.com/vigour-io/state#readme"
 }

@@ -8,45 +8,49 @@ var Observable = require('vigour-observable') // very slow init -- need to opmiz
 var subscribe = require('../../../subscribe')
 var s = require('../../../s')
 var vstamp = require('vigour-stamp')
-console.log(vstamp)
-var state = s({
-  name: 'trees'
-})
+var state = s({ name: 'trees' })
 var obj = {}
 for (var i = 0; i < 5; i++) {
-  obj[i] = i
+  obj[i] = { title: i }
 }
 state.set({ collection: obj }, false)
 // // -------------------------
+var Property = new Observable({
+  properties: {
+    render (val) {
+      // obviously need a compute cache
+      // second argument has to work
+      this.define({ render: val })
+    }
+  },
+  Child: 'Constructor'
+}).Constructor
+
 var Element = new Observable({
   properties: {
     $: true, // this basiclly means field
     // hard thing is to get multiple fields on one level -- we will not support it
     $any: true,
-    text: new Observable({
-      on: {
-        data (val, stamp) {
-          console.log('this is a text letz go!!!', stamp)
-        }
+    text: new Property({
+      render (val) {
       }
     }),
     nodeType: true,
     state: true,
     _node: true
   },
-  inject: require('../map'), // needs to be very different ofcourse
+  inject: [ require('./map'), require('./dom') ], // needs to be very different ofcourse
   Child: 'Constructor'
 }).Constructor
 // map is ofcourse wrong
 // subscribe needs to work
 
 // wtf to do
-
 var app = new Element({
   holder: {
     nested: {
       collection: {
-        $: 'field',
+        $: 'collection',
         $any: true,
         Child: {
           dot: {
@@ -54,7 +58,7 @@ var app = new Element({
               text: 'hello this is not a subscription'
             }
           },
-          text: { $: 'title' }
+          text: { $: 'title', $prepend: 'title:' }
         }
       }
     },
@@ -67,17 +71,21 @@ var app = new Element({
   }
 })
 
-// so this thing need to get a tree to nested --
-// no not? nope
+// what do i want out of this?
 /*
-tree: {
+  holder: {
+    nested: {
 
-
-
-}
+    }
+  }
 */
 
+console.log(app.$map())
 
+// properties just check for subscribers? not in the tree?
+// what about having a prop subscirbed? no problem just use val: true
+// when val true --> parse props ourselves or just make individual subs for them?
+// this may be the prefered option
 
 // -------------------------
 console.timeEnd('START')

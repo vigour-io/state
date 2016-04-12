@@ -67,11 +67,13 @@ var app = new Element({
       $: 'collection',
       $any: { val: true },
       Child: {
-        css (val) {
-          if (val > 990) {
-            return 'thing color'
+        css: {
+          $transform (val) {
+            if (val > 990) {
+              return 'thing color'
+            }
+            return 'thing'
           }
-          return 'thing'
         },
         text: true
       }
@@ -79,15 +81,12 @@ var app = new Element({
   }
 })
 
-// console.log(app.a.b.amount._on.keys())
-// wtf is going on
-
 function walk (elem) {
   var node = document.createElement(elem.nodeType || 'div')
   node.className = elem.key
   if (elem._on) {
     if (elem._on.keyup) {
-      // wtf is the difference...
+      // wtf is the difference...gi
       console.log('---->', elem._on.keys())
     }
     elem._on.each((p, key) => {
@@ -102,7 +101,7 @@ function walk (elem) {
   })
   return node
 }
-// isnt it a million times easier to just parse the subs and show that??? this can be very very heavy im affraid
+
 var appelem = walk(app)
 
 /*
@@ -134,6 +133,7 @@ function listen (type, stamp, subs, tree) {
             let v = this.compute()
             tree._node.innerText = v
             if (proto.css) {
+              // not very nice tbh make it the second argument perhaps liked prev value better
               tree._node.className = proto.css.compute(v)
             }
           }
@@ -158,6 +158,7 @@ console.time('START')
 var tree = subscribe(state, app.$map(), listen)
 var ms = Date.now()
 var lcompute = state.field.amount.compute()
+var cnt = 0
 function run () {
   var obj = {}
   var startms = Date.now()
