@@ -86,20 +86,23 @@ var elem = app.render()
 console.log('ELEM:', elem)
 console.log('go subs!')
 
-var tree = subscribe(state, subs, function (type, stamp, subs, tree) {
+var tree = subscribe(state, subs, function (type, stamp, subs, tree, ptree) {
   // or just add parent in trees... many times easier
   // update.call(keyTarget, INIT, stamp, subs, treeKey)
   // this is it
   console.log('FIRE', this.path(), type, subs)
+  console.log('tree:', tree)
+  console.log('ptree:', ptree)
+  // tree, ptree
+
+  // this is interesting
   if (subs._) {
     if (subs._.render) {
-      console.log('--->')
       // need parent
       subs._.render(subs._.parent._node, this, tree)
       // need previous value here then we are good!
     } else if (subs._.$any) {
       // something like collection flag or something
-      console.log('---> collection!', subs._.$any)
       // how to find dat node
 
       // (subs._.$parent._node find it!!!
@@ -112,7 +115,7 @@ var tree = subscribe(state, subs, function (type, stamp, subs, tree) {
   }
 })
 
-document.body.appendChild(elem)
+// document.body.appendChild(elem)
 
 console.log('tree:', tree)
 // properties just check for subscribers? not in the tree?

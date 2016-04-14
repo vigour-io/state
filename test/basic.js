@@ -49,9 +49,6 @@ test('basic', function (t) {
     { other: { yuzi: true } }
   )
 
-  // dus for now dit gewoon lekker laten werken -- wel lastig
-  // aangzien je dingen wordne geremoved en je toch nog nested moet checken :/
-
   s(
     'remove other',
     [ { path: 'other/yuzi', type: 'remove' } ],

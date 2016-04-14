@@ -10,7 +10,8 @@ module.exports = function (t, state, subs) {
   var tree = subscribe(
     state,
     subs,
-    function (type, stamp) {
+    function (type, stamp, subs, tree, parentTree) {
+      // console.log(type, stamp, subs, tree, parentTree)
       updates.push({ path: this.path().join('/'), type: type })
     }
   )
