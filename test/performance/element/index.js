@@ -80,17 +80,7 @@ var app = new Element({
   }
 }, false)
 
-// what do i want out of this?
-/*
-  holder: {
-    nested: {
-
-    }
-  }
-*/
-
 var subs = app.$map()
-
 console.log('go render!')
 var elem = app.render()
 console.log('ELEM:', elem)
