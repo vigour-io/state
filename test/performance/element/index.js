@@ -1,22 +1,23 @@
 'use strict'
-require('../style.less')
+require('./style.less')
 console.time('START')
 // -------------------------
-var raf = window.requestAnimationFrame
+// var raf = window.requestAnimationFrame
 // -------------------------
 var Observable = require('vigour-observable') // very slow init -- need to opmize
 var subscribe = require('../../../subscribe')
 var s = require('../../../s')
 var state = s({ name: 'trees' })
 var obj = {}
-for (var i = 0; i < 2; i++) {
-  obj[i] = { title: i }
-}
+for (var i = 0; i < 2; i++) { obj[i] = { title: i } }
 state.set({ collection: obj })
 // // -------------------------
 var Property = new Observable({
   properties: {
-    $: true,
+    $ (val) {
+      this.$ = val
+    },
+    has$: true,
     render (val) {
       this.define({ render: val })
     }
@@ -47,81 +48,88 @@ var Element = new Observable({
     state: true,
     _node: true
   },
-  inject: [ require('./map'), require('./render') ], // needs to be very different ofcourse
+  inject: [
+    require('./map'),
+    // require('./render')
+  ], // needs to be very different ofcourse
   Child: 'Constructor'
 }, false).Constructor
 
 var app = new Element({
-  holder: {
-    nested: {
-      collection: {
-        $: 'collection',
-        $any: true,
-        Child: {
-          dot: {
-            field: {
-              text: 'hello this is not a subscription'
-            }
-          },
-          texting: {
-            text: { $: 'title', $prepend: 'title:' }
-          }
+  key: 'app',
+  main: {
+    // message: { text: 'hello' },
+    holder: {
+      $: 'collection',
+      $any: true,
+      Child: {
+        // need to know that there is a deeper subs
+        star: {},
+        has$: true,
+        title: {
+          has$: true,
+          text: { $: 'title' }
+        },
+        header: {
+          has$: true,
+          text: { $: 'title' }
         }
       }
     },
-    something: {
-      anotherfield: {
-        text: 'more text'
-      },
-      field: {
-        text: 'some text'
-      }
-    }
-  }
+    // holder2: {
+    //   $: 'collection',
+    //   $any: true,
+    //   Child: {
+    //     has$: true,
+    //     text: { $: 'title' }
+    //   }
+    // }
+  },
+  // menu: {
+  //   button: { text: 'a button' },
+  //   settings: {
+  //     $: 'settings',
+  //     button: { text: { $: 'languages' } }
+  //   }
+  // },
+  // footer: {
+  //   left: { text: 'on the left' },
+  //   right: { text: 'on the right' }
+  // }
 }, false)
 
 var subs = app.$map()
-console.log('go render!')
-var elem = app.render()
-console.log('ELEM:', elem)
-console.log('go subs!')
 
-var tree = subscribe(state, subs, function (type, stamp, subs, tree, ptree) {
-  // or just add parent in trees... many times easier
-  // update.call(keyTarget, INIT, stamp, subs, treeKey)
-  // this is it
+var render = require('./render')
+// var elem = render.fn(app)
+console.log(app)
+
+var tree = {}
+
+tree = subscribe(state, subs, function (type, stamp, subs, ctree, ptree) {
   console.log('FIRE', this.path(), type, subs)
-  console.log('tree:', tree)
-  console.log('ptree:', ptree)
-  // tree, ptree
+  // console.log('tree:', tree)
+  // console.log('ptree:', ptree)
 
-  // this is interesting
   if (subs._) {
-    if (subs._.render) {
-      // need parent
-      subs._.render(subs._.parent._node, this, tree)
-      // need previous value here then we are good!
-    } else if (subs._.$any) {
-      // something like collection flag or something
-      // how to find dat node
-
-      // (subs._.$parent._node find it!!!
-      subs._.$any.prototype.render(false, this, tree)
-    } else {
-      console.warn('?')
-    }
+    render.fn(this, type, stamp, subs, ctree, ptree, tree)
   } else {
-    console.error('!', subs)
+    console.warn('no _ ?', this.path())
   }
-})
-
-// document.body.appendChild(elem)
-
-console.log('tree:', tree)
-// properties just check for subscribers? not in the tree?
-// what about having a prop subscirbed? no problem just use val: true
-// when val true --> parse props ourselves or just make individual subs for them?
-// this may be the prefered option
+  // render.f
+}, tree)
+// -------------------------
+console.log('subs:', subs)
 // -------------------------
 console.timeEnd('START')
 global.state = state
+global.tree = tree
+
+console.log(tree._[app.uid()])
+document.body.appendChild(tree._[app.uid()])
+// something like rendered : true
+
+// if i do this correctly dont need parent ever -- just need to store
+// element and then find it by checking parent yes better
+// document.appendChild(elem)
+// tree.node or something...
