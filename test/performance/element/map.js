@@ -32,6 +32,7 @@ exports.define = {
     if (this.$any) {
       n = { $any: this.Child.prototype.$map() }
       n.$any.val = true
+      this.Child.prototype._holder = this
       let field = get(map, this.$)
       if (field) {
         console.log('MERGER')
@@ -41,17 +42,9 @@ exports.define = {
         field = get(map, this.$)
       }
       // this all does nto work yet
-      if (field.$any._) {
-        if (field.$any._ instanceof Array) {
-          field.$any._.push({ $any: this.Child.prototype })
-        } else {
-          field.$any._ = [ field.$any._, { $any: this.Child.prototype } ]
-        }
-      } else {
-        console.log('????', field, map, map.collection)
-        field.$any._ = { $any: this.Child.prototype }
-        field._ = this
-      }
+      console.log('????', field, map, map.collection)
+      field.$any._ = { $any: this.Child.prototype }
+      field._ = this
     } if (this.$) {
       // only probs can have this -- this is too many update for sure
       if (this.$ !== true) {

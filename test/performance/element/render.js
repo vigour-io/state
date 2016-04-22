@@ -11,44 +11,75 @@ exports.fn = function (state, type, stamp, subs, tree, ptree, rtree) {
   // console.log(ptree)
   if (!elem._base_version) {
     if (elem.$any) {
-      console.warn('got any', elem, state.inspect())
       elem = elem.$any
     } else {
       throw new Error('weirdness going on render', elem)
     }
-    // need to create stuff prob...
-  } else { // TEMP FOR DEBUGS
+  }
 
-    if (elem.type === 'element') {
-      console.warn('got element -->', elem.inspect(), elem.path().join('/'))
-      if (!ptree._) {
-        ptree._ = {}
-        if (!ptree._[elem.parent.uid()]) {
-          if (!elem.parent.$) {
-            console.error('need to create this stuff!')
-            ptree._[elem.parent.uid()] = whileparentnostate(elem.parent, rtree)
-          }
-        }
+  // console.warn('got render -->', elem.path().join('/'), elem.keys())
+
+  if (!ptree._) {
+    ptree._ = {}
+  }
+  if (!ptree._[elem._parent.uid()]) {
+    // console.error('CREATE PNODE', elem.path())
+    if (!elem.parent.$) {
+      ptree._[elem._parent.uid()] = whileparentnostate(elem._parent, rtree, ptree)
+    }
+  }
+  let pnode = ptree._[elem._parent.uid()]
+  if (!tree._) {
+    tree._ = {}
+  }
+
+  if (elem.type === 'element') {
+    if (!tree._[elem.uid()]) {
+      // console.log('CREATE ELEMENT!', state.path(), pnode)
+      let div = renderelem(elem)
+      tree._[elem.uid()] = div
+      pnode.appendChild(div)
+    }
+  } else {
+    if (elem.key === 'text') {
+      if (!tree._[elem.uid()]) {
+        tree._[elem.uid()] = document.createTextNode(state.compute())
+        pnode.appendChild(tree._[elem.uid()])
+      } else {
+        tree._[elem.uid()].nodeValue = state.compute()
       }
-      let pnode = ptree._[elem.parent.uid()]
-    } else {
-      console.info('prop or somethin', elem.inspect())
     }
   }
 }
 
-function whileparentnostate (elem, rtree) {
+function renderelem (elem) {
+  var div = document.createElement('div')
+  if (elem.key || elem.css) {
+    div.className = elem.css || elem.key
+  }
+  return div
+}
+
+function whileparentnostate (elem, rtree, ptree, holder) {
   var divelem
   var pelem
-  while (elem) {
-    let tdiv = document.createElement('div')
+  while (elem && !elem.$ && !(ptree._ && ptree._[elem.uid()])) {
+    let tdiv = renderelem(elem)
     if (!divelem) {
       divelem = tdiv
     }
     if (pelem) {
       tdiv.appendChild(pelem)
     }
-    tdiv.className = elem.key
+
+    let p = elem.parent
+    if (p && ptree && ptree._[p.uid()]) {
+      // console.log('very special -- need more level')
+      ptree._[p.uid()].appendChild(tdiv)
+    } else {
+      // console.error('\n\nHERE HERE HERE WRONG!', elem.path().join('/'))
+    }
+
     pelem = tdiv
     if (!elem.parent) {
       if (!rtree._) { rtree._ = {} }

@@ -2,7 +2,7 @@
 require('./style.less')
 console.time('START')
 // -------------------------
-// var raf = window.requestAnimationFrame
+var raf = window.requestAnimationFrame
 // -------------------------
 var Observable = require('vigour-observable') // very slow init -- need to opmize
 var subscribe = require('../../../subscribe')
@@ -10,14 +10,17 @@ var s = require('../../../s')
 var state = s({ name: 'trees' })
 var obj = {}
 for (var i = 0; i < 2; i++) { obj[i] = { title: i } }
-state.set({ collection: obj })
+state.set({
+  collection: obj,
+  ms: { val: 100, $transform (val) { return Math.round(val) } }
+})
 // // -------------------------
 var Property = new Observable({
   properties: {
     $ (val) {
       this.$ = val
     },
-    has$: true,
+    // has$: true,
     render (val) {
       this.define({ render: val })
     }
@@ -29,6 +32,7 @@ var Property = new Observable({
 var Element = new Observable({
   type: 'element',
   properties: {
+    css: true,
     $: true, // this basicly means field or path
     // hard thing is to get multiple fields on one level -- we will not support it
     $any: true,
@@ -49,7 +53,7 @@ var Element = new Observable({
     _node: true
   },
   inject: [
-    require('./map'),
+    require('./map')
     // require('./render')
   ], // needs to be very different ofcourse
   Child: 'Constructor'
@@ -57,22 +61,28 @@ var Element = new Observable({
 
 var app = new Element({
   key: 'app',
+  ms: {
+    text: { $: 'ms' }
+  },
   main: {
     // message: { text: 'hello' },
     holder: {
       $: 'collection',
       $any: true,
       Child: {
+        css: 'nestchild',
         // need to know that there is a deeper subs
         star: {},
-        has$: true,
-        title: {
-          has$: true,
-          text: { $: 'title' }
-        },
+        // has$: true,
+        // title: {
+        //   // has$: true,
+        //   text: { $: 'title' }
+        // },
         header: {
-          has$: true,
-          text: { $: 'title' }
+          // has$: true,
+          a: {
+            text: { $: 'title' }
+          }
         }
       }
     },
@@ -107,10 +117,10 @@ console.log(app)
 var tree = {}
 
 tree = subscribe(state, subs, function (type, stamp, subs, ctree, ptree) {
-  console.log('FIRE', this.path(), type, subs)
+  // console.log('FIRE', this.path(), type, subs)
   // console.log('tree:', tree)
   // console.log('ptree:', ptree)
-
+  // ctree._parent = ptree
   if (subs._) {
     render.fn(this, type, stamp, subs, ctree, ptree, tree)
   } else {
@@ -127,7 +137,23 @@ global.tree = tree
 
 console.log(tree._[app.uid()])
 document.body.appendChild(tree._[app.uid()])
+console.clear()
 // something like rendered : true
+var cnt = 0
+var total = 0
+
+function loop () {
+  cnt++
+  var ms = Date.now()
+  var obj = {}
+  for (var i = 0; i < 2e3; i++) { obj[i] = { title: i + cnt } }
+  state.collection.set(obj)
+  total += (Date.now() - ms)
+  state.ms.set(total / cnt)
+  raf(loop)
+}
+
+// loop()
 
 // if i do this correctly dont need parent ever -- just need to store
 // element and then find it by checking parent yes better
