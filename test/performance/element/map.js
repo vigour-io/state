@@ -2,18 +2,17 @@
 var set = require('lodash.set')
 var get = require('lodash.get')
 
-// wrong merge
 function merge (a, b) {
   if (typeof b !== 'object') {
     if (!a.val) { a.val = b }
   } else {
     for (var i in b) {
-      if (i !== '_') {
+      if (i !== '_') { // && i !== 'val'
         if (typeof a[i] === 'object') {
           merge(a[i], b[i])
         } else if (!a[i]) {
           a[i] = b[i]
-        } else {
+        } else if (i !== 'val') {
           a[i] = { val: a[i] }
           merge(a[i], b[i])
         }
@@ -21,6 +20,17 @@ function merge (a, b) {
     }
   }
   return a
+}
+
+function addSubscriber (target, obs) {
+  if (target._) {
+    if (target._._base_version) {
+      target._ = { [target._.uid()]: target._ }
+    }
+    target._[obs.uid()] = obs
+  } else {
+    target._ = obs
+  }
 }
 
 exports.define = {
@@ -40,17 +50,9 @@ exports.define = {
         set(map, this.$, n)
         field = get(map, this.$)
       }
-      // this all does nto work yet
-      if (field.$any._) {
-        if (field.$any._ instanceof Array) {
-          field.$any._.push({ $any: this.Child.prototype })
-        } else {
-          field.$any._ = [ field.$any._, { $any: this.Child.prototype } ]
-        }
-      } else {
-        field.$any._ = { $any: this.Child.prototype }
-        field._ = this
-      }
+      // multiples!
+      field.$any._ = { $any: this.Child.prototype }
+      field._ = this
     }
 
     if (this.$) {
@@ -66,22 +68,15 @@ exports.define = {
         if (n) {
           merge(n, t)
         } else {
-          var x = get(map, this.$)
-          if (x) {
-            if (x._) {
-              if (!(x._ instanceof Array)) {
-                t._ = [ t._ ]
-                t._.push(x._)
-              } else {
-                t._ = x._
-                t._.push(this)
-              }
-            }
-          }
-          // totally wrong needs a merge
           n = t
         }
-        set(map, this.$, n)
+        var x = get(map, this.$)
+        if (x) {
+          addSubscriber(x, this)
+          merge(x, n)
+        } else {
+          set(map, this.$, n)
+        }
         map = n
       }
     }

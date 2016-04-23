@@ -61,7 +61,7 @@ exports.fn = function (state, type, stamp, subs, tree, ptree, rtree) {
       elem = elem.$any
     }
   }
-  if (elem instanceof Array) {
+  if (!elem._base_version) {
     for (var i in elem) {
       callit.call(this, elem[i], state, type, stamp, subs, tree, ptree, rtree)
     }
@@ -71,6 +71,7 @@ exports.fn = function (state, type, stamp, subs, tree, ptree, rtree) {
 }
 
 function renderelem (elem) {
+  // order!!!! very important
   var nostate = elem.noState
   var div
   // add types
@@ -83,7 +84,7 @@ function renderelem (elem) {
       return val[key] && val[key].noState
     })
     if (elem.key || elem.css) {
-      div.className = elem.css || elem.key
+      div.className = elem.css || elem.key // not correct yet
     }
     if (nostates) {
       for (var i in nostates) {
@@ -100,6 +101,8 @@ function renderelem (elem) {
   return div
 }
 
+// doing this from the state update results in a lot of weird things
+// menu that does not get rendered etc
 function whileparentnostate (elem, rtree, ptree, holder) {
   var divelem
   var pelem

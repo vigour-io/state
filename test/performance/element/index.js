@@ -120,7 +120,9 @@ var app = new Element({
     // }
   },
   menu: {
-    // this needs to be rendered of course
+    // this needs to be rendered of course -- even if there is no data -- else its pretty strange
+    // for now we cna work arround this (leave it!) but alter we need to change this
+    // it just weird that if there is a state it allways takes over and takes care of the handeling
     button: { text: 'a button' },
     settings: {
       $: 'settings',
