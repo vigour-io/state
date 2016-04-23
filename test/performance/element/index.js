@@ -104,7 +104,7 @@ var app = new Element({
           text: { $: 'title' }
         },
         // more: {
-        //   text: { $: '$root.ms' } -- root is not yet supported
+        //   text: { $: '$root.ms' } -- root is not yet supported (needs some minor revisions)
         // },
         header: {
           a: {
