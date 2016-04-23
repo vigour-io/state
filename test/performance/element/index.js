@@ -19,7 +19,8 @@ state.set({
       return isNumber(val) ? Math.round(val) : 'not measured'
     },
     $add: ' ms'
-  }
+  },
+  settings: {}
 })
 // // -------------------------
 const Property = new Observable({
@@ -72,7 +73,6 @@ var app = new Element({
     }
   },
   main: {
-    // message: { text: 'hello' },
     holder: {
       $: 'collection',
       $any: true,
@@ -92,18 +92,13 @@ var app = new Element({
             }
           }
         },
-        // need to know that there is a deeper subs
-        // star: {}, does nto work when there is no state yet...
-        // has$: true,
         title: {
-          // has$: true,
           text: { $: 'title' }
         },
         // more: {
         //   text: { $: '$root.ms' } -- root is not yet supported
         // },
         header: {
-          // has$: true,
           a: {
             text: {
               $: 'title',
@@ -124,23 +119,23 @@ var app = new Element({
     //   }
     // }
   },
-  // menu: {
-  //   button: { text: 'a button' },
-  //   settings: {
-  //     $: 'settings',
-  //     button: { text: { $: 'languages' } }
-  //   }
-  // },
-  // footer: {
-  //   left: { text: 'on the left' },
-  //   right: { text: 'on the right' }
-  // }
+  menu: {
+    // this needs to be rendered of course
+    button: { text: 'a button' },
+    settings: {
+      $: 'settings',
+      button: { text: { $: 'languages' } }
+    }
+  },
+  footer: {
+    left: { text: 'on the left' },
+    right: { text: 'on the right' }
+  }
 }, false)
 
 var subs = app.$map()
 
 var render = require('./render')
-// var elem = render.fn(app)
 console.log(app)
 
 var tree = {}
@@ -163,14 +158,10 @@ console.log('subs:', subs)
 console.timeEnd('START')
 global.state = state
 global.tree = tree
-
 console.log(tree._[app.uid()])
 document.body.appendChild(tree._[app.uid()])
-// console.clear()
-// something like rendered : true
 var cnt = 0
 var total = 0
-
 function loop () {
   cnt++
   var ms = Date.now()
@@ -187,7 +178,6 @@ loop()
 
 console.log('----------------------------')
 state.set({ elems: document.getElementsByTagName('*').length })
-
 // if i do this correctly dont need parent ever -- just need to store
 // element and then find it by checking parent yes better
 // document.appendChild(elem)

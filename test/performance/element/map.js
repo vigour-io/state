@@ -93,7 +93,6 @@ exports.define = {
             returnValue = true
           }
         } else {
-          console.log('no change! this is a leaf boy', key)
           p.noState = true // also for props of course -- important
         }
       }
