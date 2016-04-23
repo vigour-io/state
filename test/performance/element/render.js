@@ -64,9 +64,9 @@ function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
 exports.fn = function (state, type, stamp, subs, tree, ptree, rtree) {
   var elem = subs._
   if (!elem._base_version && !elem.$any) {
-    console.log('MULTIPLE', Object.keys(elem))
+    // console.log('MULTIPLE', Object.keys(elem))
     for (var i in elem) {
-      console.log('    ', elem[i].$any && !elem[i].type ? '$any: ' + elem[i].$any.css : elem[i].path())
+      // console.log('    ', elem[i].$any && !elem[i].type ? '$any: ' + elem[i].$any.css : elem[i].path())
       callit.call(this, elem[i], state, type, stamp, subs, tree, ptree, rtree)
     }
   } else {

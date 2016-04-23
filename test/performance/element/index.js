@@ -73,6 +73,14 @@ var app = new Element({
     }
   },
   main: {
+    holder2: {
+      $: 'collection',
+      $any: true,
+      Child: { // if you reuse here stuff here as a Child uid is not enough!
+        css: 'weirdChild',
+        text: { $: 'title' }
+      }
+    },
     holder: {
       $: 'collection',
       $any: true,
@@ -109,14 +117,6 @@ var app = new Element({
           }
         }
       }
-    },
-    holder2: {
-      $: 'collection',
-      $any: true,
-      Child: { // if you reuse here stuff here as a Child uid is not enough!
-        css: 'weirdChild',
-        text: { $: 'title' }
-      }
     }
   },
   menu: {
@@ -142,8 +142,8 @@ var render = require('./render')
 var tree = {}
 
 tree = subscribe(state, subs, function (type, stamp, subs, ctree, ptree) {
-  console.group()
-  console.log('FIRE', this.path(), type, subs)
+  // console.group()
+  // console.log('FIRE', this.path(), type, subs)
   // console.log('tree:', tree)
   // console.log('ptree:', ptree)
   // ctree._parent = ptree
@@ -152,7 +152,7 @@ tree = subscribe(state, subs, function (type, stamp, subs, ctree, ptree) {
   } else {
     console.warn('no _ ?', this.path())
   }
-  console.groupEnd()
+  // console.groupEnd()
   // render.f
 }, tree)
 // -------------------------
@@ -170,15 +170,15 @@ function loop () {
   cnt++
   var ms = Date.now()
   var obj = {}
-  for (var i = 0; i < 2; i++) { obj[i] = { title: i + cnt } }
+  for (var i = 0; i < 1e3; i++) { obj[i] = { title: i + cnt } }
   state.collection.set(obj)
   total += (Date.now() - ms)
   state.ms.set(total / cnt)
-  // raf(loop)
+  raf(loop)
 }
 
 // state.collection[0].remove()
-// loop()
+loop()
 
 console.log('----------------------------')
 state.set({ elems: document.getElementsByTagName('*').length })
