@@ -84,6 +84,13 @@ var app = new Element({
           }
         },
         star: {},
+        something: {
+          a: {
+            b: {
+              c: {}
+            }
+          }
+        },
         // need to know that there is a deeper subs
         // star: {}, does nto work when there is no state yet...
         // has$: true,

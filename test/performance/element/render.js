@@ -70,36 +70,32 @@ exports.fn = function (state, type, stamp, subs, tree, ptree, rtree) {
   }
 }
 
-function renderelem (elem, nostate) {
+function renderelem (elem) {
   var div
+  var nostate = elem.noState
   // add types
   if (nostate && elem._cachedNode) {
-    // then we need to allways do this of course...
-    // but dont want it double all the time it is a lot faster for collection though
     div = elem._cachedNode.cloneNode(true)
   } else {
     div = document.createElement('div')
     let nostates = elem._noState !== void 0 ? elem._noState : elem.keys('_noState', function (val, key) {
       return val[key] && val[key].noState
     })
+    if (elem.key || elem.css) {
+      div.className = elem.css || elem.key
+    }
     if (nostates) {
       for (var i in nostates) {
         if (elem[nostates[i]].type === 'element') {
           div.appendChild(renderelem(elem[nostates[i]], true))
         }
       }
-      if (nostate) {
-        elem._cachedNode = div
-      }
+    }
+    if (nostate) {
+      elem._cachedNode = div
     }
   }
-
-  // here we can do all non-state props as well
-
-  if (elem.key || elem.css) {
-    div.className = elem.css || elem.key
-  }
-  // here we need to do a check
+  // do all the non state props as well
   return div
 }
 
