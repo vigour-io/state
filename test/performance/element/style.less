@@ -1,6 +1,8 @@
 .app {
   border: 1px solid red;
   padding:5px;
+  font-family: georgia;
+  font-style: italic;
 }
 
 .main {
@@ -14,6 +16,8 @@
 }
 
 .nestchild {
+  width: 100px;
+  display: inline-block;
   border: 5px solid black;
   padding: 15px;
 }
@@ -21,7 +25,8 @@
 .title {
   font-size: 24px;
   background-color: pink;
-  padding: 3px;
+  text-align: center;
+  padding: 15px;
 }
 
 .header {
@@ -29,37 +34,37 @@
 }
 
 .star {
-    position: relative;
-    width: 212px;
-    height: 100px;
+  position: relative;
+  width: 40px;
+  height: 40px;
 }
 
 .star:before,
 .star:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 60px;
-    height: 60px;
-    border: 20px solid red;
-    -moz-border-radius: 50px 50px 0 50px;
-         border-radius: 50px 50px 0 50px;
-    -webkit-transform: rotate(-45deg);
-       -moz-transform: rotate(-45deg);
-        -ms-transform: rotate(-45deg);
-         -o-transform: rotate(-45deg);
-            transform: rotate(-45deg);
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  border: 4px solid red;
+  -moz-border-radius: 10px 10px 0 10px;
+       border-radius: 10px 10px 0 10px;
+  -webkit-transform: rotate(-45deg);
+     -moz-transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+       -o-transform: rotate(-45deg);
+          transform: rotate(-45deg);
 }
 
 .star:after {
-    left: auto;
-    right: 0;
-    -moz-border-radius: 50px 50px 50px 0;
-         border-radius: 50px 50px 50px 0;
-    -webkit-transform: rotate(45deg);
-       -moz-transform: rotate(45deg);
-        -ms-transform: rotate(45deg);
-         -o-transform: rotate(45deg);
-            transform: rotate(45deg);
+  left: auto;
+  right: 0;
+  -moz-border-radius: 10px 10px 10px 0;
+       border-radius: 10px 10px 10px 0;
+  -webkit-transform: rotate(45deg);
+     -moz-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+       -o-transform: rotate(45deg);
+          transform: rotate(45deg);
 }

@@ -40,7 +40,8 @@ function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
     } else {
       // hier moet de prop render stuff
       if (elem.key === 'text') {
-        var val = state.compute()
+        // elem.compute cna be checked if nessecary
+        var val = elem.compute(state.compute())
         if (!tree._[elem.uid()]) {
           tree._[elem.uid()] = document.createTextNode(val)
           pnode.appendChild(tree._[elem.uid()])
@@ -69,11 +70,36 @@ exports.fn = function (state, type, stamp, subs, tree, ptree, rtree) {
   }
 }
 
-function renderelem (elem) {
-  var div = document.createElement('div')
+function renderelem (elem, nostate) {
+  var div
+  // add types
+  if (nostate && elem._cachedNode) {
+    // then we need to allways do this of course...
+    // but dont want it double all the time it is a lot faster for collection though
+    div = elem._cachedNode.cloneNode(true)
+  } else {
+    div = document.createElement('div')
+    let nostates = elem._noState !== void 0 ? elem._noState : elem.keys('_noState', function (val, key) {
+      return val[key] && val[key].noState
+    })
+    if (nostates) {
+      for (var i in nostates) {
+        if (elem[nostates[i]].type === 'element') {
+          div.appendChild(renderelem(elem[nostates[i]], true))
+        }
+      }
+      if (nostate) {
+        elem._cachedNode = div
+      }
+    }
+  }
+
+  // here we can do all non-state props as well
+
   if (elem.key || elem.css) {
     div.className = elem.css || elem.key
   }
+  // here we need to do a check
   return div
 }
 

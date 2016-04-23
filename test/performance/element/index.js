@@ -17,7 +17,8 @@ state.set({
   ms: {
     $transform (val) {
       return isNumber(val) ? Math.round(val) : 'not measured'
-    }
+    },
+    $add: ' ms'
   }
 })
 // // -------------------------
@@ -26,7 +27,7 @@ const Property = new Observable({
     $ (val) {
       this.$ = val
     },
-    // has$: true,
+    noState: true,
     render (val) {
       this.define({ render: val })
     }
@@ -39,20 +40,13 @@ const Element = new Observable({
   type: 'element',
   properties: {
     css: true,
-    has$: true,
+    noState: true,
     $: true, // this basicly means field or path
     // hard thing is to get multiple fields on one level -- we will not support it
     $any: true,
     text: new Property({
       render (node, state, tree, type) {
-        // state or val ----
-        console.log('should render this prop', this.path())
-        console.log(node, state)
-        if (node) {
-          node.innerText = this.compute(state)
-        } else {
-          console.error('wtf wtf!', node, state.path())
-        }
+        // different later
       }
     }),
     nodeType: true,
@@ -73,7 +67,7 @@ var app = new Element({
       text: { $: 'ms' }
     },
     elems: {
-      text: { $: 'elems' }
+      text: { $: 'elems', $add: ' dom-nodes' }
     }
   },
   main: {
@@ -103,7 +97,12 @@ var app = new Element({
         header: {
           // has$: true,
           a: {
-            text: { $: 'title' }
+            text: {
+              $: 'title',
+              $transform (val) {
+                return val
+              }
+            }
           }
         }
       }
@@ -168,11 +167,11 @@ function loop () {
   cnt++
   var ms = Date.now()
   var obj = {}
-  for (var i = 0; i < 20e3; i++) { obj[i] = { title: i + cnt } }
+  for (var i = 0; i < 1e3; i++) { obj[i] = { title: i + cnt } }
   state.collection.set(obj)
   total += (Date.now() - ms)
   state.ms.set(total / cnt)
-  // raf(loop)
+  raf(loop)
 }
 
 state.collection[0].remove()

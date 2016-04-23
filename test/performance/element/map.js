@@ -2,6 +2,7 @@
 var set = require('lodash.set')
 var get = require('lodash.get')
 
+// wrong merge
 function merge (a, b) {
   if (typeof b !== 'object') {
     if (!a.val) { a.val = b }
@@ -50,7 +51,12 @@ exports.define = {
         field.$any._ = { $any: this.Child.prototype }
         field._ = this
       }
-    } if (this.$) {
+    }
+
+    if (this.$) {
+      if (!returnValue) {
+        returnValue = true
+      }
       // only probs can have this -- this is too many update for sure
       if (this.$ !== true) {
         let t = {
@@ -62,9 +68,7 @@ exports.define = {
         } else {
           var x = get(map, this.$)
           if (x) {
-            console.log('merge it!', this.$)
             if (x._) {
-              console.log('oooo')
               if (!(x._ instanceof Array)) {
                 t._ = [ t._ ]
                 t._.push(x._)
@@ -74,25 +78,26 @@ exports.define = {
               }
             }
           }
+          // totally wrong needs a merge
           n = t
         }
         set(map, this.$, n)
         map = n
       }
     }
-    this.each(each, false, map) // use keys and properties
+    this.each(function each (p, key, base, map) {
+      if (p.$map) {
+        let change = p.$map(map)
+        if (change) {
+          if (!returnValue) {
+            returnValue = true
+          }
+        } else {
+          console.log('no change! this is a leaf boy', key)
+          p.noState = true // also for props of course -- important
+        }
+      }
+    }, false, map)
     return returnValue
   }
 }
-
-// function hasMap (p) {
-//   return p.$map
-// }
-
-function each (p, key, base, map) {
-  p.$map && p.$map(map)
-}
-
-// needs improvement
-// need to set has$: true to everything
-// meh meh meh
