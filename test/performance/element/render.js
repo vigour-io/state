@@ -6,39 +6,48 @@ exports.define = {
 }
 
 function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
-  // console.warn('got render -->', elem.path().join('/'), elem.keys())
-  if (!ptree._) {
-    ptree._ = {}
-  }
-  if (!ptree._[elem.parent.uid()]) {
-    if (!elem.parent.$) {
-      ptree._[elem.parent.uid()] = whileparentnostate(elem.parent, rtree, ptree)
-    } else {
-      return
-    }
-  }
-  let pnode = ptree._[elem.parent.uid()]
-  console.log(elem)
-
-  if (!tree._) {
-    tree._ = {}
-  }
-
-  if (elem.type === 'element') {
-    if (!tree._[elem.uid()]) {
-      // console.log('CREATE ELEMENT!', state.path(), pnode)
-      let div = renderelem(elem)
-      tree._[elem.uid()] = div
-      pnode.appendChild(div)
+  if (type === 'remove') {
+    if (tree._[elem.uid()]) {
+      if (elem.__on.removeEmitter) {
+        elem.__on.removeEmitter.emit(elem, stamp, tree._[elem.uid()])
+      }
+      tree._[elem.uid()].parentNode.removeChild(tree._[elem.uid()])
+      delete tree._[elem.uid()]
     }
   } else {
-    if (elem.key === 'text') {
-      var val = state.compute()
-      if (!tree._[elem.uid()]) {
-        tree._[elem.uid()] = document.createTextNode(val)
-        pnode.appendChild(tree._[elem.uid()])
+    // console.warn('got render -->', elem.path().join('/'), elem.keys())
+    if (!ptree._) {
+      ptree._ = {}
+    }
+    if (!ptree._[elem.parent.uid()]) {
+      if (!elem.parent.$) {
+        ptree._[elem.parent.uid()] = whileparentnostate(elem.parent, rtree, ptree)
       } else {
-        tree._[elem.uid()].nodeValue = val
+        return
+      }
+    }
+    let pnode = ptree._[elem.parent.uid()]
+
+    if (!tree._) {
+      tree._ = {}
+    }
+
+    if (elem.type === 'element') {
+      if (!tree._[elem.uid()]) {
+        // console.log('CREATE ELEMENT!', state.path(), pnode)
+        let div = renderelem(elem)
+        tree._[elem.uid()] = div
+        pnode.appendChild(div)
+      }
+    } else {
+      if (elem.key === 'text') {
+        var val = state.compute()
+        if (!tree._[elem.uid()]) {
+          tree._[elem.uid()] = document.createTextNode(val)
+          pnode.appendChild(tree._[elem.uid()])
+        } else {
+          tree._[elem.uid()].nodeValue = val
+        }
       }
     }
   }
@@ -47,11 +56,12 @@ function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
 // if !tree._
 exports.fn = function (state, type, stamp, subs, tree, ptree, rtree) {
   var elem = subs._
+
   if (!elem._base_version) {
     if (elem.$any) {
       elem = elem.$any
     } else {
-      throw new Error('weirdness going on render', elem)
+      // throw new Error('weirdness going on render', elem)
     }
   }
 

@@ -72,6 +72,12 @@ var app = new Element({
       $any: true,
       Child: {
         css: 'nestchild',
+        on: {
+          // on data as well?
+          remove (val, stamp, node) {
+            console.log('FIRE REMOVE:', val, stamp, node)
+          }
+        },
         // need to know that there is a deeper subs
         // star: {}, does nto work when there is no state yet...
         // has$: true,
@@ -79,9 +85,9 @@ var app = new Element({
           // has$: true,
           text: { $: 'title' }
         },
-        more: {
-          text: { $: '$root.ms' }
-        },
+        // more: {
+        //   text: { $: '$root.ms' } -- root is not yet supported
+        // },
         header: {
           // has$: true,
           a: {
@@ -156,6 +162,8 @@ function loop () {
   state.ms.set(total / cnt)
   raf(loop)
 }
+
+state.collection[0].remove()
 // loop()
 
 // if i do this correctly dont need parent ever -- just need to store
