@@ -6,6 +6,12 @@ exports.define = {
 }
 
 function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
+  if (!elem._base_version) {
+    if (elem.$any) {
+      elem = elem.$any
+    }
+  }
+
   if (type === 'remove') {
     if (tree._[elem.uid()]) {
       if (elem.__on.removeEmitter) {
@@ -19,6 +25,7 @@ function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
     if (!ptree._) {
       ptree._ = {}
     }
+
     if (!ptree._[elem.parent.uid()]) {
       // console.log('hello?', ptree)
       // do this in the while parent no state
@@ -56,13 +63,10 @@ function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
 // if !tree._
 exports.fn = function (state, type, stamp, subs, tree, ptree, rtree) {
   var elem = subs._
-  if (!elem._base_version) {
-    if (elem.$any) {
-      elem = elem.$any
-    }
-  }
-  if (!elem._base_version) {
+  if (!elem._base_version && !elem.$any) {
+    console.log('MULTIPLE', Object.keys(elem))
     for (var i in elem) {
+      console.log('    ', elem[i].$any && !elem[i].type ? '$any: ' + elem[i].$any.css : elem[i].path())
       callit.call(this, elem[i], state, type, stamp, subs, tree, ptree, rtree)
     }
   } else {

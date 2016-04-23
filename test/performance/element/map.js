@@ -16,20 +16,30 @@ function merge (a, b) {
           a[i] = { val: a[i] }
           merge(a[i], b[i])
         }
+      } else {
+        console.log('add the subscriber!', a._, b._)
+        addSubscriber(a, b._)
       }
     }
   }
   return a
 }
 
-function addSubscriber (target, obs) {
-  if (target._) {
-    if (target._._base_version) {
-      target._ = { [target._.uid()]: target._ }
+function addSubscriber (target, obs, thing) {
+  if (typeof obs === 'object' && !obs._base_version) {
+    for (var i in obs) {
+      addSubscriber(target, obs[i], thing)
     }
-    target._[obs.uid()] = obs
   } else {
-    target._ = obs
+    if (target._) {
+      if (target._._base_version || target._.$any) {
+        // console.log('yo yo yo --->', target._.$any) --- make this nice and good not very ugly like this
+        target._ = { [target._.$any && target._.$any !== true ? target._.$any.uid() : target._.uid()]: target._ }
+      }
+      target._[obs.uid()] = thing || obs
+    } else {
+      target._ = thing || obs
+    }
   }
 }
 
@@ -45,14 +55,15 @@ exports.define = {
       n.$any.val = true
       let field = get(map, this.$)
       if (field) {
+        console.log('hello?', field, n)
         merge(field, n)
       } else {
         set(map, this.$, n)
         field = get(map, this.$)
       }
-      // multiples!
-      field.$any._ = { $any: this.Child.prototype }
-      field._ = this
+
+      addSubscriber(field.$any, this.Child.prototype, { $any: this.Child.prototype })
+      // addSubscriber(field, this)
     }
 
     if (this.$) {
@@ -72,6 +83,7 @@ exports.define = {
         }
         var x = get(map, this.$)
         if (x) {
+          console.log('---> ADD', this.inspect(), this.path(), x._)
           addSubscriber(x, this)
           merge(x, n)
         } else {
