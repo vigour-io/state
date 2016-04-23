@@ -71,10 +71,11 @@ exports.fn = function (state, type, stamp, subs, tree, ptree, rtree) {
 }
 
 function renderelem (elem) {
-  var div
   var nostate = elem.noState
+  var div
   // add types
   if (nostate && elem._cachedNode) {
+    // this can leak memmory for non-repeating things -- then its a waste
     div = elem._cachedNode.cloneNode(true)
   } else {
     div = document.createElement('div')

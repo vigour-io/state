@@ -62,6 +62,7 @@ const Element = new Observable({
 
 var app = new Element({
   key: 'app',
+  star: {},
   holder: {
     ms: {
       text: { $: 'ms' }
