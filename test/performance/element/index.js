@@ -65,8 +65,11 @@ var app = new Element({
   key: 'app',
   star: {},
   holder: {
+    init: {
+      text: { $: 'first', $add: ' ms initial render' }
+    },
     ms: {
-      text: { $: 'ms' }
+      text: { $: 'ms', $add: ' periodic updates' }
     },
     elems: {
       text: { $: 'elems', $add: ' dom-nodes' }
@@ -159,6 +162,7 @@ tree = subscribe(state, subs, function (type, stamp, subs, ctree, ptree) {
 console.log('subs:', subs)
 // -------------------------
 console.timeEnd('START')
+
 global.state = state
 global.tree = tree
 global.subs = subs
@@ -174,10 +178,13 @@ function loop () {
   state.collection.set(obj)
   total += (Date.now() - ms)
   state.ms.set(total / cnt)
+  if (!state.first) {
+    state.set({ first: total / cnt })
+  }
   raf(loop)
 }
 
-// state.collection[0].remove()
+state.collection[0].remove()
 loop()
 
 console.log('----------------------------')
