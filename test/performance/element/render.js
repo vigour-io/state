@@ -5,30 +5,21 @@ exports.define = {
   }
 }
 
-// if !tree._
-exports.fn = function (state, type, stamp, subs, tree, ptree, rtree) {
-  var elem = subs._
-  // console.log(ptree)
-  if (!elem._base_version) {
-    if (elem.$any) {
-      elem = elem.$any
-    } else {
-      throw new Error('weirdness going on render', elem)
-    }
-  }
-
+function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
   // console.warn('got render -->', elem.path().join('/'), elem.keys())
-
   if (!ptree._) {
     ptree._ = {}
   }
-  if (!ptree._[elem._parent.uid()]) {
-    // console.error('CREATE PNODE', elem.path())
+  if (!ptree._[elem.parent.uid()]) {
     if (!elem.parent.$) {
-      ptree._[elem._parent.uid()] = whileparentnostate(elem._parent, rtree, ptree)
+      ptree._[elem.parent.uid()] = whileparentnostate(elem.parent, rtree, ptree)
+    } else {
+      return
     }
   }
-  let pnode = ptree._[elem._parent.uid()]
+  let pnode = ptree._[elem.parent.uid()]
+  console.log(elem)
+
   if (!tree._) {
     tree._ = {}
   }
@@ -42,13 +33,35 @@ exports.fn = function (state, type, stamp, subs, tree, ptree, rtree) {
     }
   } else {
     if (elem.key === 'text') {
+      var val = state.compute()
       if (!tree._[elem.uid()]) {
-        tree._[elem.uid()] = document.createTextNode(state.compute())
+        tree._[elem.uid()] = document.createTextNode(val)
         pnode.appendChild(tree._[elem.uid()])
       } else {
-        tree._[elem.uid()].nodeValue = state.compute()
+        tree._[elem.uid()].nodeValue = val
       }
     }
+  }
+}
+
+// if !tree._
+exports.fn = function (state, type, stamp, subs, tree, ptree, rtree) {
+  var elem = subs._
+  if (!elem._base_version) {
+    if (elem.$any) {
+      elem = elem.$any
+    } else {
+      throw new Error('weirdness going on render', elem)
+    }
+  }
+
+  // console.log(ptree)
+  if (elem instanceof Array) {
+    for (var i in elem) {
+      callit.call(this, elem[i], state, type, stamp, subs, tree, ptree, rtree)
+    }
+  } else {
+    callit.call(this, elem, state, type, stamp, subs, tree, ptree, rtree)
   }
 }
 

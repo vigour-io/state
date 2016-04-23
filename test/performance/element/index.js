@@ -1,21 +1,22 @@
 'use strict'
+import Observable from 'vigour-observable' // very slow init -- need to opmize
+import subscribe from '../../../subscribe'
+import s from '../../../s'
+
 require('./style.less')
 console.time('START')
 // -------------------------
-var raf = window.requestAnimationFrame
+const raf = window.requestAnimationFrame
 // -------------------------
-var Observable = require('vigour-observable') // very slow init -- need to opmize
-var subscribe = require('../../../subscribe')
-var s = require('../../../s')
-var state = s({ name: 'trees' })
-var obj = {}
+const state = s({ name: 'trees' })
+const obj = {}
 for (var i = 0; i < 2; i++) { obj[i] = { title: i } }
 state.set({
   collection: obj,
   ms: { val: 100, $transform (val) { return Math.round(val) } }
 })
 // // -------------------------
-var Property = new Observable({
+const Property = new Observable({
   properties: {
     $ (val) {
       this.$ = val
@@ -29,7 +30,7 @@ var Property = new Observable({
   Child: 'Constructor'
 }, false).Constructor
 
-var Element = new Observable({
+const Element = new Observable({
   type: 'element',
   properties: {
     css: true,
@@ -72,12 +73,15 @@ var app = new Element({
       Child: {
         css: 'nestchild',
         // need to know that there is a deeper subs
-        star: {},
+        // star: {}, does nto work when there is no state yet...
         // has$: true,
-        // title: {
-        //   // has$: true,
-        //   text: { $: 'title' }
-        // },
+        title: {
+          // has$: true,
+          text: { $: 'title' }
+        },
+        more: {
+          text: { $: '$root.ms' }
+        },
         header: {
           // has$: true,
           a: {
@@ -85,7 +89,7 @@ var app = new Element({
           }
         }
       }
-    },
+    }
     // holder2: {
     //   $: 'collection',
     //   $any: true,
@@ -117,7 +121,7 @@ console.log(app)
 var tree = {}
 
 tree = subscribe(state, subs, function (type, stamp, subs, ctree, ptree) {
-  // console.log('FIRE', this.path(), type, subs)
+  console.log('FIRE', this.path(), type, subs)
   // console.log('tree:', tree)
   // console.log('ptree:', ptree)
   // ctree._parent = ptree
@@ -137,7 +141,7 @@ global.tree = tree
 
 console.log(tree._[app.uid()])
 document.body.appendChild(tree._[app.uid()])
-console.clear()
+// console.clear()
 // something like rendered : true
 var cnt = 0
 var total = 0
@@ -152,7 +156,6 @@ function loop () {
   state.ms.set(total / cnt)
   raf(loop)
 }
-
 // loop()
 
 // if i do this correctly dont need parent ever -- just need to store
