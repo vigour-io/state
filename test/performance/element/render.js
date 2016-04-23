@@ -20,11 +20,9 @@ function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
       ptree._ = {}
     }
     if (!ptree._[elem.parent.uid()]) {
-      if (!elem.parent.$) {
-        ptree._[elem.parent.uid()] = whileparentnostate(elem.parent, rtree, ptree)
-      } else {
-        return
-      }
+      // console.log('hello?', ptree)
+      // do this in the while parent no state
+      ptree._[elem.parent.uid()] = whileparentnostate(elem.parent, rtree, ptree)
     }
     let pnode = ptree._[elem.parent.uid()]
 
@@ -40,6 +38,7 @@ function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
         pnode.appendChild(div)
       }
     } else {
+      // hier moet de prop render stuff
       if (elem.key === 'text') {
         var val = state.compute()
         if (!tree._[elem.uid()]) {
@@ -56,16 +55,11 @@ function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
 // if !tree._
 exports.fn = function (state, type, stamp, subs, tree, ptree, rtree) {
   var elem = subs._
-
   if (!elem._base_version) {
     if (elem.$any) {
       elem = elem.$any
-    } else {
-      // throw new Error('weirdness going on render', elem)
     }
   }
-
-  // console.log(ptree)
   if (elem instanceof Array) {
     for (var i in elem) {
       callit.call(this, elem[i], state, type, stamp, subs, tree, ptree, rtree)
@@ -95,12 +89,12 @@ function whileparentnostate (elem, rtree, ptree, holder) {
       tdiv.appendChild(pelem)
     }
 
+    // not so nice but nessecary
+    ptree._[elem.uid()] = tdiv
+
     let p = elem.parent
     if (p && ptree && ptree._[p.uid()]) {
-      // console.log('very special -- need more level')
       ptree._[p.uid()].appendChild(tdiv)
-    } else {
-      // console.error('\n\nHERE HERE HERE WRONG!', elem.path().join('/'))
     }
 
     pelem = tdiv
