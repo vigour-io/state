@@ -49,9 +49,11 @@ function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
       if (elem.key === 'text') {
         // elem.compute cna be checked if nessecary
         var val = elem.compute(state.compute())
+
         if (!tree._[elem.uid()]) {
           tree._[elem.uid()] = document.createTextNode(val)
           pnode.appendChild(tree._[elem.uid()])
+          console.log(pnode)
         } else {
           tree._[elem.uid()].nodeValue = val
         }

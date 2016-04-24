@@ -23,6 +23,15 @@ state.set({
   settings: {}
 })
 // // -------------------------
+
+const operator = require('vigour-observable/lib/operator/constructor').prototype
+operator.set({
+  properties: {
+    $: true
+  },
+  inject: require('./map')
+})
+
 const Property = new Observable({
   properties: {
     $ (val) {
@@ -64,86 +73,95 @@ const Element = new Observable({
 var app = new Element({
   key: 'app',
   star: {},
-  holder: {
-    init: {
-      text: { $: 'first', $add: ' ms initial render' }
-    },
-    ms: {
-      text: { $: 'ms', $add: ' periodic updates' }
-    },
-    elems: {
-      text: { $: 'elems', $add: ' dom-nodes' }
-    }
-  },
+  // holder: {
+  //   init: {
+  //     text: { $: 'first', $add: ' ms initial render' }
+  //   },
+  //   ms: {
+  //     text: { $: 'ms', $add: ' periodic updates' }
+  //   },
+  //   elems: {
+  //     text: { $: 'elems', $add: ' dom-nodes' }
+  //   }
+  // },
   main: {
     holder2: {
       $: 'collection',
       $any: true,
       Child: { // if you reuse here stuff here as a Child uid is not enough!
         css: 'weirdChild',
+        // $transform () {
+        // ambitious but doable -- do this later
+        // hard parts -- needs to add the stuff to subscriptions
+        // same for 'property definitions (although that can be an operator'
+        // now there is no way to switch etc
+        //   return {
+        //     text: { $: 'title' }
+        //   }
+        // },
         text: { $: 'title' }
       }
-    },
-    holder: {
-      $: 'collection',
-      $any: true,
-      Child: {
-        css: 'nestchild',
-        on: {
-          remove (val, stamp, node) {
-            console.log('FIRE REMOVE:', val, stamp, node)
-          }
-        },
-        star: {},
-        something: {
-          a: {
-            b: {
-              c: {}
-            }
-          }
-        },
-        title: {
-          text: { $: 'title' }
-        },
-        // more: {
-        //   text: { $: '$root.ms' } -- root is not yet supported (needs some minor revisions)
-        // },
-        header: {
-          a: {
-            bla: {
-              $: 'title',
-              lastname: {
-                text: {
-                  $: 'lastname',
-                  $prepend: 'lname: '
-                }
-              }
-            },
-            text: {
-              $: 'title',
-              $transform (val) {
-                return val
-              }
-            }
-          }
-        }
-      }
     }
+    // holder: {
+    //   $: 'collection',
+    //   $any: true,
+    //   Child: {
+    //     css: 'nestchild',
+    //     on: {
+    //       remove (val, stamp, node) {
+    //         console.log('FIRE REMOVE:', val, stamp, node)
+    //       }
+    //     },
+    //     star: {},
+    //     something: {
+    //       a: {
+    //         b: {
+    //           c: {}
+    //         }
+    //       }
+    //     },
+    //     title: {
+    //       text: { $: 'title' }
+    //     },
+    //     // more: {
+    //     //   text: { $: '$root.ms' } -- root is not yet supported (needs some minor revisions)
+    //     // },
+    //     header: {
+    //       a: {
+    //         bla: {
+    //           $: 'title',
+    //           lastname: {
+    //             text: {
+    //               $: 'lastname',
+    //               $prepend: 'lname: '
+    //             }
+    //           }
+    //         },
+    //         text: {
+    //           $: 'title',
+    //           $transform (val) {
+    //             return val
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
   },
-  menu: {
-    // this needs to be rendered of course -- even if there is no data -- else its pretty strange
-    // for now we cna work arround this (leave it!) but alter we need to change this
-    // it just weird that if there is a state it allways takes over and takes care of the handeling
-    button: { text: 'a button' },
-    settings: {
-      $: 'settings',
-      button: { text: { $: 'languages' } }
-    }
-  },
-  footer: {
-    left: { text: 'on the left' },
-    right: { text: 'on the right' }
-  }
+  // menu: {
+  //   // this needs to be rendered of course -- even if there is no data -- else its pretty strange
+  //   // for now we cna work arround this (leave it!) but alter we need to change this
+  //   // it just weird that if there is a state it allways takes over and takes care of the handeling
+  //   button: { text: 'a button' },
+  //   settings: {
+  //     $: 'settings',
+  //     button: { text: { $: 'languages' } }
+  //   }
+  // },
+  // footer: {
+  //   left: { text: 'on the left' },
+  //   right: { text: 'on the right' }
+  // }
 }, false)
 
 var subs = app.$map()
@@ -182,12 +200,9 @@ function loop () {
   cnt++
   var ms = Date.now()
   var obj = {}
-  for (var i = 0; i < 10; i++) {
+  for (var i = 0; i < 2; i++) {
     obj[i] = {
-      title: {
-        val: i + cnt,
-        lastname: i
-      }
+      title: { val: i + cnt, lastname: i }
     }
   }
   state.collection.set(obj)
