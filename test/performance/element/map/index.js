@@ -23,7 +23,13 @@ exports.define = {
         set(map, p .$, n)
         field = get(map, p .$)
       }
-      addSubscriber(field.$any, p .Child.prototype, { $any: p .Child.prototype })
+
+      // { $any: p .Child.prototype }
+      addSubscriber(field.$any, p.Child.prototype)
+
+      // addSubscriber(field.$any, p .Child.prototype, { $any: p .Child.prototype })
+
+      // main target (the collection target)
       // addSubscriber(field, this)
     }
 

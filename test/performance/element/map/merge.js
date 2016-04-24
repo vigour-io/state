@@ -1,13 +1,13 @@
 'use strict'
-var set = require('lodash.set')
-var get = require('lodash.get')
+// var set = require('lodash.set')
+// var get = require('lodash.get')
 
 function merge (a, b) {
   if (typeof b !== 'object') {
     if (!a.val) { a.val = b }
   } else {
     for (var i in b) {
-      if (i !== '_') { // && i !== 'val'
+      if (i !== '_') {
         if (typeof a[i] === 'object') {
           merge(a[i], b[i])
         } else if (!a[i]) {
@@ -17,9 +17,6 @@ function merge (a, b) {
           merge(a[i], b[i])
         }
       } else {
-        // way to often...
-        // make this into one funciton not 2 -- so use merge EVERYWHERE
-        // console.log('add the subscriber!', a._, b._)
         addSubscriber(a, b._)
       }
     }
@@ -34,9 +31,8 @@ function addSubscriber (target, obs, thing) {
     }
   } else {
     if (target._) {
-      if (target._._base_version || target._.$any) {
-        // console.log('yo yo yo --->', target._.$any) --- make this nice and good not very ugly like this
-        target._ = { [target._.$any && target._.$any !== true ? target._.$any.uid() : target._.uid()]: target._ }
+      if (target._._base_version) {
+        target._ = { [target._.uid()]: target._ }
       }
       target._[obs.uid()] = thing || obs
     } else {

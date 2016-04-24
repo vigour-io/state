@@ -101,7 +101,7 @@ var app = new Element({
         // },
         text: { $: 'title' }
       }
-    }
+    },
     // holder: {
     //   $: 'collection',
     //   $any: true,

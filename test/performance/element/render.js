@@ -6,11 +6,8 @@ exports.define = {
 }
 
 function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
-  if (!elem._base_version) {
-    if (elem.$any) {
-      elem = elem.$any
-    }
-  }
+
+  console.log('go go go', elem.inspect())
 
   if (type === 'remove') {
     if (tree._[elem.uid()]) {
@@ -27,7 +24,7 @@ function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
     }
 
     if (!ptree._[elem.parent.uid()]) {
-      // console.log('hello?', ptree)
+      console.log('hello?', ptree)
       // do this in the while parent no state
       ptree._[elem.parent.uid()] = whileparentnostate(elem.parent, rtree, ptree)
     }
@@ -39,7 +36,7 @@ function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
 
     if (elem.type === 'element') {
       if (!tree._[elem.uid()]) {
-        // console.log('CREATE ELEMENT!', state.path(), pnode)
+        console.log('CREATE ELEMENT!', state.path(), pnode, elem.parent)
         let div = renderelem(elem)
         tree._[elem.uid()] = div
         pnode.appendChild(div)
@@ -65,10 +62,8 @@ function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
 // if !tree._
 exports.fn = function (state, type, stamp, subs, tree, ptree, rtree) {
   var elem = subs._
-  if (!elem._base_version && !elem.$any) {
-    // console.log('MULTIPLE', Object.keys(elem))
+  if (!elem._base_version) {
     for (var i in elem) {
-      // console.log('    ', elem[i].$any && !elem[i].type ? '$any: ' + elem[i].$any.css : elem[i].path())
       callit.call(this, elem[i], state, type, stamp, subs, tree, ptree, rtree)
     }
   } else {
