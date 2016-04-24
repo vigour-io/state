@@ -6,9 +6,6 @@ exports.define = {
 }
 
 function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
-
-  console.log('go go go', elem.inspect())
-
   if (type === 'remove') {
     if (tree._[elem.uid()]) {
       if (elem.__on.removeEmitter) {
@@ -24,7 +21,6 @@ function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
     }
 
     if (!ptree._[elem.parent.uid()]) {
-      console.log('hello?', ptree)
       // do this in the while parent no state
       ptree._[elem.parent.uid()] = whileparentnostate(elem.parent, rtree, ptree)
     }
@@ -36,7 +32,7 @@ function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
 
     if (elem.type === 'element') {
       if (!tree._[elem.uid()]) {
-        console.log('CREATE ELEMENT!', state.path(), pnode, elem.parent)
+        // console.log('CREATE ELEMENT!', state.path(), pnode, elem.parent)
         let div = renderelem(elem)
         tree._[elem.uid()] = div
         pnode.appendChild(div)
@@ -50,7 +46,6 @@ function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
         if (!tree._[elem.uid()]) {
           tree._[elem.uid()] = document.createTextNode(val)
           pnode.appendChild(tree._[elem.uid()])
-          console.log(pnode)
         } else {
           tree._[elem.uid()].nodeValue = val
         }

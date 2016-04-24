@@ -1,10 +1,10 @@
 'use strict'
-var test = require('tape')
-var subsTest = require('./test')
+const test = require('tape')
+const subsTest = require('./test')
 
 test('basic', function (t) {
   // use this for .val and normal fields then add collection as a separate
-  var s = subsTest(
+  const s = subsTest(
     t,
     { field: true },
     {

@@ -1,11 +1,11 @@
 'use strict'
-var test = require('tape')
-var subsTest = require('./test')
+const test = require('tape')
+const subsTest = require('./test')
 
 test('reference', function (t) {
   // need to reset event stamp :/
   // use this for .val and normal fields then add collection as a separate
-  var s = subsTest(
+  const s = subsTest(
     t,
     { a: 'a', b: { ref: '$root.a' } },
     { b: { ref: true } }

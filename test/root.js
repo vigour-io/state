@@ -1,9 +1,9 @@
 'use strict'
-var test = require('tape')
-var subsTest = require('./test')
+const test = require('tape')
+const subsTest = require('./test')
 
 test('root', function (t) {
-  var subscription = {
+  const subscription = {
     james: { hello: true },
     something: {
       a: {
@@ -17,7 +17,7 @@ test('root', function (t) {
     }
   }
 
-  var s = subsTest(
+  const s = subsTest(
     t,
     {
       something: { a: true },

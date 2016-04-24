@@ -1,7 +1,7 @@
 'use strict'
-import Observable from 'vigour-observable' // very slow init -- need to opmize
-import subscribe from '../../../subscribe'
-import s from '../../../s'
+const Observable = require('vigour-observable') // very slow init -- need to opmize
+const subscribe = require('../../../subscribe')
+const s = require('../../../s')
 
 require('./style.less')
 console.time('START')
@@ -102,51 +102,51 @@ var app = new Element({
         text: { $: 'title' }
       }
     },
-    // holder: {
-    //   $: 'collection',
-    //   $any: true,
-    //   Child: {
-    //     css: 'nestchild',
-    //     on: {
-    //       remove (val, stamp, node) {
-    //         console.log('FIRE REMOVE:', val, stamp, node)
-    //       }
-    //     },
-    //     star: {},
-    //     something: {
-    //       a: {
-    //         b: {
-    //           c: {}
-    //         }
-    //       }
-    //     },
-    //     title: {
-    //       text: { $: 'title' }
-    //     },
-    //     // more: {
-    //     //   text: { $: '$root.ms' } -- root is not yet supported (needs some minor revisions)
-    //     // },
-    //     header: {
-    //       a: {
-    //         bla: {
-    //           $: 'title',
-    //           lastname: {
-    //             text: {
-    //               $: 'lastname',
-    //               $prepend: 'lname: '
-    //             }
-    //           }
-    //         },
-    //         text: {
-    //           $: 'title',
-    //           $transform (val) {
-    //             return val
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
+    holder: {
+      $: 'collection',
+      $any: true,
+      Child: {
+        css: 'nestchild',
+        on: {
+          remove (val, stamp, node) {
+            console.log('FIRE REMOVE:', val, stamp, node)
+          }
+        },
+        star: {},
+        something: {
+          a: {
+            b: {
+              c: {}
+            }
+          }
+        },
+        title: {
+          text: { $: 'title' }
+        },
+        // more: {
+        //   text: { $: '$root.ms' } -- root is not yet supported (needs some minor revisions)
+        // },
+        header: {
+          a: {
+            bla: {
+              $: 'title',
+              lastname: {
+                text: {
+                  $: 'lastname',
+                  $prepend: 'lname: '
+                }
+              }
+            },
+            text: {
+              $: 'title',
+              $transform (val) {
+                return val
+              }
+            }
+          }
+        }
+      }
+    }
   },
   // menu: {
   //   // this needs to be rendered of course -- even if there is no data -- else its pretty strange
