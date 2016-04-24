@@ -17,7 +17,9 @@ function merge (a, b) {
           merge(a[i], b[i])
         }
       } else {
-        console.log('add the subscriber!', a._, b._)
+        // way to often...
+        // make this into one funciton not 2 -- so use merge EVERYWHERE
+        // console.log('add the subscriber!', a._, b._)
         addSubscriber(a, b._)
       }
     }
@@ -55,13 +57,13 @@ exports.define = {
       n.$any.val = true
       let field = get(map, this.$)
       if (field) {
-        console.log('hello?', field, n)
+        console.info('hello?', field, n, this.path())
         merge(field, n)
       } else {
+        console.info('not hello?', n, this.path())
         set(map, this.$, n)
         field = get(map, this.$)
       }
-
       addSubscriber(field.$any, this.Child.prototype, { $any: this.Child.prototype })
       // addSubscriber(field, this)
     }
@@ -72,24 +74,29 @@ exports.define = {
       }
       // only probs can have this -- this is too many update for sure
       if (this.$ !== true) {
+        console.info('other', this.path())
         let t = {
           val: true,
           _: this // need to handle
         }
         if (n) {
+          console.error('N --> right hur', this.path())
           merge(n, t)
         } else {
+          console.error('right hur ?', this.path())
           n = t
         }
         var x = get(map, this.$)
         if (x) {
-          console.log('---> ADD', this.inspect(), this.path(), x._)
+          console.error('---> ADD', this.inspect(), this.path(), x, map)
           addSubscriber(x, this)
           merge(x, n)
+          console.log('hello merge it', map)
         } else {
           set(map, this.$, n)
+          console.error('SET --> right hur ?', this.path(), map, this.$, n)
         }
-        map = n
+        map = x || n
       }
     }
     this.each(function each (p, key, base, map) {

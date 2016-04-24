@@ -90,7 +90,6 @@ var app = new Element({
       Child: {
         css: 'nestchild',
         on: {
-          // on data as well?
           remove (val, stamp, node) {
             console.log('FIRE REMOVE:', val, stamp, node)
           }
@@ -111,6 +110,15 @@ var app = new Element({
         // },
         header: {
           a: {
+            bla: {
+              $: 'title',
+              lastname: {
+                text: {
+                  $: 'lastname',
+                  $prepend: 'lname: '
+                }
+              }
+            },
             text: {
               $: 'title',
               $transform (val) {
@@ -174,20 +182,28 @@ function loop () {
   cnt++
   var ms = Date.now()
   var obj = {}
-  for (var i = 0; i < 1e3; i++) { obj[i] = { title: i + cnt } }
+  for (var i = 0; i < 10; i++) {
+    obj[i] = {
+      title: {
+        val: i + cnt,
+        lastname: i
+      }
+    }
+  }
   state.collection.set(obj)
   total += (Date.now() - ms)
   state.ms.set(total / cnt)
   if (!state.first) {
     state.set({ first: total / cnt })
   }
-  raf(loop)
+  // raf(loop)
 }
 
 state.collection[0].remove()
 loop()
 
 console.log('----------------------------')
+console.log('--->', subs.collection.$any)
 state.set({ elems: document.getElementsByTagName('*').length })
 // if i do this correctly dont need parent ever -- just need to store
 // element and then find it by checking parent yes better
