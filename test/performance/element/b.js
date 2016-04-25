@@ -228,7 +228,7 @@ function loop () {
   // raf(loop)
 }
 
-// state.collection[0].remove()
+state.collection[0].remove()
 loop()
 
 console.log('----------------------------')

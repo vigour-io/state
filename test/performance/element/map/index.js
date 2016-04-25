@@ -8,7 +8,6 @@ exports.define = {
     if (!map) {
       returnValue = map = {}
     }
-
     this.each((p, key, base, map) => {
       if (p.$map) {
         let change = p.$map(map)
@@ -33,16 +32,8 @@ exports.define = {
         add(val, map, this.Child.prototype, this.$, '$any')
       }
       map = add({ val: true, _: this }, map, this)
-    } else if (returnValue) {
-      if (!any) {
-        console.error('this is a traveler!', this.path())
-        subscribe(map, this)
-      } else {
-        console.info('this is any so not a real traveler', this.path())
-      }
-      // need to know if this is a non state travelers
-    } else {
-      console.warn('this is a non state element', this.path())
+    } else if (returnValue && !any) {
+      subscribe(map, this)
     }
     return returnValue
   }

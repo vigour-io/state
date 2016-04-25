@@ -16,6 +16,8 @@ function render (target, state, type, stamp, subs, tree, ptree, rtree) {
   const uid = target.uid()
   var domNode
   if (type === 'remove') {
+    console.error('REMOVE --- this has to be limited!', target.path())
+    // only the top -- target nothing more
     domNode = tree._ && tree._[uid]
     if (target.type === 'element') {
       // need to do more need to go
@@ -76,8 +78,6 @@ function getParentNode (uid, target, state, type, stamp, subs, tree, ptree, rtre
         pnode = render(parent, state, type, stamp, subs, tree, ptree, rtree)
       }
     } else {
-      // this can be wrong ofcourse
-      console.log('hey parentNode', target.path(), ptree._, tree)
       pnode = findParent(ptree, parentUid)
     }
     return pnode
@@ -89,6 +89,8 @@ function createElement (uid, target, state, type, stamp, subs, tree, ptree, rtre
   const pnode = getParentNode(uid, target, state, type, stamp, subs, tree, ptree, rtree)
   if (pnode) {
     pnode.appendChild(domNode)
+  } else {
+    console.warn('no pnode must be the app', target.path())
   }
   return domNode
 }
