@@ -2,7 +2,7 @@
 const create = require('./create')
 
 exports.define = {
-  render (state, type, stamp, subs, tree, ptree, rtree) {
+  render (state, type, stamp, subs, tree, ptree, rtree, pnode) {
     const uid = this.uid()
     var domNode = tree._ && tree._[uid]
     if (type === 'remove') {
@@ -11,7 +11,7 @@ exports.define = {
         delete tree._[uid]
       }
     } else if (!domNode) {
-      domNode = create(uid, this, state, type, stamp, subs, tree, ptree, rtree)
+      domNode = create(uid, this, state, type, stamp, subs, tree, ptree, rtree, pnode)
     }
     return domNode
   }

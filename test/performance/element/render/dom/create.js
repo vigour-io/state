@@ -1,29 +1,26 @@
 'use strict'
 const getParentNode = require('./parent')
+
 // order!!!! very important
-function renderElement (elem) {
+function renderElement (uid, elem, type, stamp, subs, tree, ptree, rtree) {
   const nostate = elem.noState
   var div
   if (nostate && elem._cachedNode) {
-    // may use cachednode for everything is faster
-    // this can leak memmory for non-repeating things -- then its a waste
-    div = elem._cachedNode.cloneNode(true)
+    div = tree._[uid] = elem._cachedNode.cloneNode(true)
   } else {
-    div = document.createElement('div')
-    let nostates = elem._noStateElems !== void 0
-      ? elem._noStateElems
-      : elem.keys('_noStateElems', noStateElement)
-
-    if (elem.key || elem.css) {
-      div.className = elem.css || elem.key // not correct yet! is a property
-    }
-    // --------------------------------
+    div = tree._[uid] = document.createElement('div') // nodeType, also can do a clone much faster
+    div.className = elem.key
+    // -------- find a way to reuse this --------
+    let nostates = elem._noStates !== void 0
+      ? elem._noStates : elem.keys('_noStates', noStateElement)
     if (nostates) {
       for (let i in nostates) {
-        div.appendChild(renderElement(elem[nostates[i]], true))
+        elem[nostates[i]].render(void 0, type, stamp, subs, tree, ptree, rtree, div)
       }
     }
-    if (nostate) {
+    // -------- how to reuse ------------------
+
+    if (nostate || nostates) {
       elem._cachedNode = div
     }
   }
@@ -32,12 +29,12 @@ function renderElement (elem) {
 
 function noStateElement (val, key) {
   const target = val[key]
-  return target && target.noState && target.type === 'element'
+  return target && target.noState
 }
 
-module.exports = function createElement (uid, target, state, type, stamp, subs, tree, ptree, rtree) {
-  const domNode = tree._[uid] = renderElement(target)
-  const pnode = getParentNode(uid, target, state, type, stamp, subs, tree, ptree, rtree)
+module.exports = function createElement (uid, target, state, type, stamp, subs, tree, ptree, rtree, pnode) {
+  const domNode = renderElement(uid, target, type, stamp, subs, tree, ptree, rtree)
+  pnode = pnode || getParentNode(uid, target, state, type, stamp, subs, tree, ptree, rtree)
   if (pnode) {
     pnode.appendChild(domNode)
   } else {

@@ -34,13 +34,17 @@ operator.set({
 
 const Property = new Observable({
   properties: {
+  //----------------------- common props
     $ (val) {
+      if (this.noState) { this.noState = null }
       this.$ = val
     },
+    $any: true,
     noState: true,
     render (val) {
       this.define({ render: val })
     }
+   //-----------------------
   },
   inject: require('./map'),
   Child: 'Constructor'
@@ -51,25 +55,48 @@ const getParentNode = require('./render/dom/parent')
 const Element = new Observable({
   type: 'element',
   properties: {
-    css: true,
-    noState: true,
-    $: true, // this basicly means field or path
-    // hard thing is to get multiple fields on one level -- we will not support it
+// -----------------------
+    $ (val) {
+      if (this.noState) { this.noState = null }
+      this.$ = val
+    },
     $any: true,
+    noState: true,
+// -----------------------
     text: new Property({
-      render (state, type, stamp, subs, tree, ptree, rtree) {
-        const val = this.compute(state.compute())
-        const uid = this.uid()
-        if (!tree._[uid]) {
-          tree._[uid] = document.createTextNode(val)
-          let pnode = getParentNode(uid, this, state, type, stamp, subs, tree, ptree, rtree)
-          if (!pnode) {
-            console.error('NO PNODE!', this.path(), this.parent.path())
+      render (state, type, stamp, subs, tree, ptree, rtree, pnode) {
+        if (this.noState && pnode) {
+          pnode.appendChild(document.createTextNode(this.compute()))
+        } else {
+          const val = state ? this.compute(state.compute()) : this.compute()
+          const uid = this.uid()
+          if (!tree._[uid]) {
+            tree._[uid] = document.createTextNode(val)
+            pnode = pnode || getParentNode(uid, this, state, type, stamp, subs, tree, ptree, rtree)
+            if (!pnode) {
+              console.error('NO PNODE!', this.path(), this.parent.path())
+            } else {
+              pnode.appendChild(tree._[uid])
+            }
           } else {
-            pnode.appendChild(tree._[uid])
+            tree._[uid].nodeValue = val
+          }
+        }
+      }
+    }),
+    css: new Property({
+      render (state, type, stamp, subs, tree, ptree, rtree, pnode) {
+        const val = state ? this.compute(state.compute()) : this.compute()
+        pnode = pnode || getParentNode(this.uid(), this, state, type, stamp, subs, tree, ptree, rtree)
+        if (pnode) {
+          let key = this.parent.key
+          if (key) {
+            pnode.className = key + ' ' + val
+          } else {
+            pnode.className = val
           }
         } else {
-          tree._[uid].nodeValue = val
+          console.error('cant find pnode????', this)
         }
       }
     }),
@@ -81,6 +108,7 @@ const Element = new Observable({
     require('./map'),
     require('./render/dom/element')
   ],
+  css: '',
   Child: 'Constructor'
 }, false).Constructor
 
@@ -130,7 +158,9 @@ var app = new Element({
         something: {
           a: {
             b: {
-              c: {}
+              c: {
+                text: 'haha'
+              }
             }
           }
         },
@@ -185,7 +215,7 @@ var app = new Element({
 
 var subs = app.$map()
 
-var render = require('./render')
+var render = require('./render').multiple
 
 var tree = {}
 

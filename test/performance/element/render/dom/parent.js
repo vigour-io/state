@@ -1,5 +1,5 @@
 'use strict'
-const render = require('../method')
+const render = require('../index.js').single
 
 module.exports = function (uid, target, state, type, stamp, subs, tree, ptree, rtree) {
   const parent = target.parent
