@@ -18,9 +18,14 @@ exports.define = {
     return domNode
   },
   generateConstructor () {
+    // way too much code to just set cachednode to false
     return function Element (val, stamp, parent, key) {
       this._Constructor = null
       this._cachedNode = false // find a better solution for this dirty as fuck
+      // make a functio for this or something!
+      // else need to use hasownprop and thats ofcourse super slow!
+      // add a method here -- figure this out tmrw
+      // need ot make sure you clear cached keys thingy
       if (this._i === false) {
         // console.log('--- dont!', this)
         this._i = null

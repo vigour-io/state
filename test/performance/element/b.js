@@ -44,7 +44,7 @@ const Property = new Observable({
     render (val) {
       this.define({ render: val })
     }
-   //-----------------------
+   // -----------------------
   },
   inject: require('./map'),
   Child: 'Constructor'
@@ -88,19 +88,54 @@ const Element = new Observable({
       render (state, type, stamp, subs, tree, ptree, rtree, pnode) {
         const val = state ? this.compute(state.compute()) : this.compute()
         pnode = pnode || getParentNode(this.uid(), this, state, type, stamp, subs, tree, ptree, rtree)
-        if (pnode) {
+        if (pnode && !this.parent.namespace) {
           let key = this.parent.key
+          // only when not svg for example
           if (key) {
-            pnode.className = key + ' ' + val
-          } else {
+            pnode.className = val ? key + ' ' + val : key
+          } else if (val) {
             pnode.className = val
           }
-        } else {
-          console.error('cant find pnode????', this)
         }
       }
     }),
-    nodeType: true,
+    html: new Property({
+      render (state, type, stamp, subs, tree, ptree, rtree, pnode) {
+        const val = state ? this.compute(state.compute()) : this.compute()
+        pnode = pnode || getParentNode(this.uid(), this, state, type, stamp, subs, tree, ptree, rtree)
+        if (pnode) {
+          if (val) {
+            pnode.innerHTML = val
+          }
+        }
+      }
+    }),
+    attr: new Property({
+      render (state, type, stamp, subs, tree, ptree, rtree, pnode) {
+        if (!this.exec) {
+          // want to remove this need non-state here!
+          this.exec = true
+          pnode = pnode || getParentNode(this.uid(), this, state, type, stamp, subs, tree, ptree, rtree)
+          if (pnode) {
+            console.log('?')
+            this.each(function (p, key) {
+              if (!p.$) {
+                pnode.setAttribute(key, p.compute())
+              }
+            })
+          }
+        }
+      },
+      Child: {
+        render (state, type, stamp, subs, tree, ptree, rtree, pnode) {
+          pnode = pnode || getParentNode(this.parent.uid(), this.parent, state, type, stamp, subs, tree, ptree, rtree)
+          pnode.setAttribute(this.key, state ? this.compute(state.compute()) : this.compute())
+        }
+      }
+    }),
+    //  keyType: '_operators', this is not good enough also need keys...
+    node: { val: 'div' },
+    namespace: true,
     state: true,
     _node: true,
     isElement: { val: true }
@@ -113,9 +148,17 @@ const Element = new Observable({
   Child: 'Constructor'
 }, false).Constructor
 
+/*
+<svg height="100" width="100">
+  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+  Sorry, your browser does not support inline SVG.
+</svg>
+*/
+
+var svgNS = 'http://www.w3.org/2000/svg'
+
 var app = new Element({
   key: 'app',
-  star: {},
   holder: {
     init: {
       text: { $: 'first', $add: ' ms initial render' }
@@ -131,8 +174,30 @@ var app = new Element({
     holder2: {
       $: 'collection',
       $any: true,
+      // css: null,
+      namespace: svgNS,
+      node: 'svg',
+      attr: {
+        width: 1000,
+        height: 1000
+      },
       Child: { // if you reuse here stuff here as a Child uid is not enough!
-        css: 'weirdChild',
+        namespace: svgNS,
+        node: 'circle',
+        // css: null,
+        attr: {
+          cx: {
+            $: 'title',
+            $transform (val) { return Math.sin(val / 30) * (val / 5) + 250 }
+          }, // 50,
+          cy: {
+            $: 'title', $transform (val) { return Math.cos(val / 30) * (val / 5) + 250 }
+          }, // 50,
+          r: 10,
+          'stroke-width': 1,
+          fill: 'red',
+          stroke: 'black'
+        }
         // $transform () {
         // ambitious but doable -- do this later
         // hard parts -- needs to add the stuff to subscriptions
@@ -142,7 +207,7 @@ var app = new Element({
         //     text: { $: 'title' }
         //   }
         // },
-        text: { $: 'title' }
+        // text: { $: 'title' }
       }
     },
     holder: {
@@ -188,7 +253,7 @@ var app = new Element({
             },
             text: {
               $: 'title',
-              $prepend: 'h:',
+              // $prepend: 'h:',
               $transform (val) {
                 return val
               }
@@ -255,9 +320,12 @@ var cnt = 0
 var total = 0
 function loop () {
   cnt++
+  if (cnt > 1e3) {
+    cnt = 0
+  }
   var ms = Date.now()
   var obj = {}
-  for (var i = 0; i < 1e3; i++) {
+  for (var i = 0; i < 1; i++) {
     obj[i] = {
       title: { val: i + cnt, lastname: i },
       x: i
@@ -276,7 +344,6 @@ state.collection[0].remove()
 loop()
 
 console.log('----------------------------')
-console.log('--->', subs.collection.$any)
 console.log('tree:', tree)
 state.set({ elems: document.getElementsByTagName('*').length })
 // if i do this correctly dont need parent ever -- just need to store

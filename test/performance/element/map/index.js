@@ -28,6 +28,7 @@ exports.define = {
       }
       if (this.$any) {
         let val = { $any: this.Child.prototype.$map(void 0, true) }
+        // only add and remove -- do it in state not like this...
         val.$any.val = true // for collection removal/addition
         add(val, map, this.Child.prototype, this.$, '$any')
       }

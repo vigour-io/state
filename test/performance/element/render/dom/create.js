@@ -17,7 +17,12 @@ function renderElement (uid, elem, type, stamp, subs, tree, ptree, rtree) {
     } else {
       let nostatesproperties = elem._noStatesP !== void 0
       ? elem._noStatesP : elem.keys('_noStatesP', noStateProperty)
-      div = tree._[uid] = document.createElement('div')
+
+      // var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      // http://www.w3.org/1999/xhtml
+      div = tree._[uid] = elem.namespace
+        ? document.createElementNS(elem.namespace, elem.node)
+        : document.createElement(elem.node)
       // -------- find a way to reuse this --------
       if (nostatesproperties) {
         for (let i in nostatesproperties) {
