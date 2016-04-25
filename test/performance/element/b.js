@@ -46,6 +46,8 @@ const Property = new Observable({
   Child: 'Constructor'
 }, false).Constructor
 
+const getParentNode = require('./render/dom/parent')
+
 const Element = new Observable({
   type: 'element',
   properties: {
@@ -55,8 +57,20 @@ const Element = new Observable({
     // hard thing is to get multiple fields on one level -- we will not support it
     $any: true,
     text: new Property({
-      render (node, state, tree, type) {
-        // different later
+      render (state, type, stamp, subs, tree, ptree, rtree) {
+        const val = this.compute(state.compute())
+        const uid = this.uid()
+        if (!tree._[uid]) {
+          tree._[uid] = document.createTextNode(val)
+          let pnode = getParentNode(uid, this, state, type, stamp, subs, tree, ptree, rtree)
+          if (!pnode) {
+            console.error('NO PNODE!', this.path(), this.parent.path())
+          } else {
+            pnode.appendChild(tree._[uid])
+          }
+        } else {
+          tree._[uid].nodeValue = val
+        }
       }
     }),
     nodeType: true,
@@ -64,9 +78,9 @@ const Element = new Observable({
     _node: true
   },
   inject: [
-    require('./map')
-    // require('./render')
-  ], // needs to be very different ofcourse
+    require('./map'),
+    require('./render/dom/element')
+  ],
   Child: 'Constructor'
 }, false).Constructor
 

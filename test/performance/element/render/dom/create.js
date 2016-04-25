@@ -1,7 +1,7 @@
 'use strict'
+const getParentNode = require('./parent')
 // order!!!! very important
-
-module.exports = function renderElement (elem) {
+function renderElement (elem) {
   const nostate = elem.noState
   var div
   if (nostate && elem._cachedNode) {
@@ -33,4 +33,15 @@ module.exports = function renderElement (elem) {
 function noStateElement (val, key) {
   const target = val[key]
   return target && target.noState && target.type === 'element'
+}
+
+module.exports = function createElement (uid, target, state, type, stamp, subs, tree, ptree, rtree) {
+  const domNode = tree._[uid] = renderElement(target)
+  const pnode = getParentNode(uid, target, state, type, stamp, subs, tree, ptree, rtree)
+  if (pnode) {
+    pnode.appendChild(domNode)
+  } else {
+    console.warn('no pnode must be the app', target.path())
+  }
+  return domNode
 }
