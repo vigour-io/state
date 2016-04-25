@@ -72,7 +72,7 @@ const Element = new Observable({
 
 var app = new Element({
   key: 'app',
-  star: {},
+  // star: {},
   // holder: {
   //   init: {
   //     text: { $: 'first', $add: ' ms initial render' }
@@ -85,23 +85,23 @@ var app = new Element({
   //   }
   // },
   main: {
-    holder2: {
-      $: 'collection',
-      $any: true,
-      Child: { // if you reuse here stuff here as a Child uid is not enough!
-        css: 'weirdChild',
-        // $transform () {
-        // ambitious but doable -- do this later
-        // hard parts -- needs to add the stuff to subscriptions
-        // same for 'property definitions (although that can be an operator'
-        // now there is no way to switch etc
-        //   return {
-        //     text: { $: 'title' }
-        //   }
-        // },
-        text: { $: 'title' }
-      }
-    },
+    // holder2: {
+    //   $: 'collection',
+    //   $any: true,
+    //   Child: { // if you reuse here stuff here as a Child uid is not enough!
+    //     css: 'weirdChild',
+    //     // $transform () {
+    //     // ambitious but doable -- do this later
+    //     // hard parts -- needs to add the stuff to subscriptions
+    //     // same for 'property definitions (although that can be an operator'
+    //     // now there is no way to switch etc
+    //     //   return {
+    //     //     text: { $: 'title' }
+    //     //   }
+    //     // },
+    //     text: { $: 'title' }
+    //   }
+    // },
     holder: {
       $: 'collection',
       $any: true,
@@ -129,10 +129,14 @@ var app = new Element({
         header: {
           a: {
             bla: {
-              $: 'title',
+              // $: true,
+              // $: 'title',
+              x: {
+                text: { $: 'x' }
+              },
               lastname: {
                 text: {
-                  $: 'lastname',
+                  $: 'title.lastname',
                   $prepend: 'lname: '
                 }
               }
@@ -175,7 +179,7 @@ tree = subscribe(state, subs, function (type, stamp, subs, ctree, ptree) {
   // console.log('FIRE', this.path(), type, subs)
   // console.log('tree:', tree)
   // console.log('ptree:', ptree)
-  // ctree._parent = ptree
+
   if (subs._) {
     render.fn(this, type, stamp, subs, ctree, ptree, tree)
   } else {
@@ -200,9 +204,10 @@ function loop () {
   cnt++
   var ms = Date.now()
   var obj = {}
-  for (var i = 0; i < 2; i++) {
+  for (var i = 0; i < 3; i++) {
     obj[i] = {
-      title: { val: i + cnt, lastname: i }
+      title: { val: i + cnt, lastname: i },
+      x: i
     }
   }
   state.collection.set(obj)

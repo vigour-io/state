@@ -2,6 +2,12 @@
 
 exports.define = {
   render (parent, state, tree, type) {
+    // this will get the true render -- need something for properties as well
+    // need to get somethign to change this up easyly -- nice to start with canvas for example
+    // need to do something about types then but all doable
+    // then some nice util convert to html and convert from html (using as much standard stuff as possible)
+    // then convert to hyperscript
+    // events
   }
 }
 
@@ -17,10 +23,12 @@ function callit (elem, state, type, stamp, subs, tree, ptree, rtree) {
   } else {
     // console.warn('got render -->', elem.path().join('/'), elem.keys())
     if (!ptree._) {
+      // need psubs!
       ptree._ = {}
     }
 
     if (!ptree._[elem.parent.uid()]) {
+      // console.info('ptree', ptree._)
       // do this in the while parent no state
       ptree._[elem.parent.uid()] = whileparentnostate(elem.parent, rtree, ptree)
     }
@@ -97,42 +105,71 @@ function renderelem (elem) {
   return div
 }
 
+// this goes away
+function finduid (p, uid) {
+  while (p) {
+    if (p._[uid]) {
+      return p._[uid]
+    }
+    p = p._parent
+  }
+}
+
 // doing this from the state update results in a lot of weird things
 // menu that does not get rendered etc
+
+// this goes away -- lets start with the travelers
 function whileparentnostate (elem, rtree, ptree, holder) {
   var divelem
   var pelem
-  while (elem && !elem.$ && !(ptree._ && ptree._[elem.uid()])) {
-    let tdiv = renderelem(elem)
-    if (!divelem) {
-      divelem = tdiv
-    }
-    if (pelem) {
-      tdiv.appendChild(pelem)
-    }
 
-    // not so nice but nessecary
-    ptree._[elem.uid()] = tdiv
+  // need to have it in the subs
+  // ptree = finduid(ptree)
 
-    let p = elem.parent
-    if (p && ptree && ptree._[p.uid()]) {
-      ptree._[p.uid()].appendChild(tdiv)
-    }
+  // ptree._[elem.uid()])
 
-    pelem = tdiv
-    if (!elem.parent) {
-      if (!rtree._) { rtree._ = {} }
-      rtree._[elem.uid()] = tdiv
+  while (elem && !elem.$) {
+    if (ptree._ && finduid(ptree, elem.uid())) {
+      if (pelem) {
+        finduid(ptree, elem.uid()).appendChild(pelem)
+      }
       elem = void 0
     } else {
-      elem = elem.parent
+      let tdiv = renderelem(elem)
+      if (!divelem) {
+        divelem = tdiv
+      }
+      if (pelem) {
+        // ptree is not enough need to find it higher up :/
+        // this is shit but its the problem
+        // we try to add this piece to the wrong tree
+        // of course the ptree "title" will not have these motherfuckers
+        // how to know where to find them?
+        // console.log('CREATE', tdiv, pelem, elem.uid(), ptree, ptree._[elem.uid()])
+        tdiv.appendChild(pelem)
+      }
+
+      // not so nice but nessecary
+      ptree._[elem.uid()] = tdiv
+      let p = elem.parent
+      if (p && ptree && ptree._[p.uid()]) {
+        ptree._[p.uid()].appendChild(tdiv)
+      }
+      pelem = tdiv
+      if (!elem.parent) {
+        if (!rtree._) { rtree._ = {} }
+        rtree._[elem.uid()] = tdiv
+        elem = void 0
+      } else {
+        elem = elem.parent
+      }
     }
   }
   return divelem
 }
 
 // we want it on the tree!
-  // root tree if ptree === rotree do somethign
+  // root tree if ptree === rootree do somethign
 // if ptree does not have node you know you have to make it
 // also eed to check is this ptree node my real parent node -- need somekind of id
 // in the _ we store the uids so you can easyly find it

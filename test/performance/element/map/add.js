@@ -1,7 +1,8 @@
 'use strict'
 const set = require('lodash.set')
 const get = require('lodash.get')
-
+const subscribe = require('./subscribe')
+// unsubscribe will be difficult
 module.exports = function (val, map, target, subs, subsTarget) {
   if (!subs) { subs = target.$ } // also allow for arrays
   const field = get(map, subs)
@@ -32,23 +33,6 @@ function merge (a, b) {
       } else {
         subscribe(a, b._)
       }
-    }
-  }
-}
-
-function subscribe (target, obs) {
-  if (typeof obs === 'object' && !obs._base_version) {
-    for (let uid in obs) {
-      subscribe(target, obs[uid])
-    }
-  } else {
-    if (target._) {
-      if (target._._base_version) {
-        target._ = { [target._.uid()]: target._ }
-      }
-      target._[obs.uid()] = obs
-    } else {
-      target._ = obs
     }
   }
 }
