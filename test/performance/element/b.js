@@ -102,7 +102,8 @@ const Element = new Observable({
     }),
     nodeType: true,
     state: true,
-    _node: true
+    _node: true,
+    isElement: { val: true }
   },
   inject: [
     require('./map'),
@@ -114,36 +115,36 @@ const Element = new Observable({
 
 var app = new Element({
   key: 'app',
-  // star: {},
-  // holder: {
-  //   init: {
-  //     text: { $: 'first', $add: ' ms initial render' }
-  //   },
-  //   ms: {
-  //     text: { $: 'ms', $add: ' periodic updates' }
-  //   },
-  //   elems: {
-  //     text: { $: 'elems', $add: ' dom-nodes' }
-  //   }
-  // },
+  star: {},
+  holder: {
+    init: {
+      text: { $: 'first', $add: ' ms initial render' }
+    },
+    ms: {
+      text: { $: 'ms', $add: ' periodic updates' }
+    },
+    elems: {
+      text: { $: 'elems', $add: ' dom-nodes' }
+    }
+  },
   main: {
-    // holder2: {
-    //   $: 'collection',
-    //   $any: true,
-    //   Child: { // if you reuse here stuff here as a Child uid is not enough!
-    //     css: 'weirdChild',
-    //     // $transform () {
-    //     // ambitious but doable -- do this later
-    //     // hard parts -- needs to add the stuff to subscriptions
-    //     // same for 'property definitions (although that can be an operator'
-    //     // now there is no way to switch etc
-    //     //   return {
-    //     //     text: { $: 'title' }
-    //     //   }
-    //     // },
-    //     text: { $: 'title' }
-    //   }
-    // },
+    holder2: {
+      $: 'collection',
+      $any: true,
+      Child: { // if you reuse here stuff here as a Child uid is not enough!
+        css: 'weirdChild',
+        // $transform () {
+        // ambitious but doable -- do this later
+        // hard parts -- needs to add the stuff to subscriptions
+        // same for 'property definitions (although that can be an operator'
+        // now there is no way to switch etc
+        //   return {
+        //     text: { $: 'title' }
+        //   }
+        // },
+        text: { $: 'title' }
+      }
+    },
     holder: {
       $: 'collection',
       $any: true,
@@ -228,10 +229,9 @@ console.error('-----------------')
 
 tree = subscribe(state, subs, function (type, stamp, subs, ctree, ptree) {
   // console.group()
-  console.log('FIRE', this.path(), type, subs)
+  // console.log('FIRE', this.path(), type, subs)
   // console.log('tree:', tree)
   // console.log('ptree:', ptree)
-
   if (subs._) {
     render.call(this, type, stamp, subs, ctree, ptree, tree)
   } else {
@@ -257,7 +257,7 @@ function loop () {
   cnt++
   var ms = Date.now()
   var obj = {}
-  for (var i = 0; i < 2; i++) {
+  for (var i = 0; i < 1e3; i++) {
     obj[i] = {
       title: { val: i + cnt, lastname: i },
       x: i
@@ -269,7 +269,7 @@ function loop () {
   if (!state.first) {
     state.set({ first: total / cnt })
   }
-  // raf(loop)
+  raf(loop)
 }
 
 state.collection[0].remove()
