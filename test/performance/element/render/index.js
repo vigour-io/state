@@ -4,8 +4,8 @@ var renderElement = require('./element')
 module.exports = function (type, stamp, subs, tree, ptree, rtree) {
   const target = subs._
   if (!target._base_version) {
-    for (var i in target) {
-      render(target[i], this, type, stamp, subs, tree, ptree, rtree)
+    for (let uid in target) {
+      render(target[uid], this, type, stamp, subs, tree, ptree, rtree)
     }
   } else {
     render(target, this, type, stamp, subs, tree, ptree, rtree)
@@ -29,6 +29,8 @@ function render (target, state, type, stamp, subs, tree, ptree, rtree) {
         delete tree._[uid]
       }
     } else {
+      // removal can be called on render or something just simple
+      // also elements can be called /w render -- also easy
       console.error('PROP REMOVAL')
     }
   } else {
