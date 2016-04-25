@@ -132,7 +132,7 @@ var app = new Element({
               // $: true,
               // $: 'title',
               x: {
-                text: { $: 'x' }
+                text: { $: 'x', $prepend: 'x:' }
               },
               lastname: {
                 text: {
@@ -143,6 +143,7 @@ var app = new Element({
             },
             text: {
               $: 'title',
+              $prepend: 'h:',
               $transform (val) {
                 return val
               }
@@ -151,7 +152,7 @@ var app = new Element({
         }
       }
     }
-  },
+  }
   // menu: {
   //   // this needs to be rendered of course -- even if there is no data -- else its pretty strange
   //   // for now we cna work arround this (leave it!) but alter we need to change this
@@ -174,20 +175,28 @@ var render = require('./render')
 
 var tree = {}
 
+// need to do initial render as well
+
+console.error('-----------------')
+console.error('TOP LEVEL RENDER')
+render.call(state, 'new', state._lstamp, subs, tree, void 0, tree)
+console.error('-----------------')
+
 tree = subscribe(state, subs, function (type, stamp, subs, ctree, ptree) {
   // console.group()
-  // console.log('FIRE', this.path(), type, subs)
+  console.log('FIRE', this.path(), type, subs)
   // console.log('tree:', tree)
   // console.log('ptree:', ptree)
 
   if (subs._) {
-    render.fn(this, type, stamp, subs, ctree, ptree, tree)
+    render.call(this, type, stamp, subs, ctree, ptree, tree)
   } else {
     console.warn('no _ ?', this.path())
   }
   // console.groupEnd()
   // render.f
 }, tree)
+
 // -------------------------
 console.log('subs:', subs)
 // -------------------------
@@ -196,7 +205,7 @@ console.timeEnd('START')
 global.state = state
 global.tree = tree
 global.subs = subs
-console.log(tree._[app.uid()])
+// console.log(tree._[app.uid()])
 document.body.appendChild(tree._[app.uid()])
 var cnt = 0
 var total = 0
@@ -204,7 +213,7 @@ function loop () {
   cnt++
   var ms = Date.now()
   var obj = {}
-  for (var i = 0; i < 3; i++) {
+  for (var i = 0; i < 2; i++) {
     obj[i] = {
       title: { val: i + cnt, lastname: i },
       x: i
@@ -219,11 +228,12 @@ function loop () {
   // raf(loop)
 }
 
-state.collection[0].remove()
+// state.collection[0].remove()
 loop()
 
 console.log('----------------------------')
 console.log('--->', subs.collection.$any)
+console.log('tree:', tree)
 state.set({ elems: document.getElementsByTagName('*').length })
 // if i do this correctly dont need parent ever -- just need to store
 // element and then find it by checking parent yes better
