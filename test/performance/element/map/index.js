@@ -36,7 +36,6 @@ exports.define = {
     } else if (returnValue) {
       if (!any) {
         console.error('this is a traveler!', this.path())
-        this._$t = true
         subscribe(map, this)
       } else {
         console.info('this is any so not a real traveler', this.path())
