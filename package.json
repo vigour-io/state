@@ -1,6 +1,6 @@
 {
   "name": "vigour-state",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Reactive state management",
   "engines": {
     "node": "^4.1.1"
