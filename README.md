@@ -7,8 +7,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/vigour-io/state/badge.svg?branch=master)](https://coveralls.io/github/vigour-io/state?branch=master)
 
 <!-- VDOC END -->
-Reactive state management for obervables.
-Inspired by virtual-dom like tree-diffing algorithms
+Fast reactive state management for obervables.
+Inspired by virtual-dom tree-diffing algorithms
 
 ```javascript
 var State = require('vigour-state')
