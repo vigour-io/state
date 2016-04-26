@@ -7,5 +7,17 @@
 [![Coverage Status](https://coveralls.io/repos/github/vigour-io/state/badge.svg?branch=master)](https://coveralls.io/github/vigour-io/state?branch=master)
 
 <!-- VDOC END -->
-Change and state management on obervables.
+Reactive state management for obervables.
 Inspired by virtual-dom like tree-diffing algorithms
+
+```javascript
+var State = require('vigour-state')
+var state = new State()
+state.subscribe({
+  $any: { title: true }
+}, function (type, stamp, subs, tree, parentTree) {
+  console.log(type, 'hey an update!', this)
+})
+// fires an update since we are subscribed to any field with a title
+state.set({ a: { title: 'a title' } })
+```
