@@ -77,6 +77,13 @@ test('collection', function (t) {
     { a: { id: true } }
   )
 
+  s(
+    'remove toplevel collection',
+    [ { path: 'fields', type: 'remove' } ],
+    { a: { $: 5, id: 5 } },
+    { fields: null }
+  )
+
   t.end()
 })
 

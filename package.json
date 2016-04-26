@@ -1,14 +1,17 @@
 {
   "name": "vigour-state",
   "version": "0.0.1",
-  "description": "Vigour state management",
+  "description": "Reactive state management",
   "engines": {
     "node": "^4.1.1"
   },
   "main": "lib/index.js",
   "scripts": {
     "test": "node test | tap-difflet",
-    "watch": "nodemon test | tap-difflet"
+    "watch": "nodemon test | tap-difflet",
+    "cover": "istanbul cover --report none --print detail test/index.js",
+    "view-cover": "istanbul report html && open ./coverage/index.html",
+    "docs": "node_modules/vigour-doc/bin/vdoc"
   },
   "repository": {
     "type": "git",
@@ -37,7 +40,10 @@
     "lodash.set": "^4.1.0",
     "lodash.merge": "^4.1.0",
     "lodash.get": "^4.2.0",
-    "nodemon": "^1.9.1"
+    "nodemon": "^1.9.1",
+    "coveralls": "^2.11.9",
+    "istanbul": "^0.4.3",
+    "vigour-doc": "^1.0.5"
   },
   "homepage": "https://github.com/vigour-io/state#readme"
 }
