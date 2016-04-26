@@ -110,6 +110,13 @@ test('collection using true', function (t) {
   )
 
   s(
+    'change field',
+    [ { path: 'a', type: 'update' } ],
+    false,
+    { a: 'a' }
+  )
+
+  s(
     'remove field',
     [
       { path: 'a', type: 'remove' }
