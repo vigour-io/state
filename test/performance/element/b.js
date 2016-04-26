@@ -211,7 +211,7 @@ var app = new Element({
       }
     },
     holder: {
-      $: 'collection',
+      // $: 'collection',
       $any: true,
       Child: {
         css: 'nestchild',
@@ -283,8 +283,7 @@ var subs = app.$map()
 
 var render = require('./render').multiple
 
-var tree = {}
-
+var tree = { parent: true }
 // need to do initial render as well
 
 console.error('-----------------')
@@ -325,7 +324,7 @@ function loop () {
   }
   var ms = Date.now()
   var obj = {}
-  for (var i = 0; i < 1; i++) {
+  for (var i = 0; i < 5e2; i++) {
     obj[i] = {
       title: { val: i + cnt, lastname: i },
       x: i

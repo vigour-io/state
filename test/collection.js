@@ -81,12 +81,9 @@ test('collection', function (t) {
 })
 
 test('collection using true', function (t) {
-  // use this for .val and normal fields then add collection as a separate
   var s = subsTest(
     t,
     {},
-    // make true work
-    // { $any: true }
     { $any: { val: true } }
   )
 
@@ -100,8 +97,52 @@ test('collection using true', function (t) {
     ],
     false,
     {
-      a: {}, // emit does not fire for empty objects why?? we want that!
+      a: {},
       b: {}
+    }
+  )
+
+  s(
+    'remove field',
+    [
+      { path: 'a', type: 'remove' }
+    ],
+    false,
+    { a: null }
+  )
+
+  t.end()
+})
+
+test('collection using val:"property"', function (t) {
+  var s = subsTest(
+    t,
+    {},
+    { $any: { val: 'property' } }
+  )
+
+  s('initial subscription', [], {})
+
+  s(
+    'create fields',
+    [
+      { path: 'a', type: 'new' },
+      { path: 'b', type: 'new' }
+    ],
+    false,
+    {
+      a: {},
+      b: {}
+    }
+  )
+
+  s(
+    'set fields',
+    [],
+    false,
+    {
+      a: 'a',
+      b: 'b'
     }
   )
 
