@@ -1,6 +1,6 @@
 {
   "name": "vigour-state",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Reactive state management",
   "engines": {
     "node": "^4.1.1"
@@ -47,7 +47,14 @@
   },
   "browserify": {
     "transform": [
-      ["babelify", { "presets": ["es2015"] }]
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015"
+          ]
+        }
+      ]
     ]
   },
   "homepage": "https://github.com/vigour-io/state#readme"
