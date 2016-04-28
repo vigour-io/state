@@ -8,7 +8,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "node test | tap-difflet",
-    "watch": "nodemon test | tap-difflet",
+    "watch": "nodemon test/root | tap-difflet",
     "cover": "istanbul cover --report none --print detail test/index.js",
     "view-cover": "istanbul report html && open ./coverage/index.html",
     "docs": "node_modules/vigour-doc/bin/vdoc",

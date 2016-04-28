@@ -2,7 +2,35 @@
 const test = require('tape')
 const subsTest = require('./test')
 
-test('root', function (t) {
+test('root - basic', function (t) {
+  console.log('lets do this biatch!')
+  const State = require('../lib')
+  const s = new State({
+    a: true
+  })
+  s.subscribe({
+    a: {
+      $root: {
+        b: { val: true } // val true wrong?
+      }
+    }
+  }, function (type) {
+    console.log('yo yo yo', this, type)
+  })
+
+  console.log('----> set b!')
+  s.set({
+    b: 'hello b!'
+  })
+
+  // console.log('its a!')
+  // console.log('----> set a!')
+  // s.set({a: false})
+
+  t.end()
+})
+
+test.skip('root - complex', function (t) {
   const subscription = {
     james: { hello: true },
     something: {
