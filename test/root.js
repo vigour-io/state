@@ -6,6 +6,7 @@ test('root - basic', function (t) {
   console.log('lets do this biatch!')
   const State = require('../lib')
   const s = new State({
+    key: 'ROOT!',
     a: true
   })
   s.subscribe({
@@ -14,13 +15,14 @@ test('root - basic', function (t) {
         b: { val: true } // val true wrong?
       }
     }
-  }, function (type) {
-    console.log('yo yo yo', this, type)
+  }, function (state, type, stamp, subs, tree) {
+    // what we need in element is everything from the originator
+    // except the actual state --- lets make it work in some way
+    console.log('FIRE:', state, type)
   })
 
-  //expect to fire for each field
+  // expect to fire for each field
   // so for b here -- this requires quite some skill
-
   console.log('----> set b!')
   s.set({
     b: 'hello b!'
