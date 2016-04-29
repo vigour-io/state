@@ -17,6 +17,7 @@ test('root - collection', function (t) {
   s('initial subscription', multiple('update'))
 
   // needs to fire 4 times!
+  console.log('FIRE 4 TIMES FOR EACH ITEM IN COLLECTION')
   s('set b', multiple('update'), false, { b: 'hello b2!' })
   t.end()
 
