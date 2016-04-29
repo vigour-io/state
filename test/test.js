@@ -20,7 +20,9 @@ module.exports = function (t, state, subs) {
       updates = []
       state.set(val)
     }
-    const info = (updated.length === 0 ? 'does not fire updates for ' : 'fires updates for ')
+    const info = updated.length === 0
+      ? 'does not fire updates for '
+      : 'fires updates for '
     resolveUpdateCheck(updates, updated, seed)
     t.deepEqual(updates, updated, `${info} "${label}"`)
     if (testtree) {
