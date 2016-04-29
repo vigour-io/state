@@ -10,9 +10,8 @@ module.exports = function (t, state, subs) {
   var tree = subscribe(
     state,
     subs,
-    function (type, stamp, subs, tree, parentTree) {
-      // console.log(type, stamp, subs, tree, parentTree)
-      updates.push({ path: this.path().join('/'), type: type })
+    function (state, type, stamp, subs, tree) {
+      updates.push({ path: state.path().join('/'), type: type })
     }
   )
   var seed = !state._lstamp ? vstamp.cnt : state._lstamp - 1
@@ -21,15 +20,12 @@ module.exports = function (t, state, subs) {
       updates = []
       state.set(val)
     }
-    t.deepEqual(
-      updates,
-      updated,
-      (updated.length === 0 ? 'does not fire updates for ' : 'fires updates for ') + '"' + label + '"'
-    )
+    const info = (updated.length === 0 ? 'does not fire updates for ' : 'fires updates for ')
+    t.deepEqual(updates, updated, `${info} "${label}"`)
     if (testtree) {
       testtree = JSON.parse(JSON.stringify(testtree))
       resolveStamps(testtree, seed)
-      t.deepEqual(tree, testtree, '"' + label + '" results in correct tree')
+      t.deepEqual(tree, testtree, `"${label}" results in correct tree`)
     }
     return { tree: tree, state: state }
   }
