@@ -3,7 +3,6 @@ const test = require('tape')
 const subsTest = require('./test')
 
 test('basic', function (t) {
-  // use this for .val and normal fields then add collection as a separate
   const s = subsTest(
     t,
     { field: true },
@@ -56,5 +55,24 @@ test('basic', function (t) {
     { other: null }
   )
 
+  t.end()
+})
+
+test('basic - $done', function (t) {
+  const s = subsTest(
+    t,
+    { a: { b: 'its b!' } },
+    {
+      a: {
+        val: true,
+        $done: true,
+        b: true
+      }
+    }
+  )
+  s(
+    'initial subscription',
+    [{ path: 'a', type: 'new' }, { path: 'a/b', type: 'new' }, { path: 'a', type: 'new' }]
+  )
   t.end()
 })
