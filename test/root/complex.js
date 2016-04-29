@@ -1,28 +1,8 @@
 'use strict'
 const test = require('tape')
-const subsTest = require('./test')
-
-test('root - basic', function (t) {
-  t.plan(2)
-  const State = require('../lib')
-  const s = new State({
-    key: 'ROOT',
-    a: true
-  })
-  s.subscribe({
-    a: {
-      $root: {
-        b: { val: true }
-      }
-    }
-  }, function (state, type, stamp, subs, tree) {
-    t.equal(state.path().join('/'), 'ROOT/b', 'correct state')
-    t.equal(type, 'new', 'correct type')
-  })
-  s.set({ b: 'hello b!' })
-})
 
 test('root - complex', function (t) {
+  const subsTest = require('../test')
   const subscription = {
     james: { hello: true },
     something: {
