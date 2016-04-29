@@ -21,15 +21,11 @@ module.exports = function (t, state, subs) {
       state.set(val)
     }
     const info = (updated.length === 0 ? 'does not fire updates for ' : 'fires updates for ')
-    t.deepEqual(
-      updates,
-      updated,
-      `${info} "${label}"`
-    )
+    t.deepEqual(updates, updated, `${info} "${label}"`)
     if (testtree) {
       testtree = JSON.parse(JSON.stringify(testtree))
       resolveStamps(testtree, seed)
-      t.deepEqual(tree, testtree, '"' + label + '" results in correct tree')
+      t.deepEqual(tree, testtree, `"${label}" results in correct tree`)
     }
     return { tree: tree, state: state }
   }
