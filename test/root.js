@@ -18,14 +18,13 @@ test('root - basic', function (t) {
     console.log('yo yo yo', this, type)
   })
 
+  //expect to fire for each field
+  // so for b here -- this requires quite some skill
+
   console.log('----> set b!')
   s.set({
     b: 'hello b!'
   })
-
-  // console.log('its a!')
-  // console.log('----> set a!')
-  // s.set({a: false})
 
   t.end()
 })
