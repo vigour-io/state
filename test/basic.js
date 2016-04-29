@@ -72,7 +72,11 @@ test('basic - $done', function (t) {
   )
   s(
     'initial subscription',
-    [{ path: 'a', type: 'new' }, { path: 'a/b', type: 'new' }, { path: 'a', type: 'new' }]
+    [
+      { path: 'a', type: 'new' },
+      { path: 'a/b', type: 'new' },
+      { path: 'a', type: 'new' }
+    ]
   )
   t.end()
 })
