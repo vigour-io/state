@@ -1,4 +1,4 @@
 'use strict'
 require('./basic')
-require('./complex')
+require('./tree')
 require('./collection')

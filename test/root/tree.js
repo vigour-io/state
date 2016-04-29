@@ -1,7 +1,7 @@
 'use strict'
 const test = require('tape')
 
-test('root - complex', function (t) {
+test('root - tree', function (t) {
   const subsTest = require('../test')
   const subscription = {
     james: { hello: true },
