@@ -36,6 +36,7 @@ test('root - basic - multiple', function (t) {
   s('initial subscription', [])
   s('set b', [ { path: 'b', type: 'new' } ], false, { b: 'hello b!' })
   s('set c', [ { path: 'c', type: 'new' } ], false, { c: 'hello c!' })
+  console.log('------------------------- \nupdate c --- here it goes wrong!')
   s('update c', [ { path: 'c', type: 'update' } ], false, { c: 'hello c2!' })
   t.end()
 })

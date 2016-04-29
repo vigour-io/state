@@ -1,17 +1,17 @@
 'use strict'
-var subscribe = require('../lib/subscribe')
-var s = require('../s')
-var isNumber = require('vigour-util/is/number')
-var vstamp = require('vigour-stamp')
+const subscribe = require('../lib/subscribe')
+const s = require('../s')
+const isNumber = require('vigour-util/is/number')
+const vstamp = require('vigour-stamp')
 
 module.exports = function (t, state, subs) {
   state = state.type === 'state' ? state : s(state)
   var updates = []
-  var tree = subscribe(
+  const tree = subscribe(
     state,
     subs,
     function (state, type, stamp, subs, tree) {
-      updates.push({ path: state.path().join('/'), type: type })
+      updates.push({ path: state.path().join('/'), type: type, tree: tree })
     }
   )
   var seed = !state._lstamp ? vstamp.cnt : state._lstamp - 1
@@ -21,6 +21,7 @@ module.exports = function (t, state, subs) {
       state.set(val)
     }
     const info = (updated.length === 0 ? 'does not fire updates for ' : 'fires updates for ')
+    resolveUpdateCheck(updates, updated, seed)
     t.deepEqual(updates, updated, `${info} "${label}"`)
     if (testtree) {
       testtree = JSON.parse(JSON.stringify(testtree))
@@ -31,8 +32,22 @@ module.exports = function (t, state, subs) {
   }
 }
 
+function resolveUpdateCheck (updates, updated, seed) {
+  for (let i = 0, len = Math.max(updated.length, updates.length); i < len; i++) {
+    if (!updated[i] || !updated[i].tree) {
+      if (updates[i]) {
+        delete updates[i].tree
+      }
+    } else if (updated[i] && updated[i].tree && updates[i]) {
+      let testtree = JSON.parse(JSON.stringify(updated[i].tree))
+      resolveStamps(testtree, seed)
+      updates[i].tree = testtree
+    }
+  }
+}
+
 function resolveStamps (tree, seed) {
-  for (var key in tree) {
+  for (let key in tree) {
     if (typeof tree[key] === 'object' && key !== '$' && key !== '$$') {
       resolveStamps(tree[key], seed)
     } else if (key !== 'val') {
