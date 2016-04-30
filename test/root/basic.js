@@ -26,8 +26,8 @@ test('root - basic - multiple', function (t) {
   }
   const s = subsTest(t, { a: true }, subscription)
   s('initial subscription', [])
-  s('set b', [ { path: 'b', type: 'new' } ], false, { b: 'hello b!' })
-  s('set c', [ { path: 'c', type: 'new' } ], false, { c: 'hello c!' })
-  s('update c', [ { path: 'c', type: 'update' } ], false, { c: 'hello c2!' })
+  s('set b', [ { path: 'b', type: 'new', sType: 'root' } ], false, { b: 'hello b!' })
+  s('set c', [ { path: 'c', type: 'new', sType: 'root' } ], false, { c: 'hello c!' })
+  s('update c', [ { path: 'c', type: 'update', sType: 'root' } ], false, { c: 'hello c2!' })
   t.end()
 })

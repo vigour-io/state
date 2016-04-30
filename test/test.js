@@ -10,8 +10,13 @@ module.exports = function (t, state, subs) {
   const tree = subscribe(
     state,
     subs,
-    function (state, type, stamp, subs, tree) {
-      updates.push({ path: state.path().join('/'), type: type, tree: tree })
+    function (state, type, stamp, subs, tree, sType) {
+      updates.push({
+        path: state.path().join('/'),
+        type: type,
+        tree: tree,
+        sType: sType
+      })
     }
   )
   var seed = !state._lstamp ? vstamp.cnt : state._lstamp - 1
@@ -23,7 +28,9 @@ module.exports = function (t, state, subs) {
     const info = updated.length === 0
       ? 'does not fire updates for '
       : 'fires updates for '
-    resolveUpdateCheck(updates, updated, seed)
+    resolveUpdatesTrees(updates, updated, seed)
+    resolveSubsTypeChecks(updates, updated)
+
     t.deepEqual(updates, updated, `${info} "${label}"`)
     if (testtree) {
       testtree = JSON.parse(JSON.stringify(testtree))
@@ -34,7 +41,7 @@ module.exports = function (t, state, subs) {
   }
 }
 
-function resolveUpdateCheck (updates, updated, seed) {
+function resolveUpdatesTrees (updates, updated, seed) {
   for (let i = 0, len = Math.max(updated.length, updates.length); i < len; i++) {
     if (!updated[i] || !updated[i].tree) {
       if (updates[i]) {
@@ -44,6 +51,16 @@ function resolveUpdateCheck (updates, updated, seed) {
       let testtree = JSON.parse(JSON.stringify(updated[i].tree))
       resolveStamps(testtree, seed)
       updates[i].tree = testtree
+    }
+  }
+}
+
+function resolveSubsTypeChecks (updates, updated) {
+  for (let i = 0, len = Math.max(updated.length, updates.length); i < len; i++) {
+    if (!updated[i] || !updated[i].sType) {
+      if (updates[i]) {
+        delete updates[i].sType
+      }
     }
   }
 }

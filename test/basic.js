@@ -75,8 +75,19 @@ test('basic - $done', function (t) {
     [
       { path: 'a', type: 'new' },
       { path: 'a/b', type: 'new' },
-      { path: 'a', type: 'new' }
+      { path: 'a', type: 'new', sType: 'done' }
     ]
+  )
+
+  s(
+    'removal',
+    [
+      { path: 'a/b', type: 'remove' },
+      { path: 'a', type: 'remove' },
+      { path: 'a', type: 'remove', sType: 'done' }
+    ],
+    false,
+    { a: null }
   )
   t.end()
 })
