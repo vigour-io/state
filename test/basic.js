@@ -80,7 +80,18 @@ test('basic - $done', function (t) {
   )
 
   s(
-    'removal',
+    'update a/b',
+    [
+      { path: 'a', type: 'update' },
+      { path: 'a/b', type: 'update' },
+      { path: 'a', type: 'update', sType: 'done' }
+    ],
+    false,
+    { a: { b: 'update b' } }
+  )
+
+  s(
+    'remove a',
     [
       { path: 'a/b', type: 'remove' },
       { path: 'a', type: 'remove' },
