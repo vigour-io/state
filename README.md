@@ -6,7 +6,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/vigour-io/state/badge.svg?branch=master&cachebust)](https://coveralls.io/github/vigour-io/state?branch=master)
 
 <!-- VDOC END -->
-Fast reactive state management for obervables.
+Fast reactive state management for observables.
 Inspired by virtual-dom tree-diffing algorithms
 
 ```javascript
