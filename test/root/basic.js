@@ -46,7 +46,7 @@ test('root - basic - double', function (t) {
   const s = subsTest(t, { a: true }, subscription)
   s(
     'set c',
-    [ { path: 'c', type: 'update' } ],
+    [ { path: 'c', type: 'new' } ],
     false,
     { b: { c: {} }, c: 'hello c!' }
   )

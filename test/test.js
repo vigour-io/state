@@ -2,6 +2,7 @@
 const subscribe = require('../lib/subscribe')
 const s = require('../s')
 const isNumber = require('vigour-util/is/number')
+const isObj = require('vigour-util/is/obj')
 const vstamp = require('vigour-stamp')
 
 module.exports = function (t, state, subs) {
@@ -36,7 +37,7 @@ module.exports = function (t, state, subs) {
     if (testtree) {
       testtree = copy(testtree)
       resolveStamps(testtree, seed)
-      t.deepEqual(tree, testtree, `"${label}" results in correct tree`)
+      t.deepEqual(removeParent(tree), testtree, `"${label}" results in correct tree`)
     }
     return { tree: tree, state: state }
   }
@@ -64,6 +65,17 @@ function resolveSubsTypeChecks (updates, updated) {
       }
     }
   }
+}
+
+function removeParent (tree) {
+  for (let i in tree) {
+    if (i === '_p') {
+      delete tree[i]
+    } else if (isObj(tree[i])) {
+      removeParent(tree[i])
+    }
+  }
+  return tree
 }
 
 function resolveStamps (tree, seed) {
