@@ -1,28 +1,8 @@
 'use strict'
 const test = require('tape')
-const subsTest = require('./test')
 
-test('root - basic', function (t) {
-  t.plan(2)
-  const State = require('../lib')
-  const s = new State({
-    key: 'ROOT',
-    a: true
-  })
-  s.subscribe({
-    a: {
-      $root: {
-        b: { val: true }
-      }
-    }
-  }, function (state, type, stamp, subs, tree) {
-    t.equal(state.path().join('/'), 'ROOT/b', 'correct state')
-    t.equal(type, 'new', 'correct type')
-  })
-  s.set({ b: 'hello b!' })
-})
-
-test('root - complex', function (t) {
+test('root - tree', function (t) {
+  const subsTest = require('../test')
   const subscription = {
     james: { hello: true },
     something: {
@@ -66,7 +46,7 @@ test('root - complex', function (t) {
     'set james hello to true',
     [
       { path: 'james/hello', type: 'new' },
-      { path: 'james/hello', type: 'update' }
+      { path: 'james/hello', type: 'new' }
       // this may pose a problem need to know if its new... leave for now
     ],
     {
@@ -130,11 +110,11 @@ test('root - complex', function (t) {
   )
 
   s('set b field', [
-    { path: 'james', type: 'update' }
+    { path: 'james', type: 'new' }
   ], false, { something: { b: true } })
 
   s('set b.c field', [
-    { path: 'james/hello', type: 'update' }
+    { path: 'james/hello', type: 'new' }
   ], false, { something: { b: { c: true } } })
 
   s('set james hello to false', [

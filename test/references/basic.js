@@ -1,0 +1,106 @@
+'use strict'
+const test = require('tape')
+const subsTest = require('../test')
+
+test('reference - basic', function (t) {
+  const s = subsTest(
+    t,
+    { a: 'a', b: { ref: '$root.a' } },
+    { b: { ref: true } }
+  )
+
+  s(
+    'initial subscription',
+    [{ path: 'b/ref', type: 'new' }],
+    { b: { $: 1, ref: 1 } }
+  )
+
+  s(
+    'referenced field origin',
+    [{ path: 'b/ref', type: 'update' }],
+    { b: { $: 2, ref: 2 } },
+    { a: 'a-update' }
+  )
+
+  t.end()
+})
+
+test('reference - double', function (t) {
+  const s = subsTest(
+    t,
+    {
+      a: {},
+      b: {
+        c: {
+          d: '$root.a'
+        }
+      }
+    },
+    { b: { c: { d: true } } }
+  )
+
+  s(
+    'initial subscription',
+    [{ path: 'b/c/d', type: 'new' }]
+  )
+
+  s(
+    'make a into a reference',
+    [{ path: 'b/c/d', type: 'update' }],
+    false,
+    { a: '$root.x' }
+  )
+
+  s(
+    'update x',
+    [{ path: 'b/c/d', type: 'update' }],
+    false,
+    { x: 'hello its x' }
+  )
+
+  t.end()
+})
+
+test('reference - nested', function (t) {
+  const s = subsTest(
+    t,
+    {
+      a: { b: { c: 'its a.b.c!' } },
+      c: { b: { c: 'its c.b.c!' } },
+      b: '$root.a'
+    },
+    { b: { b: { c: true } } }
+  )
+
+  const result = s(
+    'initial subscription',
+    [{ path: 'a/b/c', type: 'new' }]
+  )
+
+  // dont think i want to fire for this -- its a bit of an edge case
+  s(
+    'switch reference',
+    [{ path: 'c/b/c', type: 'update' }],
+    {
+      b: {
+        $: 2,
+        $ref: result.state.c,
+        b: {
+          $ref: result.state.c.b,
+          $: 1,
+          c: 1
+        }
+      }
+    },
+    { b: '$root.c' }
+  )
+
+  s(
+    'remove reference',
+    [{ path: 'c/b/c', type: 'remove-ref' }],
+    { b: { $: 3 } },
+    { b: false }
+  )
+
+  t.end()
+})
