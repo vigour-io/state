@@ -15,7 +15,7 @@ test('root - basic', function (t) {
   t.end()
 })
 
-test('root - basic - deep', function (t) {
+test('root - basic - nested', function (t) {
   const subscription = {
     a: {
       $root: { b: { c: { d: true } } }

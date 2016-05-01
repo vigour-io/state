@@ -24,3 +24,39 @@ test('reference - basic', function (t) {
 
   t.end()
 })
+
+test('reference - double', function (t) {
+  const s = subsTest(
+    t,
+    {
+      a: {},
+      b: {
+        c: {
+          d: '$root.a'
+        }
+      }
+    },
+    { b: { c: { d: true } } }
+  )
+
+  s(
+    'initial subscription',
+    [{ path: 'b/c/d', type: 'new' }]
+  )
+
+  s(
+    'make a into a reference',
+    [{ path: 'b/c/d', type: 'update' }],
+    false,
+    { a: '$root.x' }
+  )
+
+  s(
+    'update x',
+    [{ path: 'b/c/d', type: 'update' }],
+    false,
+    { x: 'hello its x' }
+  )
+
+  t.end()
+})

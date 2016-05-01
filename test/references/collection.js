@@ -40,7 +40,7 @@ test('reference - collection', function (t) {
   s(
     'remove 0',
     [
-      { path: 'collection/1', type: 'update' }
+      { path: 'collection/0', type: 'update' }
     ],
     false,
     [ null ]
