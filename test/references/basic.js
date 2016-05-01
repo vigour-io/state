@@ -69,18 +69,27 @@ test('reference - nested', function (t) {
       c: { b: { c: 'its c.b.c!' } },
       b: '$root.a'
     },
-    { b: { b: { c: true } } }
+    {
+      b: {
+        b: {
+          c: { val: true, $done: true }
+        }
+      }
+    }
   )
-
   const result = s(
     'initial subscription',
-    [{ path: 'a/b/c', type: 'new' }]
+    [
+      { path: 'a/b/c', type: 'new' },
+      { path: 'a/b/c', type: 'new', sType: 'done' }
+    ]
   )
-
-  // dont think i want to fire for this -- its a bit of an edge case
   s(
     'switch reference',
-    [{ path: 'c/b/c', type: 'update' }],
+    [
+      { path: 'c/b/c', type: 'update' },
+      { path: 'c/b/c', type: 'update', sType: 'done' }
+    ],
     {
       b: {
         $: 2,
@@ -88,19 +97,23 @@ test('reference - nested', function (t) {
         b: {
           $ref: result.state.c.b,
           $: 1,
-          c: 1
+          c: {
+            $: 1,
+            $ref: result.state.c.b.c
+          }
         }
       }
     },
     { b: '$root.c' }
   )
-
   s(
     'remove reference',
-    [{ path: 'c/b/c', type: 'remove-ref' }],
+    [
+      { path: 'c/b/c', type: 'remove-ref' },
+      { path: 'c/b/c', type: 'remove-ref', sType: 'done' }
+    ],
     { b: { $: 3 } },
     { b: false }
   )
-
   t.end()
 })
