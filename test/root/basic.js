@@ -31,6 +31,19 @@ test('root - basic - deep', function (t) {
   t.end()
 })
 
+test('root - basic - double', function (t) {
+  const subscription = {
+    a: {
+      $root: {
+        b: { $root: { c: true } }
+      }
+    }
+  }
+  const s = subsTest(t, { a: true }, subscription)
+  s('set c', [ { path: 'c', type: 'update' } ], false, { b: 'hello b!', c: 'hello c!' })
+  t.end()
+})
+
 test('root - basic - multiple', function (t) {
   const subscription = {
     a: {
