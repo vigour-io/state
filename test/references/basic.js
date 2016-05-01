@@ -60,3 +60,33 @@ test('reference - double', function (t) {
 
   t.end()
 })
+
+test('reference - nested', function (t) {
+  const s = subsTest(
+    t,
+    {
+      a: {
+        b: {
+          c: 'its c!'
+        }
+      },
+      b: '$root.a'
+    },
+    { b: { b: { c: true } } }
+  )
+
+  s(
+    'initial subscription',
+    [{ path: 'a/b/c', type: 'new' }]
+  )
+
+  // dont think i want to fire for this -- its a bit of an edge case
+  s(
+    'remove reference',
+    [{ path: 'a/b/c', type: 'remove-ref' }],
+    { b: { $: 2 } },
+    { b: false }
+  )
+
+  t.end()
+})

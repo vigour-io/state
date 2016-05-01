@@ -26,7 +26,7 @@ test('root - basic - nested', function (t) {
     'set b/c/d',
     [ { path: 'b/c/d', type: 'new', sType: 'root' } ],
     false,
-    { b: { c: { d: 'its d!'} } }
+    { b: { c: { d: 'its d!' } } }
   )
   t.end()
 })
