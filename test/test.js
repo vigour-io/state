@@ -34,7 +34,7 @@ module.exports = function (t, state, subs) {
 
     t.deepEqual(updates, updated, `${info} "${label}"`)
     if (testtree) {
-      testtree = JSON.parse(JSON.stringify(testtree))
+      testtree = copy(testtree)
       resolveStamps(testtree, seed)
       t.deepEqual(tree, testtree, `"${label}" results in correct tree`)
     }
@@ -49,7 +49,7 @@ function resolveUpdatesTrees (updates, updated, seed) {
         delete updates[i].tree
       }
     } else if (updated[i] && updated[i].tree && updates[i]) {
-      let testtree = JSON.parse(JSON.stringify(updated[i].tree))
+      let testtree = copy(updated[i].tree)
       resolveStamps(testtree, seed)
       updates[i].tree = testtree
     }
@@ -68,18 +68,36 @@ function resolveSubsTypeChecks (updates, updated) {
 
 function resolveStamps (tree, seed) {
   for (let key in tree) {
-    if (typeof tree[key] === 'object' && key !== '$' && key !== '$$') {
-      resolveStamps(tree[key], seed)
-    } else if (key !== 'val') {
-      if (tree[key] instanceof Array) {
-        let val = 0
-        for (let i in tree[key]) {
-          val += (tree[key][i] + seed)
+    if (key !== '$ref') {
+      if (typeof tree[key] === 'object' && key !== '$' && key !== '$$') {
+        resolveStamps(tree[key], seed)
+      } else if (key !== 'val') {
+        if (tree[key] instanceof Array) {
+          let val = 0
+          for (let i in tree[key]) {
+            val += (tree[key][i] + seed)
+          }
+          tree[key] = val
+        } else if (isNumber(tree[key])) {
+          tree[key] = tree[key] + seed
         }
-        tree[key] = val
-      } else if (isNumber(tree[key])) {
-        tree[key] = tree[key] + seed
       }
     }
+  }
+}
+
+function copy (tree) {
+  const result = {}
+  if (tree instanceof Array) {
+    return tree.concat()
+  } else {
+    for (let i in tree) {
+      if (tree[i] && typeof tree[i] === 'object' && !tree[i]._base_version) {
+        result[i] = copy(tree[i])
+      } else {
+        result[i] = tree[i]
+      }
+    }
+    return result
   }
 }

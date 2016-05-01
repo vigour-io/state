@@ -65,26 +65,40 @@ test('reference - nested', function (t) {
   const s = subsTest(
     t,
     {
-      a: {
-        b: {
-          c: 'its c!'
-        }
-      },
+      a: { b: { c: 'its a.b.c!' } },
+      c: { b: { c: 'its c.b.c!' } },
       b: '$root.a'
     },
     { b: { b: { c: true } } }
   )
 
-  s(
+  const result = s(
     'initial subscription',
     [{ path: 'a/b/c', type: 'new' }]
   )
 
   // dont think i want to fire for this -- its a bit of an edge case
   s(
+    'switch reference',
+    [{ path: 'c/b/c', type: 'update' }],
+    {
+      b: {
+        $: 2,
+        $ref: result.state.c,
+        b: {
+          $ref: result.state.c.b,
+          $: 1,
+          c: 1
+        }
+      }
+    },
+    { b: '$root.c' }
+  )
+
+  s(
     'remove reference',
-    [{ path: 'a/b/c', type: 'remove-ref' }],
-    { b: { $: 2 } },
+    [{ path: 'c/b/c', type: 'remove-ref' }],
+    { b: { $: 3 } },
     { b: false }
   )
 
