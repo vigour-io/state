@@ -3,7 +3,6 @@ const test = require('tape')
 const subsTest = require('./test')
 
 test('collection', function (t) {
-  // use this for .val and normal fields then add collection as a separate
   const s = subsTest(
     t,
     {},
