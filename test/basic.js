@@ -102,3 +102,16 @@ test('basic - $done', function (t) {
   )
   t.end()
 })
+
+test('basic - subscribe method', function (t) {
+  t.plan(3)
+  const s = require('../s')
+  const state = s({ haha: true }, false)
+  console.log(state._lstamp, state.haha._lstamp)
+  state.subscribe({ haha: true }, function (targetState, type, stamp) {
+    console.log(targetState, stamp)
+    t.equal(targetState, state.haha, 'correct state')
+    t.equal(type, 'new', 'correct type')
+    t.equal(stamp, 0, 'correct stamp')
+  })
+})

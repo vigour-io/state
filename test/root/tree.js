@@ -36,7 +36,7 @@ test('root - tree', function (t) {
             james: { hello: true }
           }
         },
-        $c: { a: 'root' }
+        $c: { a: true }
       },
       james: { $: 1 }
     }
@@ -63,7 +63,7 @@ test('root - tree', function (t) {
           }
         },
         $c: {
-          a: 'root',
+          a: true,
           $: 2
         }
       },
@@ -97,7 +97,7 @@ test('root - tree', function (t) {
           }
         },
         $c: {
-          a: 'root',
+          a: true,
           $: 4
         }
       },
@@ -146,7 +146,7 @@ test('root - tree', function (t) {
           }
         },
         $c: {
-          a: 'root',
+          a: true,
           $: 8,
           $$: [ 9, 7 ] // this is the calculated cache
         }

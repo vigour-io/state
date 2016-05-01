@@ -87,10 +87,10 @@ function resolveStamps (tree, seed) {
         if (tree[key] instanceof Array) {
           let val = 0
           for (let i in tree[key]) {
-            val += (tree[key][i] + seed)
+            val += tree[key][i] !== 0 ? (tree[key][i] + seed) : 0
           }
           tree[key] = val
-        } else if (isNumber(tree[key])) {
+        } else if (isNumber(tree[key]) && tree[key] !== 0) {
           tree[key] = tree[key] + seed
         }
       }
