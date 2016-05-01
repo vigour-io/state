@@ -46,7 +46,7 @@ test('root - tree', function (t) {
     'set james hello to true',
     [
       { path: 'james/hello', type: 'new' },
-      { path: 'james/hello', type: 'update' }
+      { path: 'james/hello', type: 'new' }
       // this may pose a problem need to know if its new... leave for now
     ],
     {
@@ -110,11 +110,11 @@ test('root - tree', function (t) {
   )
 
   s('set b field', [
-    { path: 'james', type: 'update' }
+    { path: 'james', type: 'new' }
   ], false, { something: { b: true } })
 
   s('set b.c field', [
-    { path: 'james/hello', type: 'update' }
+    { path: 'james/hello', type: 'new' }
   ], false, { something: { b: { c: true } } })
 
   s('set james hello to false', [

@@ -23,11 +23,7 @@ test('combined', function (t) {
   }
 
   const s = subsTest(t, state, subscription)
-  const initial = multiple('update', 'b')
-  initial[0].type = 'new'
-
-  //
-  s('initial subscription', initial)
+  s('initial subscription', multiple('new', 'b'))
   // s('set b', multiple('update'), false, { b: 'hello b2!' })
   // s('update d', multiple('update', 'b'))
 
