@@ -34,7 +34,16 @@ test('reference - collection', function (t) {
       { path: 'collection/0', type: 'update' }
     ],
     false,
-    { 0: 'hello its an update in zero' }
+    [ 'hello its an update in zero' ]
+  )
+
+  s(
+    'remove 0',
+    [
+      { path: 'collection/1', type: 'update' }
+    ],
+    false,
+    [ null ]
   )
 
   t.end()
