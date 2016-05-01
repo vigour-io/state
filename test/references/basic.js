@@ -72,7 +72,7 @@ test('reference - nested', function (t) {
     {
       b: {
         b: {
-          c: { val: true, $done: true }
+          c: { val: true, done: true }
         }
       }
     }

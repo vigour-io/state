@@ -58,14 +58,14 @@ test('basic', function (t) {
   t.end()
 })
 
-test('basic - $done', function (t) {
+test('basic - done', function (t) {
   const s = subsTest(
     t,
     { a: { b: 'its b!' } },
     {
       a: {
         val: true,
-        $done: true,
+        done: true,
         b: true
       }
     }
