@@ -55,6 +55,7 @@ test('root - tree', function (t) {
         a: {
           $: [ 2, 1 ],
           $r: {
+            // just create a root subs here
             james: {
               hello: true,
               $: 2
