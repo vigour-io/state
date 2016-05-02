@@ -8,33 +8,48 @@ test('root - basic', function (t) {
     bla: {
       a: 'hahaha it b!'
     },
-    field: {
-      a: 'hello!',
-      b: 'bye!'
-    }
+    blargh: {
+      b: 'its blargs'
+    },
+    field: {}
   })
-  state.subscribe({
+  var tree = state.subscribe({
     field: {
       $switch: {
-        // type is same as prev type -- update / new / remove / OR remove-switch (somewthing like this???)
-        // different name then fn...
         switch  (state, type, stamp, subs, tree, sType) {
-          console.log('lets switch!', state)
           if (state.key === 'bla') {
             return 'doA'
+          } else if (state.key === 'blargh') {
+            return 'doB'
           }
         },
-        // supports val 1 ofc
         val: true,
-        doA: { a: true }, // fields do not represent fields in the tree (just subs - uids)
-        doB: { b: true }
+        doA: { a: { val: true } }, // fields do not represent fields in the tree (just subs - uids)
+        doB: { b: { val: true } }
       }
     }
   }, function (state, type, stamp, subs, tree, sType) {
-    console.log('UPDATE!!!', state, type, sType)
+    console.log('UPDATE!!!', state.path(), type, sType || 'normal')
   })
 
+  console.log(' ')
+  console.log('CREATE SWITCH')
   state.field.set(state.bla)
+
+  console.log(' ')
+  console.log('DONT SWITCH')
+  state.bla.set('hello!')
+
+  // console.log('TREE:', tree.field.$switch)
+  // state.field.set(state.bla)
+  console.log(' ')
+  console.log('SWITCH')
+  state.field.set(state.blargh)
+
+  console.log(' ')
+  console.log('REMOVE')
+  state.field.remove()
+  // console.log('TREE:', tree.field.$switch)
 
   t.end()
 })
