@@ -1,19 +1,40 @@
 'use strict'
 const test = require('tape')
-const subsTest = require('../test')
+// const subsTest = require('../test')
 
 test('root - basic', function (t) {
-  const state = require('../../s')
-  const subscription = {
-    a: {
-      $root: {
-        b: { val: true, _: 'random information' }
+  const s = require('../../s')
+  const state = s({
+    bla: {
+      a: 'hahaha it b!'
+    },
+    field: {
+      a: 'hello!',
+      b: 'bye!'
+    }
+  })
+  state.subscribe({
+    field: {
+      $switch: {
+        // type is same as prev type -- update / new / remove / OR remove-switch (somewthing like this???)
+        // different name then fn...
+        switch  (state, type, stamp, subs, tree, sType) {
+          console.log('lets switch!', state)
+          if (state.key === 'bla') {
+            return 'doA'
+          }
+        },
+        // supports val 1 ofc
+        val: true,
+        doA: { a: true }, // fields do not represent fields in the tree (just subs - uids)
+        doB: { b: true }
       }
     }
-  }
-  const s = subsTest(t, state({ a: true }, false), subscription)
-  s('create b', [ { path: 'b', type: 'new' } ], false, { b: 'hello b!' })
-  s('update b', [ { path: 'b', type: 'update' } ], false, { b: 'hello b2!' })
-  s('remove b', [ { path: 'b', type: 'remove' } ], false, { b: null })
+  }, function (state, type, stamp, subs, tree, sType) {
+    console.log('UPDATE!!!', state, type, sType)
+  })
+
+  state.field.set(state.bla)
+
   t.end()
 })
