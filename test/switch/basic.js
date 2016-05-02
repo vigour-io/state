@@ -2,7 +2,7 @@
 const test = require('tape')
 const subsTest = require('../test')
 
-test('root - basic', (t) => {
+test('switch - basic', (t) => {
   const subscription = {
     field: {
       $switch: {
