@@ -6,7 +6,7 @@ test('switch - basic', (t) => {
   const subscription = {
     field: {
       $switch: {
-        switch  (state, type, stamp, subs, tree, sType) {
+        map  (state, type, stamp, subs, tree, sType) {
           if (state.key === 'a') {
             return 'optionA'
           } else if (state.key === 'b') {
@@ -14,7 +14,7 @@ test('switch - basic', (t) => {
           }
         },
         val: true,
-        optionA: { a: { val: true } }, // fields do not represent fields in the tree (just subs - uids)
+        optionA: { a: { val: true } },
         optionB: { b: { val: true } }
       }
     }
@@ -93,7 +93,10 @@ test('switch - basic', (t) => {
 
   s(
     'set field to a',
-    [{ path: 'a', type: 'update', sType: 'switch' }, { path: 'a/a', type: 'new' }],
+    [
+      { path: 'a', type: 'update', sType: 'switch' },
+      { path: 'a/a', type: 'new' }
+    ],
     {
       field: {
         $ref: result.state.a,
