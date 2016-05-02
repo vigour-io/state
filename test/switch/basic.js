@@ -1,55 +1,122 @@
 'use strict'
 const test = require('tape')
-// const subsTest = require('../test')
+const subsTest = require('../test')
 
-test('root - basic', function (t) {
-  const s = require('../../s')
-  const state = s({
-    bla: {
-      a: 'hahaha it b!'
-    },
-    blargh: {
-      b: 'its blargs'
-    },
-    field: {}
-  })
-  var tree = state.subscribe({
+test('root - basic', (t) => {
+  const subscription = {
     field: {
       $switch: {
         switch  (state, type, stamp, subs, tree, sType) {
-          if (state.key === 'bla') {
-            return 'doA'
-          } else if (state.key === 'blargh') {
-            return 'doB'
+          if (state.key === 'a') {
+            return 'optionA'
+          } else if (state.key === 'b') {
+            return 'optionB'
           }
         },
         val: true,
-        doA: { a: { val: true } }, // fields do not represent fields in the tree (just subs - uids)
-        doB: { b: { val: true } }
+        optionA: { a: { val: true } }, // fields do not represent fields in the tree (just subs - uids)
+        optionB: { b: { val: true } }
       }
     }
-  }, function (state, type, stamp, subs, tree, sType) {
-    console.log('UPDATE!!!', state.path(), type, sType || 'normal')
-  })
+  }
+  const s = subsTest(
+    t,
+    {
+      a: { a: 'its a/a' },
+      b: { b: 'its b/b' }
+    },
+    subscription
+  )
+  const result = s('initial subscription', [], {})
 
-  console.log(' ')
-  console.log('CREATE SWITCH')
-  state.field.set(state.bla)
+  s(
+    'set field to a',
+    [{ path: 'a', type: 'new', sType: 'switch' }, { path: 'a/a', type: 'new' }],
+    {
+      field: {
+        $ref: result.state.a,
+        $: 2,
+        $switch: {
+          $ref: result.state.a,
+          $: subscription.field.$switch.optionA,
+          a: {
+            $: 1,
+            $ref: result.state.a.a
+          }
+        }
+      }
+    },
+    { field: '$root.a' }
+  )
 
-  console.log(' ')
-  console.log('DONT SWITCH')
-  state.bla.set('hello!')
+  s(
+    'set field to b',
+    [
+      { path: 'a/a', type: 'remove-ref' },
+      { path: 'b', type: 'update', sType: 'switch' },
+      { path: 'b/b', type: 'new' }
+    ],
+    {
+      field: {
+        $ref: result.state.b,
+        $: 3,
+        $switch: {
+          $ref: result.state.b,
+          $: subscription.field.$switch.optionB,
+          b: {
+            $: 1,
+            $ref: result.state.b.b
+          }
+        }
+      }
+    },
+    { field: '$root.b' }
+  )
 
-  // console.log('TREE:', tree.field.$switch)
-  // state.field.set(state.bla)
-  console.log(' ')
-  console.log('SWITCH')
-  state.field.set(state.blargh)
+  s(
+    'set field to false',
+    [
+      { path: 'b/b', type: 'remove-ref' },
+      { path: 'field', type: 'update', sType: 'switch' }
+    ],
+    {
+      field: {
+        $: 4,
+        $switch: { $ref: result.state.field }
+      }
+    },
+    { field: false }
+  )
 
-  console.log(' ')
-  console.log('REMOVE')
-  state.field.remove()
-  // console.log('TREE:', tree.field.$switch)
+  s(
+    'set field to a',
+    [{ path: 'a', type: 'update', sType: 'switch' }, { path: 'a/a', type: 'new' }],
+    {
+      field: {
+        $ref: result.state.a,
+        $: 5,
+        $switch: {
+          $ref: result.state.a,
+          $: subscription.field.$switch.optionA,
+          a: {
+            $: 1,
+            $ref: result.state.a.a
+          }
+        }
+      }
+    },
+    { field: '$root.a' }
+  )
+
+  s(
+    'remove field ',
+    [
+      { path: 'a/a', type: 'remove-ref' },
+      { path: 'field', type: 'remove', sType: 'switch' }
+    ],
+    {},
+    { field: null }
+  )
 
   t.end()
 })
