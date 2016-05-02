@@ -69,7 +69,7 @@ function resolveSubsTypeChecks (updates, updated) {
 
 function removeParent (tree) {
   for (let i in tree) {
-    if (i === '_p') {
+    if (i === '_p' || i === '_key') {
       delete tree[i]
     } else if (isObj(tree[i])) {
       removeParent(tree[i])
