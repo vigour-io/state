@@ -31,7 +31,10 @@ test('switch - basic', (t) => {
 
   s(
     'set field to a',
-    [{ path: 'a', type: 'new', sType: 'switch' }, { path: 'a/a', type: 'new' }],
+    [
+      { path: 'a', type: 'new', sType: 'switch' },
+      { path: 'a/a', type: 'new' }
+    ],
     {
       field: {
         $ref: result.state.a,
