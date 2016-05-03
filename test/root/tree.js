@@ -32,7 +32,7 @@ test('root - tree', function (t) {
         $: 1,
         a: {
           $: 1,
-          $r: {
+          $root: {
             james: { hello: true }
           }
         },
@@ -54,7 +54,7 @@ test('root - tree', function (t) {
         $: [ 2, 1 ],
         a: {
           $: [ 2, 1 ],
-          $r: {
+          $root: {
             // just create a root subs here
             james: {
               hello: true,
@@ -89,7 +89,7 @@ test('root - tree', function (t) {
         $: [ 4, 4 ],
         a: {
           $: [ 3, 4 ],
-          $r: {
+          $root: {
             james: {
               hello: true,
               $: 3
@@ -138,7 +138,7 @@ test('root - tree', function (t) {
         $: [ 9, 8, 7 ],
         a: {
           $: [ 4, 7 ],
-          $r: {
+          $root: {
             james: {
               hello: true,
               $: 7
