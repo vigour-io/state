@@ -56,6 +56,22 @@ test('root - basic - double', function (t) {
   t.end()
 })
 
+test('root - basic - property', function (t) {
+  const subscription = {
+    b: { val: 1 },
+    a: {
+      $root: {
+        b: { val: 1 } // this is a shame
+      }
+    }
+  }
+  const s = subsTest(t, {}, subscription)
+  s('create b', [ { path: 'b', type: 'new' } ], false, { b: true })
+  s('create a', [ { path: 'b', type: 'new' } ], false, { a: true })
+  s('update b', [], false, { b: 'update!' })
+  t.end()
+})
+
 test('root - basic - multiple', function (t) {
   const subscription = {
     a: {
