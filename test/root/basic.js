@@ -56,22 +56,6 @@ test('root - basic - double', function (t) {
   t.end()
 })
 
-test('root - basic - property', function (t) {
-  const subscription = {
-    b: { val: 1 },
-    a: {
-      $root: {
-        b: { val: 1 } // this is a shame
-      }
-    }
-  }
-  const s = subsTest(t, {}, subscription)
-  s('create b', [ { path: 'b', type: 'new' } ], false, { b: true })
-  s('create a', [ { path: 'b', type: 'new' } ], false, { a: true })
-  s('update b', [], false, { b: 'update!' })
-  t.end()
-})
-
 test('root - basic - multiple', function (t) {
   const subscription = {
     a: {
@@ -87,5 +71,38 @@ test('root - basic - multiple', function (t) {
   s('set c', [ { path: 'c', type: 'new', sType: 'root' } ], false, { c: 'hello c!' })
   s('update c', [ { path: 'c', type: 'update', sType: 'root' } ], false, { c: 'hello c2!' })
   s('remove c', [ { path: 'c', type: 'remove', sType: 'root' } ], false, { c: null })
+  t.end()
+})
+
+test('root - basic - remove combined with normal', function (t) {
+  const subscription = {
+    b: { val: true },
+    a: { $root: { b: { val: true } } }
+  }
+  const s = subsTest(t, { b: true, a: true }, subscription)
+  console.log('REMOVE!')
+  s('remove b', [
+    { path: 'b', type: 'remove' },
+    { path: 'b', type: 'remove', sType: 'root' }
+  ], false, { b: null })
+  t.end()
+})
+
+test('root - basic - property', function (t) {
+  const subscription = {
+    b: { val: 1 },
+    a: {
+      $root: { b: { val: 1 } }
+    }
+  }
+  const s = subsTest(t, {}, subscription)
+  s('create b', [ { path: 'b', type: 'new' } ], false, { b: true })
+  s('create a', [ { path: 'b', type: 'new', sType: 'root' } ], false, { a: true })
+  s('update b', [], false, { b: 'update!' })
+  console.log('REMOVE!')
+  s('remove b', [
+    { path: 'b', type: 'remove' },
+    { path: 'b', type: 'remove', sType: 'root' }
+  ], false, { b: null })
   t.end()
 })
