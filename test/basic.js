@@ -49,8 +49,8 @@ test('basic', function (t) {
   )
 
   s(
-    'remove other',
-    [ { path: 'other/yuzi', type: 'remove' } ],
+    'remove other, no nested removal',
+    [], //{ path: 'other/yuzi', type: 'remove' }
     { field: 1 },
     { other: null }
   )
@@ -58,7 +58,34 @@ test('basic', function (t) {
   t.end()
 })
 
-test('basic - done', function (t) {
+test('basic - nested removal', function (t) {
+  const s = subsTest(
+    t,
+    { field: true, other: { yuzi: true } },
+    {
+      field: true,
+      other: { yuzi: true, $remove: true }
+    }
+  )
+  s(
+    'initial subscription',
+    [
+      { path: 'field', type: 'new' },
+      { path: 'other/yuzi', type: 'new' }
+    ]
+  )
+  s(
+    'remove and nested removal',
+    [
+      { path: 'other/yuzi', type: 'remove' }
+    ],
+    false,
+    { other: null }
+  )
+  t.end()
+})
+
+test.skip('basic - done', function (t) {
   const s = subsTest(
     t,
     { a: { b: 'its b!' } },
