@@ -7,7 +7,7 @@ test('collection', function (t) {
     t,
     {},
     {
-      fields: { $any: { title: true } },
+      fields: { $remove: true, $any: { title: true, $remove: true } },
       $any: { id: true }
     }
   )
@@ -47,8 +47,8 @@ test('collection', function (t) {
     },
     { fields: [ { title: 'smurts' } ] }
   )
-  console.log('HERE!')
-  var r = s(
+
+  s(
     'remove field in a collection',
     [
       { path: 'fields/0/title', type: 'remove' }
@@ -62,73 +62,70 @@ test('collection', function (t) {
     { fields: [ null ] }
   )
 
-  console.log(r.tree, r.state)
+  s(
+    'toplevel id collection subscription',
+    [ { path: 'a/id', type: 'new' } ],
+    {
+      fields: {
+        1: { $: 2, title: 2 },
+        $: 4
+      },
+      a: { $: 5, id: 5 }
+    },
+    { a: { id: true } }
+  )
 
-//   s(
-//     'toplevel id collection subscription',
-//     [ { path: 'a/id', type: 'new' } ],
-//     {
-//       fields: {
-//         1: { $: 2, title: 2 },
-//         $: 4
-//       },
-//       a: { $: 5, id: 5 }
-//     },
-//     { a: { id: true } }
-//   )
-
-//   s(
-//     'remove toplevel collection',
-//     [ { path: 'fields', type: 'remove' } ],
-//     { a: { $: 5, id: 5 } },
-//     { fields: null }
-//   )
-
-//   t.end()
-// })
-
-// test('collection - true', function (t) {
-//   var s = subsTest(
-//     t,
-//     {},
-//     { $any: { val: true } }
-//   )
-
-//   s('initial subscription', [], {})
-
-//   s(
-//     'create fields',
-//     [
-//       { path: 'a', type: 'new' },
-//       { path: 'b', type: 'new' }
-//     ],
-//     false,
-//     {
-//       a: {},
-//       b: {}
-//     }
-//   )
-
-//   s(
-//     'change field',
-//     [ { path: 'a', type: 'update' } ],
-//     false,
-//     { a: 'a' }
-//   )
-
-//   s(
-//     'remove field',
-//     [
-//       { path: 'a', type: 'remove' }
-//     ],
-//     false,
-//     { a: null }
-//   )
+  s(
+    'remove toplevel collection',
+    [ { path: 'fields', type: 'remove' } ],
+    { a: { $: 5, id: 5 } },
+    { fields: null }
+  )
 
   t.end()
 })
 
-test.skip('collection - val:"property"', function (t) {
+test('collection - true', function (t) {
+  var s = subsTest(
+    t,
+    {},
+    { $any: { val: true } }
+  )
+
+  s('initial subscription', [], {})
+
+  s(
+    'create fields',
+    [
+      { path: 'a', type: 'new' },
+      { path: 'b', type: 'new' }
+    ],
+    false,
+    {
+      a: {},
+      b: {}
+    }
+  )
+
+  s(
+    'change field',
+    [ { path: 'a', type: 'update' } ],
+    false,
+    { a: 'a' }
+  )
+
+  s(
+    'remove field',
+    [
+      { path: 'a', type: 'remove' }
+    ],
+    false,
+    { a: null }
+  )
+  t.end()
+})
+
+test('collection - val:"property"', function (t) {
   var s = subsTest(
     t,
     {},
