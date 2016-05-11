@@ -85,12 +85,13 @@ test('basic - nested removal', function (t) {
   t.end()
 })
 
-test.skip('basic - done', function (t) {
+test('basic - done', function (t) {
   const s = subsTest(
     t,
     { a: { b: 'its b!' } },
     {
       a: {
+        $remove: true,
         val: true,
         done: true,
         b: true
