@@ -7,9 +7,7 @@ test('reference - nested', function (t) {
     t,
     {
       a: '$root.b',
-      b: {
-        b: '$root.c'
-      },
+      b: { b: '$root.c' },
       c: { c: 'lulllz' },
       d: { c: 'more lullz!' }
     },
@@ -27,14 +25,14 @@ test('reference - nested', function (t) {
     [{ path: 'c/c', type: 'new' }]
   )
 
-  s(
+  console.log('=============================================')
+
+  var result = s(
     'update b/b to $root.d',
-    [{ path: 'd/c', type: 'new' }],
+    [{ path: 'd/c', type: 'update' }],
     false,
     {
-      b: {
-        b: '$root.d'
-      }
+      b: { b: '$root.d' }
     }
   )
 

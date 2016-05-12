@@ -4,4 +4,4 @@
 require('./references')
 // require('./root')
 // require('./combined')
-// require('./switch')
+require('./switch')
