@@ -9,7 +9,13 @@ module.exports = function logTree (tree, level, key) {
       if (typeof tree[i] === 'object' && !tree[i]._base_version) {
         logTree(tree[i], level + 1, i)
       } else {
-        console.log(indent(level + 1) + (i + ':' || '') + ' ' + (tree[i] && tree[i]._base_version ? 'STATE: ' + tree[i].path().join('/') : tree[i]))
+        console.log(
+          indent(level + 1) + (i + ':' || '') + ' ' +
+          (tree[i] && tree[i]._base_version
+            ? 'STATE: ' + tree[i].path().join('/')
+            : tree[i]
+          )
+        )
       }
     }
   }

@@ -12,7 +12,7 @@ module.exports = function (t, state, subs) {
     state,
     subs,
     function (state, type, stamp, subs, tree, sType) {
-      console.log('FIRE SUBS', state.path().join('/'), type, stamp)
+      console.log('FIRE SUBS', state.path().join('/'), type, stamp, sType || 'normal')
       updates.push({
         path: state.path().join('/'),
         type: type,
