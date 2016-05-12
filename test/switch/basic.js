@@ -78,8 +78,6 @@ test('switch - basic', (t) => {
     { field: '$root.b' }
   )
 
-  logTree(r.tree)
-
   s(
     'set field to false',
     [
@@ -157,9 +155,9 @@ test('switch - basic - direct', (t) => {
     },
     subscription
   )
-  const result = s('initial subscription', [], {})
+  s('initial subscription', [], {})
 
-  var r = s(
+  s(
     'set field to b',
     [
       { path: 'b', type: 'new', sType: 'switch' },
@@ -169,8 +167,7 @@ test('switch - basic - direct', (t) => {
     { field: '$root.b' }
   )
 
-
-   s(
+  s(
     'set field to a',
     [
       { path: 'a', type: 'update', sType: 'switch' },
@@ -180,33 +177,5 @@ test('switch - basic - direct', (t) => {
     { field: '$root.a' }
   )
 
-  logTree(r.tree)
-
   t.end()
 })
-
-
-function logTree (tree, level, key) {
-  console.log(indent(level) + (key ? key + ':' : '') + ' {')
-  if (!level) {
-    level = 0
-  }
-  for (let i in tree) {
-    if (i !== '_p' && i !== '_key') {
-      if (typeof tree[i] === 'object' && !tree[i]._base_version) {
-        logTree(tree[i], level + 1, i)
-      } else {
-        console.log(indent(level + 1) + (i + ':' || '') + ' ' + (tree[i] && tree[i]._base_version ? 'STATE: ' + tree[i].path().join('/') : tree[i]))
-      }
-    }
-  }
-  console.log(indent(level) + '}')
-}
-function indent (i) {
-  var str = ''
-  while (i) {
-    i--
-    str += '  '
-  }
-  return str
-}
