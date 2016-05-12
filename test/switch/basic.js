@@ -131,7 +131,7 @@ test('switch - basic', (t) => {
   t.end()
 })
 
-test.skip('switch - basic - direct', (t) => {
+test('switch - basic - direct', (t) => {
   const subscription = {
     field: {
       $remove: true,
@@ -145,7 +145,7 @@ test.skip('switch - basic - direct', (t) => {
         },
         val: true,
         optionA: { val: true },
-        optionB: { val: true }
+        optionB: { done: true }
       }
     }
   }
@@ -163,16 +163,26 @@ test.skip('switch - basic - direct', (t) => {
     'set field to b',
     [
       { path: 'b', type: 'new', sType: 'switch' },
-      { path: 'b', type: 'new' }
+      { path: 'b', type: 'new', sType: 'done' }
     ],
     false,
     { field: '$root.b' }
   )
 
+
+   s(
+    'set field to a',
+    [
+      { path: 'a', type: 'update', sType: 'switch' },
+      { path: 'a', type: 'new' }
+    ],
+    false,
+    { field: '$root.a' }
+  )
+
   logTree(r.tree)
 
   t.end()
-
 })
 
 
