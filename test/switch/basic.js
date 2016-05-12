@@ -1,10 +1,11 @@
 'use strict'
 const test = require('tape')
-const subsTest = require('./test')
+const subsTest = require('../test')
 
 test('switch - basic', (t) => {
   const subscription = {
     field: {
+      $remove: true,
       $switch: {
         map  (state, type, stamp, subs, tree, sType) {
           if (state.key === 'a') {
