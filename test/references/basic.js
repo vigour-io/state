@@ -71,8 +71,10 @@ test('reference - nested', function (t) {
     },
     {
       b: {
+        $remove: true,
         b: {
-          c: { val: true, done: true }
+          $remove: true,
+          c: { val: true, done: true, $remove: true }
         }
       }
     }

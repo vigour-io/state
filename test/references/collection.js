@@ -69,6 +69,7 @@ test('reference - collection - target - struct', function (t) {
   const subscription = {
     a: {
       $any: {
+        $remove: true,
         title: { val: true }
       }
     }
