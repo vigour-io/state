@@ -5,27 +5,46 @@ const subsTest = require('../test')
 test('switch - nested', (t) => {
 
   const subscription = {
-    field: {
+    target: {
       $remove: true,
       $switch: {
         map  (state, type, stamp, subs, tree, sType) {
-          if (state.key === 'a') {
-            return 'optionA'
-          } else if (state.key === 'b') {
-            return 'optionB'
+          if (state.key === 'song') {
+            return 'song'
+          } else if (state.key === 'title') {
+            return 'title'
           }
         },
         val: true,
-        optionA: { a: { val: true } },
-        optionB: { b: { val: true } }
+        song: {
+          lyric: {
+            $switch: {
+              map  (state, type, stamp, subs, tree, sType) {
+                if (state.key === 'sexy') {
+                  return 'sexy'
+                } else if (state.key === 'cool') {
+                  return 'cool'
+                }
+              }
+            },
+            sexy: {
+              title: true
+            },
+            cool: {
+              description: true
+            }
+          }
+        },
+        title: {
+          title: { val: true }
+        }
       }
     }
   }
   const s = subsTest(
     t,
     {
-      a: { a: 'its a/a' },
-      b: { b: 'its b/b' }
+
     },
     subscription
   )
