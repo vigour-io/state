@@ -2,7 +2,7 @@
 const test = require('tape')
 const subsTest = require('../test')
 
-test.skip('switch - basic', (t) => {
+test('switch - basic', (t) => {
   const subscription = {
     field: {
       $remove: true,
@@ -14,9 +14,10 @@ test.skip('switch - basic', (t) => {
             return 'optionB'
           }
         },
+        $remove: true,
         val: true,
-        optionA: { a: { val: true } },
-        optionB: { b: { val: true } }
+        optionA: { a: { val: true, $remove: true }, $remove: true },
+        optionB: { b: { val: true, $remove: true }, $remove: true }
       }
     }
   }
@@ -30,7 +31,7 @@ test.skip('switch - basic', (t) => {
   )
   const result = s('initial subscription', [], {})
 
-  s(
+   var r  = s(
     'set field to a',
     [
       { path: 'a', type: 'new', sType: 'switch' },
@@ -76,6 +77,8 @@ test.skip('switch - basic', (t) => {
     },
     { field: '$root.b' }
   )
+
+  logTree(r.tree)
 
   s(
     'set field to false',
@@ -128,7 +131,7 @@ test.skip('switch - basic', (t) => {
   t.end()
 })
 
-test('switch - basic - direct', (t) => {
+test.skip('switch - basic - direct', (t) => {
   const subscription = {
     field: {
       $remove: true,
@@ -183,7 +186,7 @@ function logTree (tree, level, key) {
       if (typeof tree[i] === 'object' && !tree[i]._base_version) {
         logTree(tree[i], level + 1, i)
       } else {
-        console.log(indent(level + 1) + (i + ':' || '') + ' ' + (tree[i] && tree[i]._base_version ? tree[i].inspect() : tree[i]))
+        console.log(indent(level + 1) + (i + ':' || '') + ' ' + (tree[i] && tree[i]._base_version ? 'STATE: ' + tree[i].path().join('/') : tree[i]))
       }
     }
   }
