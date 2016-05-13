@@ -25,7 +25,7 @@ function indent (i) {
   var str = ''
   while (i) {
     i--
-    str += '  '
+    str += '- '
   }
   return str
 }

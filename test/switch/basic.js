@@ -57,7 +57,7 @@ test('switch - basic', (t) => {
   s(
     'set field to b',
     [
-      { path: 'a/a', type: 'remove-ref' },
+      { type: 'remove' },
       { path: 'b', type: 'update', sType: 'switch' },
       { path: 'b/b', type: 'new' }
     ],
@@ -81,7 +81,7 @@ test('switch - basic', (t) => {
   s(
     'set field to false',
     [
-      { path: 'b/b', type: 'remove-ref' },
+      { type: 'remove' },
       { path: 'field', type: 'update', sType: 'switch' }
     ],
     {
@@ -119,7 +119,7 @@ test('switch - basic', (t) => {
   s(
     'remove field ',
     [
-      { path: 'a/a', type: 'remove-ref' },
+      { type: 'remove' },
       { path: 'field', type: 'remove', sType: 'switch' }
     ],
     {},

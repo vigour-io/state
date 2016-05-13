@@ -110,8 +110,8 @@ test('reference - nested', function (t) {
   s(
     'remove reference',
     [
-      { path: 'c/b/c', type: 'remove-ref' },
-      { path: 'c/b/c', type: 'remove-ref', sType: 'done' }
+      { type: 'remove' },
+      { type: 'remove', sType: 'done' }
     ],
     { b: { $: 3 } },
     { b: false }
