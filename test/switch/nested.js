@@ -34,10 +34,12 @@ test('switch - nested', (t) => {
                 description: { val: true }
               }
             }
-          }
+          },
+          done: true
         },
         title: {
-          text: { val: true }
+          text: { val: true },
+          val: true
         }
       }
     }
@@ -59,17 +61,20 @@ test('switch - nested', (t) => {
     },
     subscription
   )
-  const result = s('initial subscription', [], { target: { $: 1 } })
+
+  s('initial subscription', [], { target: { $: 1 } })
 
   s('swtich target to $root.title', [
     { path: 'title', type: 'new', sType: 'switch'},
-    { path: 'title/text', type: 'new' }
+    { path: 'title', type: 'new' },
+    { path: 'title/text', type: 'new' },
   ], false, { target: '$root.title' })
 
   s('swtich target to $root.song', [
     { path: 'song', type: 'update', sType: 'switch'},
     { path: 'genres/sexy', type: 'new', sType: 'switch' },
-    { path: 'genres/sexy/title', type: 'new' }
+    { path: 'genres/sexy/title', type: 'new' },
+    { path: 'song', type: 'new', sType: 'done' }
   ], false, { target: '$root.song' })
 
   s('swtich song.genre to $root.genres.cool', [
