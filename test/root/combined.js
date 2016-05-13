@@ -1,17 +1,17 @@
 'use strict'
 const test = require('tape')
 
-test('root - tree', function (t) {
+test('root - combined', function (t) {
   const subsTest = require('../test')
   const subscription = {
-    james: { hello: true },
+    james: { hello: { val: true } },
     something: {
       a: {
-        $root: { james: { hello: true } }
+        $root: { james: { hello: { val: true } } }
       },
       b: {
-        $root: { james: true },
-        c: { $root: { james: { hello: true } } }
+        $root: { james: { val: true } },
+        c: { $root: { james: { hello: { val: true } } } }
       }
     }
   }

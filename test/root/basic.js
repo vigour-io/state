@@ -29,7 +29,7 @@ test('root - basic', function (t) {
   t.end()
 })
 
-test.skip('root - basic - nested', function (t) {
+test('root - basic - nested', function (t) {
   const subs = {
     a: {
       $root: { b: { c: { d: { val: true } } } }
@@ -38,19 +38,19 @@ test.skip('root - basic - nested', function (t) {
   const s = subsTest(t, { a: true }, subs)
   s(
     'set b/c/d',
-    [ { path: 'b/c/d', type: 'new', sType: 'root' } ],
+    [ { path: 'b/c/d', type: 'new' } ],
     { b: { c: { d: 'its d!' } } }
   )
   t.end()
 })
 
-test.skip('root - basic - double', function (t) {
+test('root - basic - double', function (t) {
   const subs = {
     a: {
       $root: {
         b: {
           c: {
-            $root: { c: true }
+            $root: { c: { val: true } }
           }
         }
       }
@@ -65,7 +65,7 @@ test.skip('root - basic - double', function (t) {
   t.end()
 })
 
-test.skip('root - basic - multiple', function (t) {
+test('root - basic - multiple', function (t) {
   const subs = {
     a: {
       $root: {
@@ -76,28 +76,27 @@ test.skip('root - basic - multiple', function (t) {
   }
   const s = subsTest(t, { a: true }, subs)
   s('initial subscription', [])
-  s('set b', [ { path: 'b', type: 'new', sType: 'root' } ], { b: 'hello b!' })
-  s('set c', [ { path: 'c', type: 'new', sType: 'root' } ], { c: 'hello c!' })
-  s('update c', [ { path: 'c', type: 'update', sType: 'root' } ], { c: 'hello c2!' })
-  s('remove c', [ { path: 'c', type: 'remove', sType: 'root' } ], { c: null })
+  s('set b', [ { path: 'b', type: 'new' } ], { b: 'hello b!' })
+  s('set c', [ { path: 'c', type: 'new' } ], { c: 'hello c!' })
+  s('update c', [ { path: 'c', type: 'update' } ], { c: 'hello c2!' })
+  s('remove c', [ { path: 'c', type: 'remove' } ], { c: null })
   t.end()
 })
 
-test.skip('root - basic - remove combined with normal', function (t) {
+test('root - basic - remove combined with normal', function (t) {
   const subs = {
     b: { val: true },
     a: { $root: { b: { val: true } } }
   }
   const s = subsTest(t, { b: true, a: true }, subs)
-  console.log('REMOVE!')
   s('remove b', [
     { path: 'b', type: 'remove' },
-    { path: 'b', type: 'remove', sType: 'root' }
+    { path: 'b', type: 'remove' }
   ], { b: null })
   t.end()
 })
 
-test.skip('root - basic - property', function (t) {
+test('root - basic - property', function (t) {
   const subs = {
     b: { val: 1 },
     a: {
@@ -105,13 +104,12 @@ test.skip('root - basic - property', function (t) {
     }
   }
   const s = subsTest(t, {}, subs)
-  s('create b', [ { path: 'b', type: 'new' } ], false, { b: true })
-  s('create a', [ { path: 'b', type: 'new', sType: 'root' } ], false, { a: true })
+  s('create b', [ { path: 'b', type: 'new' } ], { b: true })
+  s('create a', [ { path: 'b', type: 'new' } ], { a: true })
   s('update b', [], { b: 'update!' })
-  console.log('REMOVE!')
   s('remove b', [
     { path: 'b', type: 'remove' },
-    { path: 'b', type: 'remove', sType: 'root' }
+    { path: 'b', type: 'remove' }
   ], { b: null })
   t.end()
 })

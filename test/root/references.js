@@ -3,7 +3,13 @@ const subsTest = require('../test')
 test('root - references', function (t) {
   const subscription = {
     a: {
-      b: { $root: { b: { d: true } } }
+      b: {
+        $root: {
+          b: {
+            d: { val: true }
+          }
+        }
+      }
     }
   }
 
@@ -16,17 +22,16 @@ test('root - references', function (t) {
   }
 
   const s = subsTest(t, state, subscription)
-  s('initial subscription', [{ path: 'c/d', type: 'new', sType: 'root' }])
+  s('initial subscription', [{ path: 'c/d', type: 'new' }])
   s(
     'switch reference on b',
-    [{ path: 'd/d', type: 'update', sType: 'root' }],
-    false,
+    [{ path: 'd/d', type: 'update' }],
     { b: '$root.d' }
   )
+
   s(
     'remove reference on b',
-    [{ path: 'd/d', type: 'remove-ref', sType: 'root' }],
-    false,
+    [{ type: 'remove' }],
     { b: 'no more ref!' }
   )
   t.end()
