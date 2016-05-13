@@ -1,8 +1,8 @@
 'use strict'
-// require('./basic')
-// require('./collection')
-// require('./references')
-// require('./switch')
+require('./basic')
+require('./collection')
+require('./references')
+require('./switch')
 require('./root')
-// require('./combined')
+require('./combined')
 require('./parent')
