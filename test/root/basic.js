@@ -7,16 +7,22 @@ test('root - basic', function (t) {
   const state = require('../../s')
   const subscription = {
     a: {
-      $root: {
-        b: { val: true, _: 'random information' }
+      b: {
+        $root: {
+          $remove: true,
+          b: { val: true, _: 'random information' }
+        }
       }
     }
   }
-  const s = subsTest(t, state({ a: true, b: 'lullz' }, false), subscription, true)
+  const s = subsTest(t, state({ a: { b: {} }, b: 'lullz' }, false), subscription, true)
   const r = s('initial subscription', [ { path: 'b', type: 'new' } ])
   s('create b', [ { path: 'b', type: 'update' } ], { b: 'hello b!' })
   s('update b', [ { path: 'b', type: 'update' } ], { b: 'hello b2!' })
   s('remove b', [ { path: 'b', type: 'remove' } ], { b: null })
+  s('create b (again)', [ { path: 'b', type: 'new' } ], { b: 'hello b!' })
+  s('remove a/b', [{ type: 'remove' }], { a: { b: null } })
+  logger(r)
   t.end()
 })
 
