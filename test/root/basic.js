@@ -8,6 +8,7 @@ test('root - basic', function (t) {
   const subscription = {
     a: {
       b: {
+        $remove: true,
         $root: {
           $remove: true,
           b: { val: true, _: 'random information' }
