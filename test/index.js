@@ -3,6 +3,6 @@
 // require('./collection')
 // require('./references')
 // require('./switch')
-// require('./root')
+require('./root')
 // require('./combined')
 require('./parent')

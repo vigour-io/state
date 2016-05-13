@@ -12,6 +12,15 @@ test('root - combined', function (t) {
       b: {
         $root: { james: { val: true } },
         c: { $root: { james: { hello: { val: true } } } }
+      },
+      d: {
+        e: {
+          x: { $root: { hello: { val: true } } },
+          y: { $root: { hello: { val: true } } }
+        },
+        f: {
+          $root: { hello: { val: true } }
+        }
       }
     }
   }
@@ -62,10 +71,15 @@ test('root - combined', function (t) {
     { path: 'james/hello', type: 'update' }
   ], { james: { hello: true } })
 
-  s(
-    'remove something/b',
-    [], // think about this do you really dont want to fire when root subs? probably yes
-    { something: { b: null } }
-  )
+  const r = s('remove something/b', [], { something: { b: null } })
+  s('add something/d/e', [], { something: { d: { e: { x: {}, y: {} }, f: {} } } } )
+  t.same(r.tree.something.$c, { d: 'root', a: 'root' }, 'got d and a in something/$c')
+  t.same(r.tree.something.d.$c, { e: 'root', f: 'root' }, 'got e and f in something/d/$c')
+  s('remove something/d/e/x', [], { something: { d: { e: { x: null } } } } )
+  t.same(r.tree.something.d.$c, { e: 'root', f: 'root' }, 'got e and f in something/d/$c')
+  s('remove something/d/e', [], { something: { d: { e: null } } } )
+  t.same(r.tree.something.d.$c, { f: 'root' }, 'got f in something/d/$c')
+  s('remove something/d', [], { something: { d: null } } )
+  t.same(r.tree.something.$c, { a: 'root' }, 'got only a in something/$c')
   t.end()
 })
