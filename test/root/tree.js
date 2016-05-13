@@ -25,54 +25,14 @@ test('root - tree', function (t) {
     subscription
   )
 
-  s(
-    'initial subscription', [],
-    {
-      something: {
-        $: 1,
-        a: {
-          $: 1,
-          $root: {
-            james: { hello: true }
-          }
-        },
-        $c: { a: true }
-      },
-      james: { $: 1 }
-    }
-  )
+  s('initial subscription', [])
 
   s(
     'set james hello to true',
     [
       { path: 'james/hello', type: 'new' },
       { path: 'james/hello', type: 'new' }
-      // this may pose a problem need to know if its new... leave for now
     ],
-    {
-      something: {
-        $: [ 2, 1 ],
-        a: {
-          $: [ 2, 1 ],
-          $root: {
-            // just create a root subs here
-            james: {
-              hello: true,
-              $: 2
-            },
-            $: 2
-          }
-        },
-        $c: {
-          a: true,
-          $: 2
-        }
-      },
-      james: {
-        $: 2,
-        hello: 2
-      }
-    },
     { james: { hello: true } }
   )
 
@@ -84,29 +44,6 @@ test('root - tree', function (t) {
   s(
     'set a to false',
     [],
-    {
-      something: {
-        $: [ 4, 4 ],
-        a: {
-          $: [ 3, 4 ],
-          $root: {
-            james: {
-              hello: true,
-              $: 3
-            },
-            $: 3
-          }
-        },
-        $c: {
-          a: true,
-          $: 4
-        }
-      },
-      james: {
-        $: 3,
-        hello: 3
-      }
-    },
     { something: { a: false } }
   )
 
@@ -128,31 +65,6 @@ test('root - tree', function (t) {
   s(
     'remove something/b',
     [], // think about this do you really dont want to fire when root subs? probably yes
-    {
-      james: {
-        $: 7,
-        hello: 7
-      },
-      something: {
-        // 6 is self, 7 from b, 7 from a (both from root/james)
-        $: [ 9, 8, 7 ],
-        a: {
-          $: [ 4, 7 ],
-          $root: {
-            james: {
-              hello: true,
-              $: 7
-            },
-            $: 7
-          }
-        },
-        $c: {
-          a: true,
-          $: 8,
-          $$: [ 9, 7 ] // this is the calculated cache
-        }
-      }
-    },
     { something: { b: null } }
   )
   t.end()
