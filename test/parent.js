@@ -23,7 +23,10 @@ test('parent', function (t) {
         b: {
           c: {
             d: {
+              $remove: true,
               $parent: {
+                $remove: true,
+                done: true,
                 $parent: {
                   $parent: {
                     a: { val: true }
@@ -46,5 +49,11 @@ test('parent', function (t) {
   s('update top/a', [
     { path: 'top/a', type: 'update' }
   ], { top: { a: 'its more a!' } })
+
+  s('remove top/b/c/d',
+    // this is a bit weird as behvaiour but ok...
+    [ { path: 'top/b/c/d', type: 'remove' } ],
+    { top: { b: { c: { d: null } } }
+  })
   t.end()
 })
