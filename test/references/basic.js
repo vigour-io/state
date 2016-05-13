@@ -6,19 +6,17 @@ test('reference - basic', function (t) {
   const s = subsTest(
     t,
     { a: 'a', b: { ref: '$root.a' } },
-    { b: { ref: true } }
+    { b: { ref: { val: true } } }
   )
 
-  s(
+  const r = s(
     'initial subscription',
-    [{ path: 'b/ref', type: 'new' }],
-    { b: { $: 1, ref: 1 } }
+    [{ path: 'b/ref', type: 'new' }]
   )
 
   s(
     'referenced field origin',
     [{ path: 'b/ref', type: 'update' }],
-    { b: { $: 2, ref: 2 } },
     { a: 'a-update' }
   )
 
@@ -36,7 +34,7 @@ test('reference - double', function (t) {
         }
       }
     },
-    { b: { c: { d: true } } }
+    { b: { c: { d: { val: true } } } }
   )
 
   s(
@@ -47,14 +45,12 @@ test('reference - double', function (t) {
   s(
     'make a into a reference',
     [{ path: 'b/c/d', type: 'update' }],
-    false,
     { a: '$root.x' }
   )
 
   s(
     'update x',
     [{ path: 'b/c/d', type: 'update' }],
-    false,
     { x: 'hello its x' }
   )
 
@@ -71,8 +67,10 @@ test('reference - nested', function (t) {
     },
     {
       b: {
+        $remove: true,
         b: {
-          c: { val: true, done: true }
+          $remove: true,
+          c: { val: true, done: true, $remove: true }
         }
       }
     }
@@ -90,29 +88,14 @@ test('reference - nested', function (t) {
       { path: 'c/b/c', type: 'update' },
       { path: 'c/b/c', type: 'update', sType: 'done' }
     ],
-    {
-      b: {
-        $: 2,
-        $ref: result.state.c,
-        b: {
-          $ref: result.state.c.b,
-          $: 1,
-          c: {
-            $: 1,
-            $ref: result.state.c.b.c
-          }
-        }
-      }
-    },
     { b: '$root.c' }
   )
   s(
     'remove reference',
     [
-      { path: 'c/b/c', type: 'remove-ref' },
-      { path: 'c/b/c', type: 'remove-ref', sType: 'done' }
+      { type: 'remove' },
+      { type: 'remove', sType: 'done' }
     ],
-    { b: { $: 3 } },
     { b: false }
   )
   t.end()

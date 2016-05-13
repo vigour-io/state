@@ -7,54 +7,66 @@ test('basic', function (t) {
     t,
     { field: true },
     {
-      field: true,
-      other: { yuzi: true }
+      field: { val: true },
+      other: { yuzi: { val: true } }
     }
   )
 
   s(
     'initial subscription',
-    [{ path: 'field', type: 'new' }],
-    { field: 1 }
+    [{ path: 'field', type: 'new' }]
   )
 
   s(
     'update nested field',
     [ { path: 'other/yuzi', type: 'new' } ],
-    {
-      field: 1,
-      other: { $: 2, yuzi: 2 }
-    },
     { other: { yuzi: true } }
   )
 
   s(
     'remove field',
     [ { path: 'other/yuzi', type: 'remove' } ],
-    {
-      field: 1,
-      other: { $: 3 }
-    },
     { other: { yuzi: null } }
   )
 
   s(
     'reset yuzi',
     [ { path: 'other/yuzi', type: 'new' } ],
-    {
-      field: 1,
-      other: { $: 4, yuzi: 4 }
-    },
     { other: { yuzi: true } }
   )
 
   s(
-    'remove other',
-    [ { path: 'other/yuzi', type: 'remove' } ],
-    { field: 1 },
+    'remove other, no nested removal',
+    [],
     { other: null }
   )
 
+  t.end()
+})
+
+test('basic - nested removal', function (t) {
+  const s = subsTest(
+    t,
+    { field: true, other: { yuzi: true } },
+    {
+      field: { val: true },
+      other: { yuzi: { val: true }, $remove: true }
+    }
+  )
+  s(
+    'initial subscription',
+    [
+      { path: 'field', type: 'new' },
+      { path: 'other/yuzi', type: 'new' }
+    ]
+  )
+  s(
+    'remove and nested removal',
+    [
+      { path: 'other/yuzi', type: 'remove' }
+    ],
+    { other: null }
+  )
   t.end()
 })
 
@@ -64,9 +76,10 @@ test('basic - done', function (t) {
     { a: { b: 'its b!' } },
     {
       a: {
+        $remove: true,
         val: true,
         done: true,
-        b: true
+        b: { val: true }
       }
     }
   )
@@ -86,7 +99,6 @@ test('basic - done', function (t) {
       { path: 'a/b', type: 'update' },
       { path: 'a', type: 'update', sType: 'done' }
     ],
-    false,
     { a: { b: 'update b' } }
   )
 
@@ -97,7 +109,6 @@ test('basic - done', function (t) {
       { path: 'a', type: 'remove' },
       { path: 'a', type: 'remove', sType: 'done' }
     ],
-    false,
     { a: null }
   )
   t.end()
@@ -107,9 +118,7 @@ test('basic - subscribe method', function (t) {
   t.plan(3)
   const s = require('../s')
   const state = s({ haha: true }, false)
-  console.log(state._lstamp, state.haha._lstamp)
-  state.subscribe({ haha: true }, function (targetState, type, stamp) {
-    console.log(targetState, stamp)
+  state.subscribe({ haha: { val: true } }, function (targetState, type, stamp) {
     t.equal(targetState, state.haha, 'correct state')
     t.equal(type, 'new', 'correct type')
     t.equal(stamp, 0, 'correct stamp')

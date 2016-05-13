@@ -5,24 +5,30 @@ const isNumber = require('vigour-util/is/number')
 const isObj = require('vigour-util/is/obj')
 const vstamp = require('vigour-stamp')
 
-module.exports = function (t, state, subs) {
+module.exports = function (t, state, subs, log) {
   state = state.type === 'state' ? state : s(state)
   var updates = []
   const tree = subscribe(
     state,
     subs,
     function (state, type, stamp, subs, tree, sType) {
-      // console.log('FIRE SUBS', state.path().join('/'), type, stamp)
-      updates.push({
-        path: state.path().join('/'),
+      let path = state && state.path().join('/')
+      let obj = {
         type: type,
         tree: tree,
         sType: sType
-      })
+      }
+      if (path) {
+        obj.path = path
+      }
+      if (log) {
+        console.log('FIRE:', path, type, sType || 'normal')
+      }
+      updates.push(obj)
     }
   )
   var seed = !state._lstamp ? vstamp.cnt : state._lstamp - 1
-  return function test (label, updated, testtree, val) {
+  return function test (label, updated, val) {
     if (val) {
       updates = []
       state.set(val)
@@ -32,13 +38,7 @@ module.exports = function (t, state, subs) {
       : 'fires updates for '
     resolveUpdatesTrees(updates, updated, seed)
     resolveSubsTypeChecks(updates, updated)
-
     t.deepEqual(updates, updated, `${info} "${label}"`)
-    if (testtree) {
-      testtree = copy(testtree)
-      resolveStamps(testtree, seed)
-      t.deepEqual(removeParent(tree), testtree, `"${label}" results in correct tree`)
-    }
     return { tree: tree, state: state }
   }
 }
@@ -65,17 +65,6 @@ function resolveSubsTypeChecks (updates, updated) {
       }
     }
   }
-}
-
-function removeParent (tree) {
-  for (let i in tree) {
-    if (i === '_p' || i === '_key') {
-      delete tree[i]
-    } else if (isObj(tree[i])) {
-      removeParent(tree[i])
-    }
-  }
-  return tree
 }
 
 function resolveStamps (tree, seed) {
