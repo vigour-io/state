@@ -13,7 +13,7 @@ Inspired by virtual-dom tree-diffing algorithms
 var State = require('vigour-state')
 var state = new State()
 state.subscribe({
-  $any: { title: true }
+  $any: { title: { val: true } }
 }, function (type, stamp, subs, tree, parentTree) {
   console.log(type, 'hey an update!', this)
 })
