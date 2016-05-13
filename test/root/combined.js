@@ -39,7 +39,7 @@ test('root - tree', function (t) {
   s('set james hello to false', [
     { path: 'james/hello', type: 'update' },
     { path: 'james/hello', type: 'update' }
-  ], false, { james: { hello: false } })
+  ], { james: { hello: false } })
 
   s(
     'set a to false',
@@ -49,18 +49,18 @@ test('root - tree', function (t) {
 
   s('set b field', [
     { path: 'james', type: 'new' }
-  ], false, { something: { b: true } })
+  ], { something: { b: true } })
 
   s('set b.c field', [
     { path: 'james/hello', type: 'new' }
-  ], false, { something: { b: { c: true } } })
+  ], { something: { b: { c: true } } })
 
   s('set james hello to false', [
     { path: 'james/hello', type: 'update' },
     { path: 'james/hello', type: 'update' },
     { path: 'james', type: 'update' },
     { path: 'james/hello', type: 'update' }
-  ], false, { james: { hello: true } })
+  ], { james: { hello: true } })
 
   s(
     'remove something/b',

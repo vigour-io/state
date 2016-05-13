@@ -1,6 +1,7 @@
 'use strict'
 const test = require('tape')
 const subsTest = require('../test')
+const logger = require('../log')
 
 test('root - basic', function (t) {
   const state = require('../../s')
@@ -12,12 +13,11 @@ test('root - basic', function (t) {
     }
   }
   const s = subsTest(t, state({ a: true }, false), subscription)
-  const r = s('create b', [ { path: 'b', type: 'new' } ], false, { b: 'hello b!' })
 
-  console.log(r.tree)
-
-  s('update b', [ { path: 'b', type: 'update' } ], false, { b: 'hello b2!' })
-  s('remove b', [ { path: 'b', type: 'remove' } ], false, { b: null })
+  const r = s('create b', [ { path: 'b', type: 'new' } ], { b: 'hello b!' })
+  logger(r.tree)
+  s('update b', [ { path: 'b', type: 'update' } ], { b: 'hello b2!' })
+  s('remove b', [ { path: 'b', type: 'remove' } ], { b: null })
   t.end()
 })
 
@@ -31,7 +31,6 @@ test.skip('root - basic - nested', function (t) {
   s(
     'set b/c/d',
     [ { path: 'b/c/d', type: 'new', sType: 'root' } ],
-    false,
     { b: { c: { d: 'its d!' } } }
   )
   t.end()
@@ -53,7 +52,6 @@ test.skip('root - basic - double', function (t) {
   s(
     'set c',
     [ { path: 'c', type: 'new' } ],
-    false,
     { b: { c: {} }, c: 'hello c!' }
   )
   t.end()
@@ -70,10 +68,10 @@ test.skip('root - basic - multiple', function (t) {
   }
   const s = subsTest(t, { a: true }, subscription)
   s('initial subscription', [])
-  s('set b', [ { path: 'b', type: 'new', sType: 'root' } ], false, { b: 'hello b!' })
-  s('set c', [ { path: 'c', type: 'new', sType: 'root' } ], false, { c: 'hello c!' })
-  s('update c', [ { path: 'c', type: 'update', sType: 'root' } ], false, { c: 'hello c2!' })
-  s('remove c', [ { path: 'c', type: 'remove', sType: 'root' } ], false, { c: null })
+  s('set b', [ { path: 'b', type: 'new', sType: 'root' } ], { b: 'hello b!' })
+  s('set c', [ { path: 'c', type: 'new', sType: 'root' } ], { c: 'hello c!' })
+  s('update c', [ { path: 'c', type: 'update', sType: 'root' } ], { c: 'hello c2!' })
+  s('remove c', [ { path: 'c', type: 'remove', sType: 'root' } ], { c: null })
   t.end()
 })
 
@@ -87,7 +85,7 @@ test.skip('root - basic - remove combined with normal', function (t) {
   s('remove b', [
     { path: 'b', type: 'remove' },
     { path: 'b', type: 'remove', sType: 'root' }
-  ], false, { b: null })
+  ], { b: null })
   t.end()
 })
 
@@ -101,11 +99,11 @@ test.skip('root - basic - property', function (t) {
   const s = subsTest(t, {}, subscription)
   s('create b', [ { path: 'b', type: 'new' } ], false, { b: true })
   s('create a', [ { path: 'b', type: 'new', sType: 'root' } ], false, { a: true })
-  s('update b', [], false, { b: 'update!' })
+  s('update b', [], { b: 'update!' })
   console.log('REMOVE!')
   s('remove b', [
     { path: 'b', type: 'remove' },
     { path: 'b', type: 'remove', sType: 'root' }
-  ], false, { b: null })
+  ], { b: null })
   t.end()
 })
