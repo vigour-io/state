@@ -1,6 +1,6 @@
 'use strict'
 require('./basic')
-// require('./collection')
+require('./collection')
 // require('./references')
 // require('./root')
 // require('./combined')

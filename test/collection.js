@@ -7,8 +7,8 @@ test('collection', function (t) {
     t,
     {},
     {
-      fields: { $remove: true, $any: { title: true, $remove: true } },
-      $any: { id: true }
+      fields: { $remove: true, $any: { title: { val: true }, $remove: true } },
+      $any: { id: { val: true } }
     }
   )
 
@@ -22,8 +22,8 @@ test('collection', function (t) {
     ],
     {
       fields: {
-        0: { $: 2, title: 2 },
-        1: { $: 2, title: 2 },
+        0: { $: 2, title: { $: 2 } },
+        1: { $: 2, title: { $: 2 } },
         $: 2
       }
     },
@@ -40,8 +40,8 @@ test('collection', function (t) {
     [ { path: 'fields/0/title', type: 'update' } ],
     {
       fields: {
-        0: { $: 3, title: 3 },
-        1: { $: 2, title: 2 },
+        0: { $: 3, title: { $: 3 } },
+        1: { $: 2, title: { $: 2 } },
         $: 3
       }
     },
@@ -55,7 +55,7 @@ test('collection', function (t) {
     ],
     {
       fields: {
-        1: { $: 2, title: 2 },
+        1: { $: 2, title: { $: 2 } },
         $: 4
       }
     },
@@ -67,10 +67,10 @@ test('collection', function (t) {
     [ { path: 'a/id', type: 'new' } ],
     {
       fields: {
-        1: { $: 2, title: 2 },
+        1: { $: 2, title: { $: 2 } },
         $: 4
       },
-      a: { $: 5, id: 5 }
+      a: { $: 5, id: { $: 5 } }
     },
     { a: { id: true } }
   )
@@ -78,7 +78,7 @@ test('collection', function (t) {
   s(
     'remove toplevel collection',
     [ { path: 'fields', type: 'remove' } ],
-    { a: { $: 5, id: 5 } },
+    { a: { $: 5, id: { $: 5 } } },
     { fields: null }
   )
 
