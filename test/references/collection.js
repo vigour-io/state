@@ -31,7 +31,6 @@ test('reference - collection - fields', function (t) {
     [
       { path: 'collection/0', type: 'update' }
     ],
-    false,
     [ 'hello its an update in zero' ]
   )
   s(
@@ -39,7 +38,6 @@ test('reference - collection - fields', function (t) {
     [
       { path: 'collection/0', type: 'update' }
     ],
-    false,
     [ null ]
   )
   t.end()
@@ -72,7 +70,6 @@ test('reference - collection - target - struct', function (t) {
   s(
     'remove reference',
      multiple('remove', true),
-     { a: { $: 2 } },
      { a: false }
    )
   t.end()

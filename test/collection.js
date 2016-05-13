@@ -21,13 +21,6 @@ test('collection', function (t) {
       { path: 'fields/1/title', type: 'new' }
     ],
     {
-      fields: {
-        0: { $: 2, title: { $: 2 } },
-        1: { $: 2, title: { $: 2 } },
-        $: 2
-      }
-    },
-    {
       fields: [
         { title: 'james' },
         { title: 'yuz' }
@@ -38,13 +31,6 @@ test('collection', function (t) {
   s(
     'specific field in a collection',
     [ { path: 'fields/0/title', type: 'update' } ],
-    {
-      fields: {
-        0: { $: 3, title: { $: 3 } },
-        1: { $: 2, title: { $: 2 } },
-        $: 3
-      }
-    },
     { fields: [ { title: 'smurts' } ] }
   )
 
@@ -53,32 +39,18 @@ test('collection', function (t) {
     [
       { path: 'fields/0/title', type: 'remove' }
     ],
-    {
-      fields: {
-        1: { $: 2, title: { $: 2 } },
-        $: 4
-      }
-    },
     { fields: [ null ] }
   )
 
   s(
     'toplevel id collection subscription',
     [ { path: 'a/id', type: 'new' } ],
-    {
-      fields: {
-        1: { $: 2, title: { $: 2 } },
-        $: 4
-      },
-      a: { $: 5, id: { $: 5 } }
-    },
     { a: { id: true } }
   )
 
   s(
     'remove toplevel collection',
     [ { path: 'fields', type: 'remove' } ],
-    { a: { $: 5, id: { $: 5 } } },
     { fields: null }
   )
 
@@ -100,7 +72,6 @@ test('collection - true', function (t) {
       { path: 'a', type: 'new' },
       { path: 'b', type: 'new' }
     ],
-    false,
     {
       a: {},
       b: {}
@@ -110,7 +81,6 @@ test('collection - true', function (t) {
   s(
     'change field',
     [ { path: 'a', type: 'update' } ],
-    false,
     { a: 'a' }
   )
 
@@ -119,7 +89,6 @@ test('collection - true', function (t) {
     [
       { path: 'a', type: 'remove' }
     ],
-    false,
     { a: null }
   )
   t.end()
@@ -140,7 +109,6 @@ test('collection - val: "property"', function (t) {
       { path: 'a', type: 'new' },
       { path: 'b', type: 'new' }
     ],
-    false,
     {
       a: {},
       b: {}
@@ -150,7 +118,6 @@ test('collection - val: "property"', function (t) {
   s(
     'set fields',
     [],
-    false,
     {
       a: 'a',
       b: 'b'
@@ -162,7 +129,6 @@ test('collection - val: "property"', function (t) {
     [
       { path: 'a', type: 'remove' }
     ],
-    false,
     { a: null }
   )
 

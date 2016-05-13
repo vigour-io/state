@@ -25,7 +25,7 @@ module.exports = function (t, state, subs) {
     }
   )
   var seed = !state._lstamp ? vstamp.cnt : state._lstamp - 1
-  return function test (label, updated, testtree, val) {
+  return function test (label, updated, val) {
     if (val) {
       updates = []
       state.set(val)
@@ -36,11 +36,6 @@ module.exports = function (t, state, subs) {
     resolveUpdatesTrees(updates, updated, seed)
     resolveSubsTypeChecks(updates, updated)
     t.deepEqual(updates, updated, `${info} "${label}"`)
-    if (testtree) {
-      testtree = copy(testtree)
-      resolveStamps(testtree, seed)
-      // t.deepEqual(removeParent(tree), testtree, `"${label}" results in correct tree`)
-    }
     return { tree: tree, state: state }
   }
 }

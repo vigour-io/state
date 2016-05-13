@@ -14,44 +14,30 @@ test('basic', function (t) {
 
   s(
     'initial subscription',
-    [{ path: 'field', type: 'new' }],
-    { field: { $: 1 } }
+    [{ path: 'field', type: 'new' }]
   )
 
   s(
     'update nested field',
     [ { path: 'other/yuzi', type: 'new' } ],
-    {
-      field: { $: 1 },
-      other: { $: 2, yuzi: { $: 2 } }
-    },
     { other: { yuzi: true } }
   )
 
   s(
     'remove field',
     [ { path: 'other/yuzi', type: 'remove' } ],
-    {
-      field: { $: 1 },
-      other: { $: 3 }
-    },
     { other: { yuzi: null } }
   )
 
   s(
     'reset yuzi',
     [ { path: 'other/yuzi', type: 'new' } ],
-    {
-      field: { $: 1 },
-      other: { $: 4, yuzi: { $: 4 } }
-    },
     { other: { yuzi: true } }
   )
 
   s(
     'remove other, no nested removal',
-    [], //{ path: 'other/yuzi', type: 'remove' }
-    { field: { $: 1 } },
+    [],
     { other: null }
   )
 
@@ -79,7 +65,6 @@ test('basic - nested removal', function (t) {
     [
       { path: 'other/yuzi', type: 'remove' }
     ],
-    false,
     { other: null }
   )
   t.end()
@@ -114,7 +99,6 @@ test('basic - done', function (t) {
       { path: 'a/b', type: 'update' },
       { path: 'a', type: 'update', sType: 'done' }
     ],
-    false,
     { a: { b: 'update b' } }
   )
 
@@ -125,7 +109,6 @@ test('basic - done', function (t) {
       { path: 'a', type: 'remove' },
       { path: 'a', type: 'remove', sType: 'done' }
     ],
-    false,
     { a: null }
   )
   t.end()

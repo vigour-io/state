@@ -17,7 +17,6 @@ test('reference - basic', function (t) {
   s(
     'referenced field origin',
     [{ path: 'b/ref', type: 'update' }],
-    { b: { $: 2, ref: { $: 2, $ref: r.state.a } } },
     { a: 'a-update' }
   )
 
@@ -46,14 +45,12 @@ test('reference - double', function (t) {
   s(
     'make a into a reference',
     [{ path: 'b/c/d', type: 'update' }],
-    false,
     { a: '$root.x' }
   )
 
   s(
     'update x',
     [{ path: 'b/c/d', type: 'update' }],
-    false,
     { x: 'hello its x' }
   )
 
@@ -91,20 +88,6 @@ test('reference - nested', function (t) {
       { path: 'c/b/c', type: 'update' },
       { path: 'c/b/c', type: 'update', sType: 'done' }
     ],
-    {
-      b: {
-        $: 2,
-        $ref: result.state.c,
-        b: {
-          $ref: result.state.c.b,
-          $: 1,
-          c: {
-            $: 1,
-            $ref: result.state.c.b.c
-          }
-        }
-      }
-    },
     { b: '$root.c' }
   )
   s(
@@ -113,7 +96,6 @@ test('reference - nested', function (t) {
       { type: 'remove' },
       { type: 'remove', sType: 'done' }
     ],
-    { b: { $: 3 } },
     { b: false }
   )
   t.end()

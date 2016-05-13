@@ -28,7 +28,6 @@ test('reference - nested', function (t) {
   var result = s(
     'update b/b to $root.d',
     [{ path: 'd/c', type: 'update' }],
-    false,
     {
       b: { b: '$root.d' }
     }
