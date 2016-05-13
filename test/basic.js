@@ -7,23 +7,23 @@ test('basic', function (t) {
     t,
     { field: true },
     {
-      field: true,
-      other: { yuzi: true }
+      field: { val: true },
+      other: { yuzi: { val: true } }
     }
   )
 
   s(
     'initial subscription',
     [{ path: 'field', type: 'new' }],
-    { field: 1 }
+    { field: { $: 1 } }
   )
 
   s(
     'update nested field',
     [ { path: 'other/yuzi', type: 'new' } ],
     {
-      field: 1,
-      other: { $: 2, yuzi: 2 }
+      field: { $: 1 },
+      other: { $: 2, yuzi: { $: 2 } }
     },
     { other: { yuzi: true } }
   )
@@ -32,7 +32,7 @@ test('basic', function (t) {
     'remove field',
     [ { path: 'other/yuzi', type: 'remove' } ],
     {
-      field: 1,
+      field: { $: 1 },
       other: { $: 3 }
     },
     { other: { yuzi: null } }
@@ -42,8 +42,8 @@ test('basic', function (t) {
     'reset yuzi',
     [ { path: 'other/yuzi', type: 'new' } ],
     {
-      field: 1,
-      other: { $: 4, yuzi: 4 }
+      field: { $: 1 },
+      other: { $: 4, yuzi: { $: 4 } }
     },
     { other: { yuzi: true } }
   )
@@ -51,7 +51,7 @@ test('basic', function (t) {
   s(
     'remove other, no nested removal',
     [], //{ path: 'other/yuzi', type: 'remove' }
-    { field: 1 },
+    { field: { $: 1 } },
     { other: null }
   )
 
@@ -63,8 +63,8 @@ test('basic - nested removal', function (t) {
     t,
     { field: true, other: { yuzi: true } },
     {
-      field: true,
-      other: { yuzi: true, $remove: true }
+      field: { val: true },
+      other: { yuzi: { val: true }, $remove: true }
     }
   )
   s(
@@ -94,7 +94,7 @@ test('basic - done', function (t) {
         $remove: true,
         val: true,
         done: true,
-        b: true
+        b: { val: true }
       }
     }
   )
@@ -135,7 +135,7 @@ test('basic - subscribe method', function (t) {
   t.plan(3)
   const s = require('../s')
   const state = s({ haha: true }, false)
-  state.subscribe({ haha: true }, function (targetState, type, stamp) {
+  state.subscribe({ haha: { val: true } }, function (targetState, type, stamp) {
     t.equal(targetState, state.haha, 'correct state')
     t.equal(type, 'new', 'correct type')
     t.equal(stamp, 0, 'correct stamp')
