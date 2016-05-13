@@ -12,10 +12,9 @@ test('root - basic', function (t) {
       }
     }
   }
-  const s = subsTest(t, state({ a: true }, false), subscription)
-
-  const r = s('create b', [ { path: 'b', type: 'new' } ], { b: 'hello b!' })
-  logger(r.tree)
+  const s = subsTest(t, state({ a: true, b: 'lullz' }, false), subscription, true)
+  const r = s('initial subscription', [ { path: 'b', type: 'new' } ])
+  s('create b', [ { path: 'b', type: 'update' } ], { b: 'hello b!' })
   s('update b', [ { path: 'b', type: 'update' } ], { b: 'hello b2!' })
   s('remove b', [ { path: 'b', type: 'remove' } ], { b: null })
   t.end()

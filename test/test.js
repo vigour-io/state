@@ -5,7 +5,7 @@ const isNumber = require('vigour-util/is/number')
 const isObj = require('vigour-util/is/obj')
 const vstamp = require('vigour-stamp')
 
-module.exports = function (t, state, subs) {
+module.exports = function (t, state, subs, log) {
   state = state.type === 'state' ? state : s(state)
   var updates = []
   const tree = subscribe(
@@ -20,6 +20,9 @@ module.exports = function (t, state, subs) {
       }
       if (path) {
         obj.path = path
+      }
+      if (log) {
+        console.log('FIRE:', path, type, sType || 'normal')
       }
       updates.push(obj)
     }
