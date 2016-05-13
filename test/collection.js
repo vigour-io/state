@@ -125,7 +125,7 @@ test('collection - true', function (t) {
   t.end()
 })
 
-test('collection - val:"property"', function (t) {
+test('collection - val: "property"', function (t) {
   var s = subsTest(
     t,
     {},

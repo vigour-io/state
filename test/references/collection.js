@@ -15,7 +15,7 @@ test('reference - collection - fields', function (t) {
     },
     {
       collection: {
-        $any: true
+        $any: { val: true }
       }
     }
   )
@@ -47,7 +47,7 @@ test('reference - collection - fields', function (t) {
 
 test('reference - collection - target - leaf', function (t) {
   const b = [ 1, 2, 3, 4 ]
-  const s = subsTest(t, { b: b, a: '$root.b' }, { a: { $any: true } })
+  const s = subsTest(t, { b: b, a: '$root.b' }, { a: { $any: { val: true } } })
   s('initial subscription', multiple('new'))
   function multiple (type) {
     const val = []

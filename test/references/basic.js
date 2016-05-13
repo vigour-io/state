@@ -6,19 +6,18 @@ test('reference - basic', function (t) {
   const s = subsTest(
     t,
     { a: 'a', b: { ref: '$root.a' } },
-    { b: { ref: true } }
+    { b: { ref: { val: true } } }
   )
 
-  s(
+  const r = s(
     'initial subscription',
-    [{ path: 'b/ref', type: 'new' }],
-    { b: { $: 1, ref: 1 } }
+    [{ path: 'b/ref', type: 'new' }]
   )
 
   s(
     'referenced field origin',
     [{ path: 'b/ref', type: 'update' }],
-    { b: { $: 2, ref: 2 } },
+    { b: { $: 2, ref: { $: 2, $ref: r.state.a } } },
     { a: 'a-update' }
   )
 
@@ -36,7 +35,7 @@ test('reference - double', function (t) {
         }
       }
     },
-    { b: { c: { d: true } } }
+    { b: { c: { d: { val: true } } } }
   )
 
   s(
