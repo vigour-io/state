@@ -18,9 +18,8 @@ test('condition', function (t) {
             $root: { query: {} }
           },
           $pass: {
-            val: true,
+            val: 1,
             description: { val: true },
-            rating: { val: true },
             title: { val: true }
           }
         }
@@ -33,50 +32,65 @@ test('condition', function (t) {
     movies: [
       {
         title: 'jump street',
-        description: 'its about streets!',
-        rating: 2
+        description: 'its about streets!'
       },
       {
         title: 'interstellar',
-        description: 'its about stars!',
-        rating: 6
+        description: 'its about stars!'
       }
     ]
   }
 
-  const s = subsTest(t, state, subs, true)
-  const r = s('initial subscription', [])
+  const s = subsTest(t, state, subs)
+  s('initial subscription', [
+    { path: 'movies/1', type: 'new' },
+    { path: 'movies/1/description', type: 'new' },
+    { path: 'movies/1/title', type: 'new' }
+  ])
 
-  console.log('jump query')
-  r.state.query.set('jump')
+  s('change query to "jump"', [
+    { path: 'movies/0', type: 'new' },
+    { path: 'movies/0/description', type: 'new' },
+    { path: 'movies/0/title', type: 'new' },
+    { path: 'movies/1', type: 'remove' }
+  ], { query: 'jump' })
 
-  console.log('stellar query')
-  r.state.query.set('stellar')
+  s('change query to "stellar"', [
+    { path: 'movies/0', type: 'remove' },
+    { path: 'movies/1', type: 'new' },
+    { path: 'movies/1/description', type: 'new' },
+    { path: 'movies/1/title', type: 'new' }
+  ], { query: 'stellar' })
 
-  console.log('jump street ---> stellar jumps')
-  r.state.movies[0].title.set('stellar jumps')
+  s('change title from "jump street" to "stellar jumps"', [
+    { path: 'movies/0', type: 'new' },
+    { path: 'movies/0/description', type: 'new' },
+    { path: 'movies/0/title', type: 'new' }
+  ], { movies: { 0: { title: 'stellar jumps' } } })
 
-  console.log('title to jumps -- fire remove!')
-  r.state.movies[0].title.set('jumps')
+  s('change title from "stellar jumps" to "jump street"', [
+    { path: 'movies/0', type: 'remove' }
+  ], { movies: { 0: { title: 'jump street' } } })
 
-  console.log('query to blargh')
-  r.state.query.set('blargh')
+  s('change query to "blargh"', [
+    { path: 'movies/1', type: 'remove' }
+  ], { query: 'blargh' })
 
-  console.log('add movie "the blargh"')
-  r.state.movies.set({
-    2: {
-      title: 'the blargh'
+  s('add movie "the blargh"', [
+    { path: 'movies/2', type: 'new' },
+    { path: 'movies/2/title', type: 'new' }
+  ], { movies: { 2: { title: 'the blargh' } } })
+
+  s(
+    'add description for "the blargh"',
+    [ { path: 'movies/2/description', type: 'new' } ],
+    {
+      movies: {
+        2: {
+          description: 'its about a monster, the blargh!'
+        }
+      }
     }
-  })
-
+  )
   t.end()
 })
-
-/*
-extra /w references ofc
-actors: {
-  $any: {
-    name: { val: true }
-  }
-}
-*/
