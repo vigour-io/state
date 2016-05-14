@@ -50,7 +50,7 @@ test('collection', function (t) {
 
   s(
     'remove toplevel collection',
-    [ { path: 'fields', type: 'remove' } ],
+    [],
     { fields: null }
   )
 

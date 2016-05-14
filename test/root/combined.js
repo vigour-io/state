@@ -1,8 +1,8 @@
 'use strict'
 const test = require('tape')
+const subsTest = require('../test')
 
 test('root - combined', function (t) {
-  const subsTest = require('../test')
   const subscription = {
     james: { hello: { val: true } },
     something: {
@@ -82,4 +82,86 @@ test('root - combined', function (t) {
   s('remove something/d', [], { something: { d: null } } )
   t.same(r.tree.something.$c, { a: 'root' }, 'got only a in something/$c')
   t.end()
+})
+
+test('root - combined - normal subscription', function (t) {
+  const subs = {
+    a: {
+      val: true,
+      b: {
+        $root: { b: { val: true } }
+      }
+    }
+  }
+  const s = subsTest(t, { a: { b: {} }, b: true }, subs)
+  s(
+    'set b',
+    [
+      { path: 'b', type: 'update' },
+      { path: 'a', type: 'update' }
+    ],
+    { b: 'hello!' }
+  )
+  t.end()
+})
+
+test('root - combined - collection - normal subscription', function (t) {
+  const subscription = {
+    a: {
+      val: true,
+      $any: {
+        $root: {
+          b: { val: true }
+        }
+      }
+    }
+  }
+  const a = [ 1, 2, 3, 4 ]
+  const s = subsTest(t, { a: a, b: 'hello b!' }, subscription)
+  const creation = multiple('new')
+  creation.unshift({ path: 'a', type: 'new'})
+  s('initial subscription', creation)
+  const update = multiple('update')
+  // order changes since we dont know before hand if a composite updates -- this is hard to change!
+  update.push({ path: 'a', type: 'update' })
+  s('set b', update, { b: 'hello b2!' })
+  t.end()
+  function multiple (type) {
+    const val = []
+    for (let i = 0, len = a.length; i < len; i++) {
+      val.push({ type: type, path: 'b' })
+    }
+    return val
+  }
+})
+
+test('root - combined - collection - normal subscription -- done', function (t) {
+  const subscription = {
+    a: {
+      done: true,
+      $any: {
+        $root: {
+          b: { val: true }
+        }
+      }
+    }
+  }
+  const a = [ 1, 2, 3, 4 ]
+  const s = subsTest(t, { a: a, b: 'hello b!' }, subscription)
+  const creation = multiple('new')
+  // done at the end
+  creation.push({ path: 'a', type: 'new'})
+  s('initial subscription', creation)
+  const update = multiple('update')
+  // order changes since we dont know before hand if a composite updates -- this is hard to change!
+  update.push({ path: 'a', type: 'update' })
+  s('set b', update, { b: 'hello b2!' })
+  t.end()
+  function multiple (type) {
+    const val = []
+    for (let i = 0, len = a.length; i < len; i++) {
+      val.push({ type: type, path: 'b' })
+    }
+    return val
+  }
 })
