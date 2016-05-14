@@ -14,7 +14,7 @@ test('root - collection', function (t) {
   }
   const a = [ 1, 2, 3, 4 ]
   const s = subsTest(t, { a: a, b: 'hello b!' }, subscription)
-  const r = s('initial subscription', multiple('new'))
+  s('initial subscription', multiple('new'))
   s('set b', multiple('update'), { b: 'hello b2!' })
   t.end()
   function multiple (type) {
