@@ -1,8 +1,8 @@
 'use strict'
 const test = require('tape')
+const subsTest = require('../test')
 
 test('root - combined', function (t) {
-  const subsTest = require('../test')
   const subscription = {
     james: { hello: { val: true } },
     something: {
@@ -81,5 +81,26 @@ test('root - combined', function (t) {
   t.same(r.tree.something.d.$c, { f: 'root' }, 'got f in something/d/$c')
   s('remove something/d', [], { something: { d: null } } )
   t.same(r.tree.something.$c, { a: 'root' }, 'got only a in something/$c')
+  t.end()
+})
+
+test('root - combined - normal subscription', function (t) {
+  const subs = {
+    a: {
+      val: true,
+      b: {
+        $root: { b: { val: true } }
+      }
+    }
+  }
+  const s = subsTest(t, { a: { b: {} }, b: true }, subs)
+  s(
+    'set b',
+    [
+      { path: 'b', type: 'update' },
+      { path: 'a', type: 'update' }
+    ],
+    { b: 'hello!' }
+  )
   t.end()
 })
