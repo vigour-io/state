@@ -20,7 +20,10 @@ test('condition', function (t) {
           $pass: {
             val: 1,
             description: { val: true },
-            title: { val: true }
+            title: { val: true },
+            $root: {
+              current: { val: true }
+            }
           }
         }
       }
@@ -91,6 +94,15 @@ test('condition', function (t) {
         }
       }
     }
+  )
+
+  s(
+    'change root/current fire for "the blargh"',
+    [
+      { path: 'current', type: 'new' },
+      { path: 'movies/2', type: 'update' }
+    ],
+    { current: 'hello!' }
   )
   t.end()
 })
