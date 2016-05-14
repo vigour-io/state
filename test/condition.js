@@ -53,12 +53,21 @@ test('condition', function (t) {
   console.log('stellar query')
   r.state.query.set('stellar')
 
-  console.log('stellar jumps!')
+  console.log('jump street ---> stellar jumps')
   r.state.movies[0].title.set('stellar jumps')
 
   console.log('title to jumps -- fire remove!')
   r.state.movies[0].title.set('jumps')
 
+  console.log('query to blargh')
+  r.state.query.set('blargh')
+
+  console.log('add movie "the blargh"')
+  r.state.movies.set({
+    2: {
+      title: 'the blargh'
+    }
+  })
 
   t.end()
 })
