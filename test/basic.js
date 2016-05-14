@@ -124,3 +124,16 @@ test('basic - subscribe method', function (t) {
     t.equal(stamp, 0, 'correct stamp')
   })
 })
+
+test('basic - top', function (t) {
+  t.plan(2)
+  const s = require('../s')
+  const state = s({ haha: true }, false)
+  const cnt = { done: 0, new: 0 }
+  state.subscribe({ val: true, done: true }, function (targetState, type, stamp, subs, tree, sType) {
+    if (sType) { cnt[sType]++ }
+    cnt[type]++
+  })
+  t.equal(cnt.done, 1, 'fired done once')
+  t.equal(cnt.new, 2, 'fired new twice')
+})
