@@ -45,7 +45,7 @@ test('condition', function (t) {
     ]
   }
 
-  const s = subsTest(t, state, subs, true)
+  const s = subsTest(t, state, subs)
 
   const r = s('initial subscription', [
     { path: 'movies/1', type: 'new' },
