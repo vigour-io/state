@@ -1,6 +1,7 @@
 'use strict'
 const test = require('tape')
 const subsTest = require('./test')
+const logger = require('./log')
 
 test('condition', function (t) {
   const subs = {
@@ -45,7 +46,8 @@ test('condition', function (t) {
   }
 
   const s = subsTest(t, state, subs)
-  s('initial subscription', [
+
+  const r = s('initial subscription', [
     { path: 'movies/1', type: 'new' },
     { path: 'movies/1/description', type: 'new' },
     { path: 'movies/1/title', type: 'new' }
@@ -104,5 +106,24 @@ test('condition', function (t) {
     ],
     { current: 'hello!' }
   )
+
+  t.same(
+    r.tree.movies[2].$c,
+    { $condition: 'root', $pass: 'root' },
+    'movies/2 has $c/$pass'
+  )
+
+  s(
+    'change query to "somethig"',
+    [ { path: 'movies/2', type: 'remove' } ],
+    { query: 'something' }
+  )
+
+  t.same(
+    r.tree.movies[2].$c,
+    { $condition: 'root' },
+    'movies/2 does not have $c/$pass'
+  )
+
   t.end()
 })
