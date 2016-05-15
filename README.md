@@ -10,7 +10,8 @@
 Fast reactive state management for observables.
 Inspired by virtual-dom tree-diffing algorithms.
 
--
+Inherits or extends [vigour-observable](https://github.com/vigour-io/observable)
+
 ####simple
 ```javascript
 var State = require('vigour-state')
@@ -18,12 +19,13 @@ var state = new State()
 state.subscribe({
   field: { val: true }
 }, function (state, type) {
+  // type can be "new", "update" or "remove", in this case "new"
+  // state is the target of the update, in this case state.field
   console.log(type, state)
 })
 state.set({ field: 'hello' })
 ```
 
--
 ####any
 ```javascript
 var State = require('vigour-state')
@@ -37,7 +39,6 @@ state.subscribe({
 state.set({ a: { title: 'a title' } })
 ```
 
--
 ####switch
 switch between different subscriptions based on conditions
 ```javascript
@@ -90,7 +91,6 @@ state.set({ field: state.someone })
 state.someone.set({ diet: 'paleo' })
 ```
 
--
 ####root
 ```javascript
 var State = require('vigour-state')
@@ -111,7 +111,6 @@ state.set({ something: true })
 state.set({ field: { another: true } })
 ```
 
--
 ####parent
 ```javascript
 var State = require('vigour-state')
@@ -132,7 +131,6 @@ state.set({ field: { something: true } })
 state.set({ field: { another: true } })
 ```
 
--
 ####condition
 ```javascript
 var State = require('vigour-state')
@@ -186,6 +184,14 @@ state.set({
 // fires for interstellar (remove) and fires for jump street's title and description
 state.query.set('jump')
 ```
--
-
 Or any combination of the above
+
+####inject
+convert any observable to a state-observable
+```javascript
+var Observable = require('vigour-observable')
+var obs = new Observable({
+  inject: require('vigour-state/inject')
+})
+obs.subscribe({ field: { val: true }}, function () {})
+```
