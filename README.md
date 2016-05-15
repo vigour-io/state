@@ -46,15 +46,15 @@ var state = new State()
 state.subscribe({
   field: {
     $switch: {
-      map: (state) => state.key === 'bird' ? 'animal' : 'person'
-    },
-    animal: {
-      class: { val: true },
-      diet: { val: true }
-    },
-    person: {
-      name: { val: true },
-      job: { val: true }
+      map: (state) => state.key === 'bird' ? 'animal' : 'person',
+      animal: {
+        class: { val: true },
+        diet: { val: true }
+      },
+      person: {
+        name: { val: true },
+        job: { val: true }
+      }
     }
   }
 }, function (state, type) {
