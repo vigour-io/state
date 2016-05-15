@@ -9,6 +9,7 @@
 <!-- VDOC END -->
 Fast reactive state management for observables.
 Inspired by virtual-dom tree-diffing algorithms.
+
 -
 ####simple
 ```javascript
