@@ -41,7 +41,8 @@
     "coveralls": "^2.11.9",
     "istanbul": "^0.4.3",
     "vigour-doc": "^1.0.5",
-    "standard": "^7.0.1"
+    "standard": "^7.0.1",
+    "pre-commit": "^1.1.3"
   },
   "browserify": {
     "transform": [
