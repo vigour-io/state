@@ -9,7 +9,7 @@ test('reference - basic', function (t) {
     { b: { ref: { val: true } } }
   )
 
-  const r = s(
+  s(
     'initial subscription',
     [{ path: 'b/ref', type: 'new' }]
   )
@@ -75,13 +75,15 @@ test('reference - nested', function (t) {
       }
     }
   )
-  const result = s(
+
+  s(
     'initial subscription',
     [
       { path: 'a/b/c', type: 'new' },
       { path: 'a/b/c', type: 'new', sType: 'done' }
     ]
   )
+
   s(
     'switch reference',
     [
@@ -90,6 +92,7 @@ test('reference - nested', function (t) {
     ],
     { b: '$root.c' }
   )
+
   s(
     'remove reference',
     [

@@ -1,7 +1,6 @@
 'use strict'
 const test = require('tape')
 const subsTest = require('../test')
-const logger = require('../log')
 test('root - switch', function (t) {
   const subscription = {
     target: {

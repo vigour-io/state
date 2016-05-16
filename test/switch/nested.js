@@ -3,7 +3,6 @@ const test = require('tape')
 const subsTest = require('../test')
 
 test('switch - nested', (t) => {
-
   const subscription = {
     target: {
       $remove: true,
@@ -65,13 +64,13 @@ test('switch - nested', (t) => {
   s('initial subscription', [], { target: { $: 1 } })
 
   s('swtich target to $root.title', [
-    { path: 'title', type: 'new', sType: 'switch'},
+    { path: 'title', type: 'new', sType: 'switch' },
     { path: 'title', type: 'new' },
-    { path: 'title/text', type: 'new' },
+    { path: 'title/text', type: 'new' }
   ], { target: '$root.title' })
 
   s('swtich target to $root.song', [
-    { path: 'song', type: 'update', sType: 'switch'},
+    { path: 'song', type: 'update', sType: 'switch' },
     { path: 'genres/sexy', type: 'new', sType: 'switch' },
     { path: 'genres/sexy/title', type: 'new' },
     { path: 'song', type: 'new', sType: 'done' }

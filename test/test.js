@@ -2,7 +2,6 @@
 const subscribe = require('../lib/subscribe')
 const s = require('../s')
 const isNumber = require('vigour-util/is/number')
-const isObj = require('vigour-util/is/obj')
 const vstamp = require('vigour-stamp')
 
 module.exports = function (t, state, subs, log) {

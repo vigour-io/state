@@ -31,7 +31,7 @@ test('switch - basic', (t) => {
   )
   const result = s('initial subscription', [], {})
 
-   var r  = s(
+  s(
     'set field to a',
     [
       { path: 'a', type: 'new', sType: 'switch' },

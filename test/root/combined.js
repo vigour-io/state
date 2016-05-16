@@ -72,14 +72,14 @@ test('root - combined', function (t) {
   ], { james: { hello: true } })
 
   const r = s('remove something/b', [], { something: { b: null } })
-  s('add something/d/e', [], { something: { d: { e: { x: {}, y: {} }, f: {} } } } )
+  s('add something/d/e', [], { something: { d: { e: { x: {}, y: {} }, f: {} } } })
   t.same(r.tree.something.$c, { d: 'root', a: 'root' }, 'got d and a in something/$c')
   t.same(r.tree.something.d.$c, { e: 'root', f: 'root' }, 'got e and f in something/d/$c')
-  s('remove something/d/e/x', [], { something: { d: { e: { x: null } } } } )
+  s('remove something/d/e/x', [], { something: { d: { e: { x: null } } } })
   t.same(r.tree.something.d.$c, { e: 'root', f: 'root' }, 'got e and f in something/d/$c')
-  s('remove something/d/e', [], { something: { d: { e: null } } } )
+  s('remove something/d/e', [], { something: { d: { e: null } } })
   t.same(r.tree.something.d.$c, { f: 'root' }, 'got f in something/d/$c')
-  s('remove something/d', [], { something: { d: null } } )
+  s('remove something/d', [], { something: { d: null } })
   t.same(r.tree.something.$c, { a: 'root' }, 'got only a in something/$c')
   t.end()
 })
@@ -119,7 +119,7 @@ test('root - combined - collection - normal subscription', function (t) {
   const a = [ 1, 2, 3, 4 ]
   const s = subsTest(t, { a: a, b: 'hello b!' }, subscription)
   const creation = multiple('new')
-  creation.unshift({ path: 'a', type: 'new'})
+  creation.unshift({ path: 'a', type: 'new' })
   s('initial subscription', creation)
   const update = multiple('update')
   // order changes since we dont know before hand if a composite updates -- this is hard to change!
@@ -150,7 +150,7 @@ test('root - combined - collection - normal subscription -- done', function (t) 
   const s = subsTest(t, { a: a, b: 'hello b!' }, subscription)
   const creation = multiple('new')
   // done at the end
-  creation.push({ path: 'a', type: 'new'})
+  creation.push({ path: 'a', type: 'new' })
   s('initial subscription', creation)
   const update = multiple('update')
   // order changes since we dont know before hand if a composite updates -- this is hard to change!

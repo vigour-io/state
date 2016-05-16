@@ -4,11 +4,11 @@
   "description": "Reactive state management",
   "main": "lib/index.js",
   "scripts": {
-    "test": "node test | tap-difflet",
+    "test": "node test | tap-difflet && standard",
     "watch": "nodemon test | tap-difflet",
     "cover": "istanbul cover --report none --print detail test/index.js",
     "docs": "node_modules/vigour-doc/bin/vdoc",
-    "travis": "npm run cover -s && istanbul report lcov && ((cat coverage/lcov.info | coveralls) || exit 0)"
+    "travis": "npm run cover -s && istanbul report lcov && ((cat coverage/lcov.info | coveralls) || exit 0) && standard"
   },
   "repository": {
     "type": "git",
@@ -40,7 +40,8 @@
     "nodemon": "^1.9.1",
     "coveralls": "^2.11.9",
     "istanbul": "^0.4.3",
-    "vigour-doc": "^1.0.5"
+    "vigour-doc": "^1.0.5",
+    "standard": "^7.0.1"
   },
   "browserify": {
     "transform": [

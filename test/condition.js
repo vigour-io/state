@@ -1,7 +1,6 @@
 'use strict'
 const test = require('tape')
 const subsTest = require('./test')
-const logger = require('./log')
 
 test('condition', function (t) {
   const subs = {
