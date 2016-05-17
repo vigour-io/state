@@ -18,7 +18,7 @@ test('condition - parent', function (t) {
             $root: { query: {} }
           },
           $pass: {
-            val: 1, // 1 should not fire!
+            val: 1,
             title: { val: true },
             $parent: {
               title: { val: true }
