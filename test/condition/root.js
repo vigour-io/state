@@ -1,8 +1,8 @@
 'use strict'
 const test = require('tape')
-const subsTest = require('./test')
+const subsTest = require('../test')
 
-test('condition', function (t) {
+test('condition - root', function (t) {
   const subs = {
     movies: {
       $any: {
@@ -99,10 +99,7 @@ test('condition', function (t) {
 
   s(
     'change root/current fire for "the blargh"',
-    [
-      { path: 'current', type: 'new' },
-      { path: 'movies/2', type: 'update' }
-    ],
+    [ { path: 'current', type: 'new' } ],
     { current: 'hello!' }
   )
 
