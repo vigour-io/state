@@ -104,7 +104,7 @@ test('condition - root', function (t) {
   )
 
   t.same(
-    r.tree.movies[2].$c,
+    r.tree.movies.$any[2].$c,
     { $condition: 'root', $pass: 'root' },
     'movies/2 has $c/$pass'
   )
@@ -116,7 +116,7 @@ test('condition - root', function (t) {
   )
 
   t.same(
-    r.tree.movies[2].$c,
+    r.tree.movies.$any[2].$c,
     { $condition: 'root' },
     'movies/2 does not have $c/$pass'
   )
