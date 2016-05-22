@@ -92,7 +92,7 @@ function copy (tree) {
     return tree.concat()
   } else {
     for (let i in tree) {
-      if (tree[i] && typeof tree[i] === 'object' && !tree[i]._base_version) {
+      if (tree[i] && typeof tree[i] === 'object' && !tree[i].isBase) {
         result[i] = copy(tree[i])
       } else {
         result[i] = tree[i]
