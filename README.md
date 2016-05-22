@@ -146,7 +146,7 @@ state.subscribe({
           }
         },
         // this is the subscription relevant for the condition
-        $subs: {
+        $: {
           title: {},
           $root: { query: {} }
         },
