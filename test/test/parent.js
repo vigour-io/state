@@ -13,7 +13,7 @@ test('test - parent', function (t) {
               return (state.title.compute().indexOf(query) > -1)
             }
           },
-          $subs: {
+          $: {
             title: {},
             $root: { query: {} }
           },
