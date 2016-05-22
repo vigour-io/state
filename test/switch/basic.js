@@ -7,7 +7,7 @@ test('switch - basic', (t) => {
     field: {
       $remove: true,
       $switch: {
-        map  (state, type, stamp, subs, tree, sType) {
+        exec  (state, type, stamp, subs, tree, sType) {
           if (state.key === 'a') {
             return 'optionA'
           } else if (state.key === 'b') {
@@ -87,7 +87,7 @@ test('switch - basic - direct', (t) => {
     field: {
       $remove: true,
       $switch: {
-        map  (state, type, stamp, subs, tree, sType) {
+        exec  (state, type, stamp, subs, tree, sType) {
           if (state.key === 'a') {
             return 'optionA'
           } else if (state.key === 'b') {

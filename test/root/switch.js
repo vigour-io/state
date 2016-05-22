@@ -5,7 +5,7 @@ test('root - switch', function (t) {
   const subscription = {
     target: {
       $switch: {
-        map  (state, type, stamp, subs, tree, sType) {
+        exec  (state, type, stamp, subs, tree, sType) {
           if (state.key === 'a') {
             return 'optionA'
           } else if (state.key === 'b') {

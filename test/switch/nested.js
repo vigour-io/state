@@ -7,7 +7,7 @@ test('switch - nested', (t) => {
     target: {
       $remove: true,
       $switch: {
-        map  (state, type, stamp, subs, tree, sType) {
+        exec  (state, type, stamp, subs, tree, sType) {
           if (state.key === 'song') {
             return 'song'
           } else if (state.key === 'title') {
@@ -19,7 +19,7 @@ test('switch - nested', (t) => {
           genre: {
             $switch: {
               val: true,
-              map  (state, type, stamp, subs, tree, sType) {
+              exec  (state, type, stamp, subs, tree, sType) {
                 if (state.key === 'sexy') {
                   return 'sexy'
                 } else if (state.key === 'cool') {
