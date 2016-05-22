@@ -1,7 +1,7 @@
 'use strict'
 const test = require('tape')
 const Observable = require('vigour-observable')
-const subsTest = require('./test')
+const subsTest = require('./util')
 
 test('basic', function (t) {
   const s = subsTest(

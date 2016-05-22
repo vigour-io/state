@@ -1,5 +1,5 @@
 const test = require('tape')
-const subsTest = require('../test')
+const subsTest = require('../util')
 test('root - references', function (t) {
   const subscription = {
     a: {

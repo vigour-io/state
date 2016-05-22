@@ -1,6 +1,6 @@
 'use strict'
 const test = require('tape')
-const subsTest = require('../test')
+const subsTest = require('../util')
 
 test('switch - basic', (t) => {
   const subscription = {

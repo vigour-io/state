@@ -1,13 +1,13 @@
 'use strict'
 const test = require('tape')
-const subsTest = require('../test')
+const subsTest = require('../util')
 
-test('condition - parent', function (t) {
+test('test - parent', function (t) {
   const subs = {
     movies: {
       $any: {
-        $condition: {
-          val (state) {
+        $test: {
+          exec (state) {
             var query = state.getRoot().query.compute()
             if (query && state.title) {
               return (state.title.compute().indexOf(query) > -1)

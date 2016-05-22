@@ -1,13 +1,13 @@
 'use strict'
 const test = require('tape')
-const subsTest = require('../test')
+const subsTest = require('../util')
 
-test('condition - root', function (t) {
+test('test - root', function (t) {
   const subs = {
     movies: {
       $any: {
-        $condition: {
-          val (state) {
+        $test: {
+          exec (state) {
             var query = state.getRoot().query.compute()
             if (query && state.title) {
               return (state.title.compute().indexOf(query) > -1)
@@ -105,7 +105,7 @@ test('condition - root', function (t) {
 
   t.same(
     r.tree.movies.$any[2].$c,
-    { $condition: 'root', $pass: 'root' },
+    { $test: 'root', $pass: 'root' },
     'movies/2 has $c/$pass'
   )
 
@@ -117,7 +117,7 @@ test('condition - root', function (t) {
 
   t.same(
     r.tree.movies.$any[2].$c,
-    { $condition: 'root' },
+    { $test: 'root' },
     'movies/2 does not have $c/$pass'
   )
 
