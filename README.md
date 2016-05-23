@@ -8,7 +8,7 @@
 
 <!-- VDOC END -->
 Fast reactive state management for observables.
-Inspired by virtual-dom tree-diffing algorithms.
+Inspired by virtual-dom tree-diffing algorithms and merkle-trees.
 
 Inherits or extends [vigour-observable](https://github.com/vigour-io/observable)
 
@@ -47,7 +47,7 @@ var state = new State()
 state.subscribe({
   field: {
     $switch: {
-      map: (state) => state.key === 'bird' ? 'animal' : 'person',
+      exec: (state) => state.key === 'bird' ? 'animal' : 'person',
       animal: {
         class: { val: true },
         diet: { val: true }
@@ -131,26 +131,26 @@ state.set({ field: { something: true } })
 state.set({ field: { another: true } })
 ```
 
-####condition
+####test
 ```javascript
 var State = require('vigour-state')
 var state = new State()
 state.subscribe({
   movies: {
     $any: {
-      $condition: {
-        val (state) {
+      $test: {
+        exec (state) {
           var query = state.getRoot().query.compute()
           if (query && state.title) {
             return (state.title.compute().indexOf(query) > -1)
           }
         },
         // this is the subscription relevant for the condition
-        $subs: {
+        $: {
           title: {},
           $root: { query: {} }
         },
-        // when the condition passes it subscribes on this pattern
+        // when the condition passes it subscribes to this pattern
         $pass: {
           val: 1,
           description: { val: true },
