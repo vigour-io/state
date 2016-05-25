@@ -3,7 +3,7 @@
 var Stats = require('stats-js')
 var stats = new Stats()
 stats.setMode(0)
-document.body.appendChild(stats.domElement)
+document.body.appendchild(stats.domElement)
 // -------------------------
 var subscribe = require('../../subscribe')
 var s = require('../../s')
@@ -16,7 +16,7 @@ canvas.id = 'canvas'
 canvas.width = 1000
 canvas.height = 1000
 document.body.style.backgroundColor = 'rgb(38,50,56)'
-document.body.appendChild(canvas)
+document.body.appendchild(canvas)
 var context = canvas.getContext('2d')
 var dir = 2
 context.fillStyle = 'rgb(128,263,192)'

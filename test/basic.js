@@ -140,10 +140,10 @@ test('basic - subscribe method', function (t) {
     t.equal(type, 'new', 'correct type')
     t.equal(stamp, 0, 'correct stamp')
   }, void 0, void 0, obs)
-  t.equal('attach' in state.__on.subscription, true, 'has observable attached')
+  t.equal('attach' in state.emitters.subscription, true, 'has observable attached')
   obs.remove()
   t.equal(
-    state.__on.subscription.attach.keys(),
+    state.emitters.subscription.attach.keys(),
     false,
     'removing observable removes subscription'
   )
