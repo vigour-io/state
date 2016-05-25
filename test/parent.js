@@ -57,3 +57,36 @@ test('parent', function (t) {
   })
   t.end()
 })
+
+test('parent - $any', function (t) {
+  const s = subsTest(
+    t,
+    {
+      collection: {
+        a: true,
+        b: true
+      }
+    },
+    {
+      collection: {
+        $any: {
+          $parent: {
+            $parent: {
+              focus: { val: true }
+            }
+          }
+        }
+      }
+    }
+  )
+  s('initial subscription', [], {})
+  s(
+    'create a collection',
+    [
+      { path: 'focus', type: 'new' },
+      { path: 'focus', type: 'new' }
+    ],
+    { focus: true }
+  )
+  t.end()
+})
