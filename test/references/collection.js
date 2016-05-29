@@ -67,6 +67,8 @@ test('reference - collection - target - struct', function (t) {
     }
     return val
   }
+
+  console.log('what ze fuck')
   s(
     'remove reference',
      multiple('remove', true),
