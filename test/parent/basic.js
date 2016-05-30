@@ -1,6 +1,6 @@
 'use strict'
 const test = require('tape')
-const subsTest = require('./util')
+const subsTest = require('../util')
 
 test('parent', function (t) {
   const s = subsTest(
