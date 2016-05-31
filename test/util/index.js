@@ -3,6 +3,7 @@ const subscribe = require('../../lib/subscribe')
 const s = require('../../s')
 const isNumber = require('vigour-util/is/number')
 const vstamp = require('vigour-stamp')
+const logger = require('./log')
 
 module.exports = function (t, state, subs, log) {
   state = state.type === 'state' ? state : s(state)
@@ -38,6 +39,13 @@ module.exports = function (t, state, subs, log) {
     resolveUpdatesTrees(updates, updated, seed)
     resolveSubsTypeChecks(updates, updated)
     t.deepEqual(updates, updated, `${info} "${label}"`)
+    tree.inspect = false
+    Object.defineProperty(tree, 'inspect', {
+      value () {
+        return logger(this)
+      },
+      enumerable: false
+    })
     return { tree: tree, state: state }
   }
 }

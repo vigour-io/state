@@ -31,8 +31,6 @@ test('switch - basic', (t) => {
   )
   const result = s('initial subscription', [], {})
 
-  console.log('-> 1 heeere we go', result.state.field)
-
   s(
     'set field to a',
     [
@@ -41,8 +39,6 @@ test('switch - basic', (t) => {
     ],
     { field: '$root.a' }
   )
-
-  console.log('-> 2 heeere we go 2', result.state.field.listensOnBase.keys())
 
   s(
     'set field to b',
@@ -54,8 +50,6 @@ test('switch - basic', (t) => {
     { field: '$root.b' }
   )
 
-  console.log('3 heeere we go', result.state.field.listensOnBase.keys())
-
   s(
     'set field to false',
     [
@@ -65,7 +59,6 @@ test('switch - basic', (t) => {
     { field: false }
   )
 
-  console.log('4 heeere we go', result.state.field.listensOnBase.keys())
   s(
     'set field to a',
     [
@@ -75,7 +68,6 @@ test('switch - basic', (t) => {
     { field: '$root.a' }
   )
 
-  console.log('REMOVE!') // needs tests in observable clearly!
   s(
     'remove field ',
     [
