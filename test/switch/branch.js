@@ -2,7 +2,7 @@
 const test = require('tape')
 const subsTest = require('../util')
 
-test('switch - basic', (t) => {
+test('switch - branches', (t) => {
   const subs = {
     exec  (state, type, stamp, subs, tree, sType) {
       if (state.key === 'a') {
@@ -11,18 +11,15 @@ test('switch - basic', (t) => {
         return 'optionB'
       }
     },
-    // val: true,
     optionA: { a: { val: true } },
     optionB: { b: { val: true } }
   }
-
   const subscription = {
     field: {
-      $switch1: subs
-      // $switch2: subs
+      $switch1: subs,
+      $switch2: subs
     }
   }
-
   const s = subsTest(
     t,
     {
@@ -32,8 +29,12 @@ test('switch - basic', (t) => {
     },
     subscription
   )
-  const result = s('initial subscription', [ { path: 'a/a', type: 'new' } ])
-  console.log(result.tree)
-  // result
+  s(
+    'initial subscription',
+    [
+      { path: 'a/a', type: 'new' },
+      { path: 'a/a', type: 'new' }
+    ]
+  )
   t.end()
 })
