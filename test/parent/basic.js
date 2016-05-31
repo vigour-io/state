@@ -115,7 +115,12 @@ test('parent - $any', function (t) {
       }
     }
   )
+
   const r = s('initial subscription', [], {})
+
+  console.log(' ')
+  console.log(' ')
+  console.log('LETS FOCUS')
   s(
     'create a collection',
     [
