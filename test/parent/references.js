@@ -67,5 +67,6 @@ test('parent - references - double', function (t) {
     }
   )
   s('initial subscription', [ { path: 'a/b/d', type: 'new' } ])
+  // maybe add some switch ref tests
   t.end()
 })
