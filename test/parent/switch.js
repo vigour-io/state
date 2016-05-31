@@ -8,7 +8,6 @@ test('parent - $switch', function (t) {
       field: {
         $switch: {
           exec  (state, type, stamp, subs, tree, sType) {
-            console.log(state)
             if (state.key === 'a') {
               return 'optionA'
             } else if (state.key === 'b') {
