@@ -18,8 +18,8 @@ test('switch - basic', (t) => {
 
   const subscription = {
     field: {
-      $switch1: subs
-      // $switch2: subs
+      $switch1: subs,
+      $switch2: subs
     }
   }
 
@@ -32,7 +32,7 @@ test('switch - basic', (t) => {
     },
     subscription
   )
-  const result = s('initial subscription', [ { path: 'a/a', type: 'new' } ])
+  const result = s('initial subscription', [ { path: 'a/a', type: 'new' }, { path: 'a/a', type: 'new' } ])
   console.log(result.tree)
   // result
   t.end()
