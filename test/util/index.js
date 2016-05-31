@@ -43,7 +43,8 @@ module.exports = function (t, state, subs, log) {
     Object.defineProperty(tree, 'inspect', {
       value () {
         return logger(this)
-      }
+      },
+      enumerable: false
     })
     return { tree: tree, state: state }
   }

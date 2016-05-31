@@ -115,7 +115,7 @@ test('parent - $any', function (t) {
       }
     }
   )
-  s('initial subscription', [], {})
+  const r = s('initial subscription', [], {})
   s(
     'create a collection',
     [
@@ -124,5 +124,6 @@ test('parent - $any', function (t) {
     ],
     { focus: true }
   )
+  console.log(r.tree)
   t.end()
 })
