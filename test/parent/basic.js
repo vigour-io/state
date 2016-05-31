@@ -1,6 +1,6 @@
 'use strict'
 const test = require('tape')
-const subsTest = require('./util')
+const subsTest = require('../util')
 
 test('parent', function (t) {
   const s = subsTest(
@@ -40,6 +40,7 @@ test('parent', function (t) {
     }
   )
   const r = s('initial subscription', [ { path: 'top/a', type: 'new' } ])
+
   t.equal('$c' in r.tree.top, false, 'no $c in top')
   t.equal(
     '$c' in r.tree.top.b && 'c' in r.tree.top.b.$c,
@@ -55,6 +56,41 @@ test('parent', function (t) {
     [ { path: 'top/b/c/d', type: 'remove' } ],
     { top: { b: { c: { d: null } } }
   })
+  t.end()
+})
+
+test('parent - type', function (t) {
+  // prop somehting with sid
+  const s = subsTest(
+    t,
+    {
+      types: {
+        swag: {
+          val: ''
+        }
+      },
+      a: {
+        b: {
+          d: 'yes!',
+          c: {
+            type: 'swag'
+          }
+        }
+      }
+    },
+    {
+      a: {
+        b: {
+          c: {
+            $parent: {
+              d: { val: true }
+            }
+          }
+        }
+      }
+    }
+  )
+  s('initial subscription', [ { path: 'a/b/d', type: 'new' } ])
   t.end()
 })
 
