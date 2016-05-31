@@ -116,7 +116,7 @@ test('parent - $any', function (t) {
     }
   )
   s('initial subscription', [], {})
-  const r = s(
+  s(
     'create a collection',
     [
       { path: 'focus', type: 'new' },
@@ -124,6 +124,5 @@ test('parent - $any', function (t) {
     ],
     { focus: true }
   )
-  require('./util/log')(r.tree)
   t.end()
 })
