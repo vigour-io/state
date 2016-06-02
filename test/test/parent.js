@@ -15,7 +15,9 @@ test('test - parent', function (t) {
           },
           $: {
             title: {},
-            $root: { query: {} }
+            $parent: {
+              $parent: { query: {} }
+            }
           },
           $pass: {
             val: 1,
