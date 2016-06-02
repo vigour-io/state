@@ -6,7 +6,7 @@ test('test - parent', function (t) {
   const subs = {
     movies: {
       $any: {
-        $test: {
+        $testIt: {
           exec (state) {
             var query = state.getRoot().query.compute()
             if (query && state.title) {
@@ -56,6 +56,5 @@ test('test - parent', function (t) {
     ],
     { movies: { title: 'hey' }
   })
-
   t.end()
 })
