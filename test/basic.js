@@ -149,4 +149,3 @@ test('basic - subscribe method', function (t) {
   )
   state[1].set('hello!')
 })
-
