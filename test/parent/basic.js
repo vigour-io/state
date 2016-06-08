@@ -26,7 +26,6 @@ test('parent', function (t) {
               $remove: true,
               $parent: {
                 $remove: true,
-                done: true,
                 $parent: {
                   $parent: {
                     a: { val: true }

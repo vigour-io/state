@@ -71,63 +71,18 @@ test('basic - nested removal', function (t) {
   t.end()
 })
 
-test('basic - done', function (t) {
-  const s = subsTest(
-    t,
-    { a: { b: 'its b!' } },
-    {
-      a: {
-        $remove: true,
-        val: true,
-        done: true,
-        b: { val: true }
-      }
-    }
-  )
-  s(
-    'initial subscription',
-    [
-      { path: 'a', type: 'new' },
-      { path: 'a/b', type: 'new' },
-      { path: 'a', type: 'new', sType: 'done' }
-    ]
-  )
-
-  s(
-    'update a/b',
-    [
-      { path: 'a', type: 'update' },
-      { path: 'a/b', type: 'update' },
-      { path: 'a', type: 'update', sType: 'done' }
-    ],
-    { a: { b: 'update b' } }
-  )
-
-  s(
-    'remove a',
-    [
-      { path: 'a/b', type: 'remove' },
-      { path: 'a', type: 'remove' },
-      { path: 'a', type: 'remove', sType: 'done' }
-    ],
-    { a: null }
-  )
-  t.end()
-})
-
 test('basic - top', function (t) {
-  t.plan(3)
+  t.plan(2)
   const s = require('../s')
   const state = s({ haha: true }, false)
-  const cnt = { done: 0, new: 0, update: 0 }
-  state.subscribe({ val: true, done: true }, function (target, type, stamp, subs, tree, sType) {
+  const cnt = { new: 0, update: 0 }
+  state.subscribe({ val: true }, function (target, type, stamp, subs, tree, sType) {
     if (sType) { cnt[sType]++ }
     cnt[type]++
   })
   state.set('lullz')
-  t.equal(cnt.done, 2, 'fired done once')
-  t.equal(cnt.new, 2, 'fired new twice')
-  t.equal(cnt.update, 2, 'fired update twice')
+  t.equal(cnt.new, 1, 'fired new twice')
+  t.equal(cnt.update, 1, 'fired update twice')
 })
 
 test('basic - subscribe method', function (t) {

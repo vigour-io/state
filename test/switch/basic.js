@@ -96,7 +96,7 @@ test('switch - basic - direct', (t) => {
         },
         val: true,
         optionA: { val: true },
-        optionB: { done: true }
+        optionB: { val: true }
       }
     }
   }
@@ -114,7 +114,7 @@ test('switch - basic - direct', (t) => {
     'set field to b',
     [
       { path: 'b', type: 'new', sType: 'switch' },
-      { path: 'b', type: 'new', sType: 'done' }
+      { path: 'b', type: 'new' }
     ],
     { field: '$root.b' }
   )

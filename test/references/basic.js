@@ -70,7 +70,7 @@ test('reference - nested', function (t) {
         $remove: true,
         b: {
           $remove: true,
-          c: { val: true, done: true, $remove: true }
+          c: { val: true, $remove: true }
         }
       }
     }
@@ -79,16 +79,14 @@ test('reference - nested', function (t) {
   s(
     'initial subscription',
     [
-      { path: 'a/b/c', type: 'new' },
-      { path: 'a/b/c', type: 'new', sType: 'done' }
+      { path: 'a/b/c', type: 'new' }
     ]
   )
 
   s(
     'switch reference',
     [
-      { path: 'c/b/c', type: 'update' },
-      { path: 'c/b/c', type: 'update', sType: 'done' }
+      { path: 'c/b/c', type: 'update' }
     ],
     { b: '$root.c' }
   )
@@ -96,8 +94,7 @@ test('reference - nested', function (t) {
   s(
     'remove reference',
     [
-      { type: 'remove' },
-      { type: 'remove', sType: 'done' }
+      { type: 'remove' }
     ],
     { b: false }
   )
