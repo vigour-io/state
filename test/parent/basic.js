@@ -5,7 +5,6 @@ const field = require('../util/field')
 
 module.exports = function (type) {
   test(type, function (t) {
-
     const s = subsTest(
       t,
       {
