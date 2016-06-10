@@ -66,3 +66,33 @@ test('test - basic - root', function (t) {
 
   t.end()
 })
+
+test('test - basic - nested root', function (t) {
+  const subs = {
+    y: {
+      $root: {
+        x: {
+          $test: {
+            exec (state) {
+              return state.compute() > 50
+            },
+            $pass: { val: true }
+          }
+        }
+      }
+    }
+  }
+  const state = { x: 100, y: {} }
+  const s = subsTest(t, state, subs)
+  s('initial subscription', [
+    { path: 'x', type: 'new' }
+  ])
+  s(
+    'change bla to false',
+    [
+      { path: 'x', type: 'remove' }
+    ],
+    { x: 50 }
+  )
+  t.end()
+})
