@@ -5,12 +5,11 @@ const field = require('../util/field')
 
 module.exports = function (type) {
   test(type + ' - references', function (t) {
+    var r
     const s = subsTest(
       t,
       {
-        bla: {
-          d: 'xxxx'
-        },
+        bla: {},
         a: {
           b: {
             c: '$root.bla',
@@ -32,12 +31,15 @@ module.exports = function (type) {
     )
 
     if (type === '$parent') {
-      s('initial subscription', [], {})
-      s('fire d', [ { path: 'a/b/d', type: 'new' } ], { a: { b: { d: 'no!' } } })
-      s('fire d', [ { path: 'a/b/d', type: 'update' } ], { a: { b: { d: 'yes!' } } })
+      s('initial subscription', [ { path: 'a/b/d', type: 'new' } ])
+      s('fire d', [ { path: 'a/b/d', type: 'update' } ], { a: { b: { d: 'no!' } } })
     } else if (type === 'parent') {
-      s('initial subscription', [ { path: 'bla/d', type: 'new' } ])
-      // s('fire d', [ { path: 'a/b/d', type: 'update' } ], { a: { b: { d: 'no!' } } })
+      r = s('initial subscription', [])
+      // have to relay tree on ref change...
+      // also gave to relay tree on root change...
+      // this is for everyhting -- need to update $c!!!
+      console.log('!@#!@#!@#whats happneing here! ?', r.tree)
+      s('fire d', [ { path: 'd', type: 'new' } ], { d: 'hello!' })
     }
     t.end()
   })
