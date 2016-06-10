@@ -14,7 +14,7 @@ module.exports = function (type) {
         a: {
           b: {
             c: '$root.bla',
-            // d: 'yes!'
+            d: 'yes!'
           }
         }
       },
