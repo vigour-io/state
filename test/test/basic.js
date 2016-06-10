@@ -36,3 +36,33 @@ test('test - basic', function (t) {
 
   t.end()
 })
+
+test('test - basic - root', function (t) {
+  const subs = {
+    x: {
+      $test: {
+        exec (state) {
+          return state.compute() > 50
+        },
+        $pass: { $root: { bla: { val: true } } }
+      }
+    }
+  }
+
+  const state = { bla: true, x: 100 }
+  const s = subsTest(t, state, subs)
+
+  s('initial subscription', [
+    { path: 'bla', type: 'new' }
+  ])
+
+  s(
+    'change bla to false',
+    [
+      { path: 'bla', type: 'update' }
+    ],
+    { bla: false }
+  )
+
+  t.end()
+})
