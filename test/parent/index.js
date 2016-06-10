@@ -5,6 +5,8 @@ require('./switch')('$parent')
 require('./basic')('parent')
 require('./switch')('parent')
 
-// require('./references')
+require('./references')('$parent')
+
+require('./references')('parent')
 
 // run them twice one for $parent one for parent
