@@ -14,7 +14,7 @@ module.exports = function (type) {
         a: {
           b: {
             c: '$root.bla',
-            d: 'yes!'
+            // d: 'yes!'
           }
         }
       },
@@ -32,8 +32,9 @@ module.exports = function (type) {
     )
 
     if (type === '$parent') {
-      s('initial subscription', [ { path: 'a/b/d', type: 'new' } ])
-      s('fire d', [ { path: 'a/b/d', type: 'update' } ], { a: { b: { d: 'no!' } } })
+      s('initial subscription', [], {})
+      s('fire d', [ { path: 'a/b/d', type: 'new' } ], { a: { b: { d: 'no!' } } })
+      s('fire d', [ { path: 'a/b/d', type: 'update' } ], { a: { b: { d: 'yes!' } } })
     } else if (type === 'parent') {
       s('initial subscription', [ { path: 'bla/d', type: 'new' } ])
       // s('fire d', [ { path: 'a/b/d', type: 'update' } ], { a: { b: { d: 'no!' } } })
