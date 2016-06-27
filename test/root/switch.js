@@ -4,7 +4,7 @@ const subsTest = require('../util')
 test('root - switch', function (t) {
   const subscription = {
     target: {
-      $switch: {
+      $switchX: {
         exec  (state, type, stamp, subs, tree, sType) {
           if (state.key === 'a') {
             return 'optionA'

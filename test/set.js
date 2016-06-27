@@ -5,6 +5,7 @@ const s = require('../s')
 test('set', function (t) {
   t.plan(1)
   const state = s({
+    key: 'state',
     hello: {
       bye: {
         yes: '$root.bla.bla'
@@ -49,6 +50,4 @@ test('set', function (t) {
       premium: 'its premium!'
     }
   })
-
-  t.end()
 })

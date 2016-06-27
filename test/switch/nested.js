@@ -34,7 +34,7 @@ test('switch - nested', (t) => {
               }
             }
           },
-          done: true
+          val: true
         },
         title: {
           text: { val: true },
@@ -71,9 +71,9 @@ test('switch - nested', (t) => {
 
   s('swtich target to $root.song', [
     { path: 'song', type: 'update', sType: 'switch' },
+    { path: 'song', type: 'new' },
     { path: 'genres/sexy', type: 'new', sType: 'switch' },
-    { path: 'genres/sexy/title', type: 'new' },
-    { path: 'song', type: 'new', sType: 'done' }
+    { path: 'genres/sexy/title', type: 'new' }
   ], { target: '$root.song' })
 
   s('swtich song.genre to $root.genres.cool', [

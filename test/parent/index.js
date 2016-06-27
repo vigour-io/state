@@ -1,4 +1,13 @@
 'use strict'
-require('./basic')
-require('./references')
-require('./switch')
+require('./basic')('$parent')
+require('./switch')('$parent')
+require('./references')('$parent')
+
+require('./basic')('parent')
+require('./switch')('parent')
+require('./references')('parent')
+
+require('./root')('parent')
+require('./root')('$parent')
+
+require('./combined')
