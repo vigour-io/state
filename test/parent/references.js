@@ -47,12 +47,15 @@ module.exports = function (type) {
       t,
       {
         bla: {
+          x: {
+            val: 'its x'
+          },
           d: 'xxxx'
         },
         a: {
           b: {
             c: {
-              deep: '$root.bla'
+              deep: '$root.bla.x'
             },
             d: 'yes!'
           }
@@ -74,14 +77,12 @@ module.exports = function (type) {
         }
       }, type, '$parent')
     )
-
     if (type === '$parent') {
       s('initial subscription', [ { path: 'a/b/d', type: 'new' } ])
     } else if (type === 'parent') {
       s('initial subscription', [])
+      s('fire for $root.d', [ { path: 'd', type: 'new' } ], { d: 'hello!' })
     }
-    // maybe add some switch ref tests
-    // this is were the 2 types start to divert
     t.end()
   })
 }
