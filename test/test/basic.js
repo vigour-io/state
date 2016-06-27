@@ -76,14 +76,35 @@ test('test - basic - root', function (t) {
       }
     }
   }
-
   const state = { bla: true, x: 100 }
   const s = subsTest(t, state, subs)
-
   s('initial subscription', [
     { path: 'bla', type: 'new' }
   ])
+  s(
+    'change bla to false',
+    [
+      { path: 'bla', type: 'update' }
+    ],
+    { bla: false }
+  )
+  t.end()
+})
 
+test('test - basic - root', function (t) {
+  const subs = {
+    x: {
+      '$test-X': {
+        exec: (state) => state.compute() > 50,
+        $pass: { $root: { bla: { val: true } } }
+      }
+    }
+  }
+  const state = { bla: true, x: 100 }
+  const s = subsTest(t, state, subs)
+  s('initial subscription', [
+    { path: 'bla', type: 'new' }
+  ])
   const r = s(
     'change bla to false',
     [
@@ -92,6 +113,5 @@ test('test - basic - root', function (t) {
     { bla: false }
   )
   console.log(r.tree)
-
   t.end()
 })
