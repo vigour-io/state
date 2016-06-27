@@ -91,27 +91,47 @@ test('test - basic - root', function (t) {
   t.end()
 })
 
-test('test - basic - root', function (t) {
-  const subs = {
-    x: {
-      '$test-X': {
-        exec: (state) => state.compute() > 50,
-        $pass: { $root: { bla: { val: true } } }
+function testRootParent (type) {
+  test('test - basic - root + ' + type, function (t) {
+    const subs = {
+      x: {
+        '$test-X': {
+          exec: (state) => state.parent.y.compute() > 50,
+          $: {
+            [type]: {
+              y: {}
+            }
+          },
+          $pass: { val: true, $root: { bla: { val: true } } }
+        }
       }
     }
-  }
-  const state = { bla: true, x: 100 }
-  const s = subsTest(t, state, subs)
-  s('initial subscription', [
-    { path: 'bla', type: 'new' }
-  ])
-  const r = s(
-    'change bla to false',
-    [
-      { path: 'bla', type: 'update' }
-    ],
-    { bla: false }
-  )
-  console.log(r.tree)
-  t.end()
-})
+    const state = { bla: true, x: 100, y: 100 }
+    const s = subsTest(t, state, subs)
+    const r = s('initial subscription', [
+      { path: 'x', type: 'new' },
+      { path: 'bla', type: 'new' }
+    ])
+
+    s(
+      'change bla to false',
+      [
+        { path: 'bla', type: 'update' },
+        { path: 'x', type: 'update' }
+      ],
+      { bla: false }
+    )
+
+    s(
+      'change y to 10',
+      [
+        { path: 'x', type: 'remove' }
+      ],
+      { y: 10 }
+    )
+
+    t.end()
+  })
+}
+testRootParent('parent')
+testRootParent('$parent')
