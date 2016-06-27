@@ -108,7 +108,7 @@ function testRootParent (type) {
     }
     const state = { bla: true, x: 100, y: 100 }
     const s = subsTest(t, state, subs)
-    const r = s('initial subscription', [
+    s('initial subscription', [
       { path: 'x', type: 'new' },
       { path: 'bla', type: 'new' }
     ])
