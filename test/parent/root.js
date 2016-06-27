@@ -29,11 +29,8 @@ module.exports = function (type) {
         }
       }, type, '$parent')
     )
-
-    const r = s('initial subscription', [ { path: 'b/d', type: 'new' } ])
-    console.log(r.tree)
+    s('initial subscription', [ { path: 'b/d', type: 'new' } ])
     s('update b/d', [ { path: 'b/d', type: 'update' } ], { b: { d: 'x' } })
-
     t.end()
   })
 }

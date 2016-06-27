@@ -10,4 +10,4 @@ require('./references')('parent')
 require('./root')('parent')
 require('./root')('$parent')
 
-// require('./combined')
+require('./combined')

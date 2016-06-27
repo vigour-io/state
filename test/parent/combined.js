@@ -25,16 +25,10 @@ test('parent - references - combined', function (t) {
             c: {
               deep: {
                 $parent: {
-                  $parent: {
+                  parent: {
                     d: { val: true }
                   }
                 }
-                // val: true
-                // parent: {
-                  // parent: {
-                    // d: { val: true }
-                  // }
-                // }
               }
             }
           }
@@ -42,10 +36,6 @@ test('parent - references - combined', function (t) {
       }
     }
   )
-  const r = s('initial subscription', [ { path: 'b/d', type: 'new' } ])
-  console.log(r.tree)
+  s('initial subscription', [ { path: 'b/d', type: 'new' } ])
   t.end()
 })
-
-// combinding goes totally wrong
-// parent /w root does not work

@@ -56,13 +56,14 @@ test('test - basic - root', function (t) {
     { path: 'bla', type: 'new' }
   ])
 
-  s(
+  const r = s(
     'change bla to false',
     [
       { path: 'bla', type: 'update' }
     ],
     { bla: false }
   )
+  console.log(r.tree)
 
   t.end()
 })
