@@ -7,4 +7,7 @@ require('./basic')('parent')
 require('./switch')('parent')
 require('./references')('parent')
 
-require('./combined')
+require('./root')('parent')
+require('./root')('$parent')
+
+// require('./combined')

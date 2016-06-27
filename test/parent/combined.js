@@ -10,24 +10,31 @@ test('parent - references - combined', function (t) {
         x: 'its x',
         d: 'xxxx'
       },
-      a: {
-        b: {
-          c: {
-            deep: '$root.bla.x'
-          },
-          d: 'yes!'
-        }
+      a: {},
+      b: {
+        c: {
+          deep: '$root.bla.x'
+        },
+        d: 'yes!'
       }
     },
     {
       a: {
-        b: {
-          c: {
-            deep: {
-              $parent: {
-                parent: {
-                  d: { val: true }
+        $root: {
+          b: {
+            c: {
+              deep: {
+                $parent: {
+                  $parent: {
+                    d: { val: true }
+                  }
                 }
+                // val: true
+                // parent: {
+                  // parent: {
+                    // d: { val: true }
+                  // }
+                // }
               }
             }
           }
@@ -35,6 +42,10 @@ test('parent - references - combined', function (t) {
       }
     }
   )
-  s('initial subscription', [ { path: 'a/b/d', type: 'new' } ])
+  const r = s('initial subscription', [ { path: 'b/d', type: 'new' } ])
+  console.log(r.tree)
   t.end()
 })
+
+// combinding goes totally wrong
+// parent /w root does not work
