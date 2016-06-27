@@ -37,37 +37,6 @@ test('test - basic', function (t) {
   t.end()
 })
 
-test('test - basic - root', function (t) {
-  const subs = {
-    x: {
-      $test: {
-        exec (state) {
-          return state.compute() > 50
-        },
-        $pass: { $root: { bla: { val: true } } }
-      }
-    }
-  }
-
-  const state = { bla: true, x: 100 }
-  const s = subsTest(t, state, subs)
-
-  s('initial subscription', [
-    { path: 'bla', type: 'new' }
-  ])
-
-  const r = s(
-    'change bla to false',
-    [
-      { path: 'bla', type: 'update' }
-    ],
-    { bla: false }
-  )
-  console.log(r.tree)
-
-  t.end()
-})
-
 test('test - basic - nested root', function (t) {
   const subs = {
     y: {
@@ -95,5 +64,34 @@ test('test - basic - nested root', function (t) {
     ],
     { x: 50 }
   )
+  t.end()
+})
+
+test('test - basic - root', function (t) {
+  const subs = {
+    x: {
+      '$test-X': {
+        exec: (state) => state.compute() > 50,
+        $pass: { $root: { bla: { val: true } } }
+      }
+    }
+  }
+
+  const state = { bla: true, x: 100 }
+  const s = subsTest(t, state, subs)
+
+  s('initial subscription', [
+    { path: 'bla', type: 'new' }
+  ])
+
+  const r = s(
+    'change bla to false',
+    [
+      { path: 'bla', type: 'update' }
+    ],
+    { bla: false }
+  )
+  console.log(r.tree)
+
   t.end()
 })
