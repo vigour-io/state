@@ -48,12 +48,6 @@ test('collection', function (t) {
     { a: { id: true } }
   )
 
-  s(
-    'remove toplevel collection',
-    [],
-    { fields: null }
-  )
-
   t.end()
 })
 
@@ -147,9 +141,6 @@ test('collection - combined with a field with nested subs', function (t) {
 
   s('initial subscription', [], {})
 
-  // uses same subs -- $ is same and then it goes wrong
-  // 2 options -- if colleciton and setting someone else of the other way arround need to
-  // exclude field from collection or merge
   s(
     'create fields',
     [
@@ -162,6 +153,68 @@ test('collection - combined with a field with nested subs', function (t) {
       field: {
         nested: 'hello'
       }
+    }
+  )
+
+  t.end()
+})
+
+test('collection - empty fields', function (t) {
+  var s = subsTest(
+    t,
+    {
+      fields: [ true, true ]
+    },
+    {
+      fields: {
+        $remove: true,
+        $any: { val: true, $remove: true }
+      }
+    }
+  )
+
+  s('initial subscription', [
+    { path: 'fields/0', type: 'new' },
+    { path: 'fields/1', type: 'new' }
+  ])
+
+  s(
+    'remove fields',
+    [ { type: 'remove' }, { type: 'remove' } ],
+    {
+      fields: { reset: true }
+    }
+  )
+
+  t.end()
+})
+
+test('collection - remove nested fields using $remove listener', function (t) {
+  var s = subsTest(
+    t,
+    {
+      fields: [ true, true ]
+    },
+    {
+      fields: {
+        $remove: true,
+        $any: { val: true, $remove: true }
+      }
+    }
+  )
+
+  s('initial subscription', [
+    { path: 'fields/0', type: 'new' },
+    { path: 'fields/1', type: 'new' }
+  ])
+
+  s(
+    'remove fields',
+    [
+      { path: 'fields/0', type: 'remove' }, { path: 'fields/1', type: 'remove' }
+    ],
+    {
+      fields: null
     }
   )
 
