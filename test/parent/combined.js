@@ -2,7 +2,7 @@
 const test = require('tape')
 const subsTest = require('../util')
 
-test('parent - references - double', function (t) {
+test('parent - references - combined', function (t) {
   const s = subsTest(
     t,
     {
