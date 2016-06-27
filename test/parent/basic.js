@@ -42,7 +42,10 @@ module.exports = function (type) {
       }, type, '$parent')
     )
     const r = s('initial subscription', [ { path: 'top/a', type: 'new' } ])
-    t.equal('$c' in r.tree.top, false, 'no $c in top')
+
+    // for normal parent allways needs to flavour tree
+    t.equal('$c' in r.tree.top, type === 'parent', 'correct $c in top')
+
     t.equal(
       '$c' in r.tree.top.b && 'c' in r.tree.top.b.$c,
       true,
