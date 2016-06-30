@@ -8,7 +8,7 @@ module.exports = function (type) {
     const subscription = field({
       nest: {
         field: {
-          $switch: {
+          $switchX: {
             exec  (state, type, stamp, subs, tree, sType) {
               if (state.key === 'a') {
                 return 'optionA'
@@ -42,13 +42,13 @@ module.exports = function (type) {
     )
 
     const r = s('initial subscription', [ { path: 'nest/bla', type: 'new' } ])
-    t.same(r.tree.nest.field.$switch.$c, { [type]: type }, 'got correct $c')
+    t.same(r.tree.nest.field.$switchX.$c, { [type]: type }, 'got correct $c')
     s(
       'change to c (remove parent subs)',
       [ { path: 'nest/c', type: 'new' } ],
       { nest: { field: '$root.nest.c' } }
     )
-    t.equal(r.tree.nest.field.$switch.$c, void 0, 'removed field.$switch.$c')
+    t.equal(r.tree.nest.field.$switchX.$c, void 0, 'removed field.$switch.$c')
     s(
       'change to b (double parent)',
       [ { path: 'etc', type: 'new' } ],
@@ -59,7 +59,7 @@ module.exports = function (type) {
       [ { path: 'nest/c', type: 'new' } ],
       { nest: { field: '$root.nest.c' } }
     )
-    t.equal(r.tree.nest.field.$switch.$c, void 0, 'removed field.$switch.$c')
+    t.equal(r.tree.nest.field.$switchX.$c, void 0, 'removed field.$switch.$c')
     t.equal(r.tree.nest.field.$c, void 0, 'removed field.$c')
     t.end()
   })
