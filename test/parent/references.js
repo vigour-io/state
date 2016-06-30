@@ -42,7 +42,7 @@ module.exports = function (type) {
     t.end()
   })
 
-  test('parent - references - double', function (t) {
+  test(type + ' - references - double', function (t) {
     const s = subsTest(
       t,
       {
@@ -52,7 +52,9 @@ module.exports = function (type) {
           },
           d: 'xxxx'
         },
-        a: {
+        // shoudl work with $. -- strange make tests
+        a: '$root.lulz',
+        lulz: {
           b: {
             c: {
               deep: '$root.bla.x'
@@ -78,7 +80,7 @@ module.exports = function (type) {
       }, type, '$parent')
     )
     if (type === '$parent') {
-      s('initial subscription', [ { path: 'a/b/d', type: 'new' } ])
+      s('initial subscription', [ { path: 'lulz/b/d', type: 'new' } ])
     } else if (type === 'parent') {
       s('initial subscription', [])
       s('fire for $root.d', [ { path: 'd', type: 'new' } ], { d: 'hello!' })
