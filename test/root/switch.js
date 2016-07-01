@@ -43,6 +43,8 @@ test('root - switch', function (t) {
     subscription
   )
   const result = s('initial subscription', [], {})
+
+  console.log('yo wtf?')
   s('switch target to $root/a', [
     { path: 'a/a', type: 'new' },
     { path: 'b', type: 'new' }

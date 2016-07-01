@@ -128,5 +128,14 @@ test('switch - basic - direct', (t) => {
     { field: '$root.a' }
   )
 
+  s(
+    'change a',
+    [
+      // { path: 'a', type: 'update', sType: 'switch' },
+      { path: 'a', type: 'update' }
+    ],
+    { a: 'update' }
+  )
+
   t.end()
 })
