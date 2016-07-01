@@ -76,9 +76,9 @@ test('switch - nested', (t) => {
     { path: 'genres/sexy/title', type: 'new' }
   ], { target: '$root.song' })
 
-
   // so whats up here
   s('switch song.genre to $root.genres.cool', [
+    { path: 'song', type: 'update' },
     { path: 'genres/cool', type: 'update', sType: 'switch' },
     { path: 'genres/cool/description', type: 'new' }
   ], { song: { genre: '$root.genres.cool' } })
