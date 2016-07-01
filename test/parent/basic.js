@@ -119,7 +119,9 @@ module.exports = function (type) {
         }
       }, type, '$parent')
     )
+
     s('initial subscription', [], {})
+
     s(
       'create a collection',
       [
