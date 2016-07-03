@@ -105,7 +105,7 @@ test('root - combined - normal subscription', function (t) {
   t.end()
 })
 
-test('root - combined - collection - normal subscription', function (t) {
+test('root - combined - any - normal subscription', function (t) {
   const subscription = {
     a: {
       val: true,

@@ -2,7 +2,7 @@
 const test = require('tape')
 const subsTest = require('./util')
 
-test('collection', function (t) {
+test('any', function (t) {
   const s = subsTest(
     t,
     {},
@@ -51,7 +51,7 @@ test('collection', function (t) {
   t.end()
 })
 
-test('collection - true', function (t) {
+test('any - true', function (t) {
   var s = subsTest(
     t,
     {},
@@ -88,7 +88,7 @@ test('collection - true', function (t) {
   t.end()
 })
 
-test('collection - val: "property"', function (t) {
+test('any - val: "property"', function (t) {
   var s = subsTest(
     t,
     {},
@@ -129,7 +129,7 @@ test('collection - val: "property"', function (t) {
   t.end()
 })
 
-test('collection - combined with a field with nested subs', function (t) {
+test('any - combined with a field with nested subs', function (t) {
   var s = subsTest(
     t,
     {},
@@ -159,7 +159,7 @@ test('collection - combined with a field with nested subs', function (t) {
   t.end()
 })
 
-test('collection - empty fields', function (t) {
+test('any - empty fields', function (t) {
   var s = subsTest(
     t,
     {
@@ -189,7 +189,7 @@ test('collection - empty fields', function (t) {
   t.end()
 })
 
-test('collection - remove nested fields using $remove listener', function (t) {
+test('any - remove nested fields using $remove listener', function (t) {
   var s = subsTest(
     t,
     {

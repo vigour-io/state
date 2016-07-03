@@ -3,7 +3,7 @@ const test = require('tape')
 const subsTest = require('../util')
 const State = require('../../lib')
 
-test('reference - collection - fields', function (t) {
+test('reference - any - fields', function (t) {
   const s = subsTest(
     t,
     {
@@ -44,7 +44,7 @@ test('reference - collection - fields', function (t) {
   t.end()
 })
 
-test('reference - collection - target - struct', function (t) {
+test('reference - any - target - struct', function (t) {
   const subscription = {
     a: {
       $remove: true,
@@ -77,7 +77,7 @@ test('reference - collection - target - struct', function (t) {
   t.end()
 })
 
-test('reference - collection - over reference', function (t) {
+test('reference - any - over reference', function (t) {
   const state = new State({
     a: {
       a1: true,
@@ -119,7 +119,7 @@ test('reference - collection - over reference', function (t) {
   t.end()
 })
 
-test('reference - collection - target - struct', function (t) {
+test('reference - any - target - struct', function (t) {
   const subscription = {
     a: {
       $remove: true,
