@@ -143,7 +143,6 @@ test('reference - any - target - struct', function (t) {
     }
     return val
   }
-
   s(
     'remove reference',
      multiple('remove', true),
