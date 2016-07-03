@@ -2,7 +2,7 @@
 const test = require('tape')
 const subsTest = require('../util')
 
-test('root - collection', function (t) {
+test('root - any', function (t) {
   const subscription = {
     a: {
       $any: {

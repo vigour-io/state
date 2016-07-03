@@ -1,10 +1,10 @@
 'use strict'
 require('./init')
 require('./basic')
-require('./collection')
+require('./any')
 require('./references')
 require('./parent')
 require('./test')
 require('./set')
-require('./root')
 require('./switch')
+require('./root')
