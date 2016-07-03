@@ -63,20 +63,22 @@ test('switch - nested', (t) => {
 
   s('initial subscription', [], { target: { $: 1 } })
 
-  s('swtich target to $root.title', [
+  s('switch target to $root.title', [
     { path: 'title', type: 'new', sType: 'switch' },
     { path: 'title', type: 'new' },
     { path: 'title/text', type: 'new' }
   ], { target: '$root.title' })
 
-  s('swtich target to $root.song', [
+  s('switch target to $root.song', [
     { path: 'song', type: 'update', sType: 'switch' },
     { path: 'song', type: 'new' },
     { path: 'genres/sexy', type: 'new', sType: 'switch' },
     { path: 'genres/sexy/title', type: 'new' }
   ], { target: '$root.song' })
 
-  s('swtich song.genre to $root.genres.cool', [
+  // so whats up here
+  s('switch song.genre to $root.genres.cool', [
+    { path: 'song', type: 'update' },
     { path: 'genres/cool', type: 'update', sType: 'switch' },
     { path: 'genres/cool/description', type: 'new' }
   ], { song: { genre: '$root.genres.cool' } })

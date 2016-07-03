@@ -128,5 +128,50 @@ test('switch - basic - direct', (t) => {
     { field: '$root.a' }
   )
 
+  s(
+    'change a',
+    [
+      // { path: 'a', type: 'update', sType: 'switch' },
+      { path: 'a', type: 'update' }
+    ],
+    { a: 'update' }
+  )
+
+  t.end()
+})
+
+test('switch - basic - remove', (t) => {
+  const subscription = {
+    field: {
+      $switch: {
+        $remove: true,
+        exec: (state) => state.key,
+        a: { val: true },
+        b: { val: true }
+      }
+    }
+  }
+  const s = subsTest(
+    t,
+    {
+      field: '$root.a',
+      a: 'its a/a',
+      b: 'its b/b'
+    },
+    subscription
+  )
+  s('initial subscription', [
+    { type: 'new', path: 'a', tree: 'field/$switch/$current' }
+  ])
+
+  s(
+    'set field to b',
+    [
+      { path: 'a', type: 'remove', tree: 'field/$switch/$current' },
+      { path: 'b', type: 'new' }
+    ],
+    { field: '$root.b' }
+  )
+
   t.end()
 })

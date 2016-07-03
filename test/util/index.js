@@ -22,7 +22,7 @@ module.exports = function (t, state, subs, log) {
         obj.path = path
       }
       if (log) {
-        console.log('FIRE:', path, type, sType || 'normal')
+        console.log('FIRE:', path, type, sType || 'normal', treePath(tree))
       }
       updates.push(obj)
     }
@@ -50,6 +50,16 @@ module.exports = function (t, state, subs, log) {
   }
 }
 
+function treePath (tree) {
+  var path = []
+  var p = tree
+  while (p && p._key) {
+    path.push(p._key)
+    p = p._p
+  }
+  return path.reverse().join('/')
+}
+
 function resolveUpdatesTrees (updates, updated, seed) {
   for (let i = 0, len = Math.max(updated.length, updates.length); i < len; i++) {
     if (!updated[i] || !updated[i].tree) {
@@ -57,9 +67,13 @@ function resolveUpdatesTrees (updates, updated, seed) {
         delete updates[i].tree
       }
     } else if (updated[i] && updated[i].tree && updates[i]) {
-      let testtree = copy(updated[i].tree)
-      resolveStamps(testtree, seed)
-      updates[i].tree = testtree
+      if (typeof updated[i].tree === 'string') {
+        updates[i].tree = treePath(updates[i].tree)
+      } else {
+        let testtree = copy(updated[i].tree)
+        resolveStamps(testtree, seed)
+        updates[i].tree = testtree
+      }
     }
   }
 }

@@ -42,7 +42,7 @@ module.exports = function (type) {
     )
 
     const r = s('initial subscription', [ { path: 'nest/bla', type: 'new' } ])
-    t.same(r.tree.nest.field.$switchX.$c, { [type]: type }, 'got correct $c')
+    t.same(r.tree.nest.field.$switchX.$c, { $current: type }, 'got correct $c')
     s(
       'change to c (remove parent subs)',
       [ { path: 'nest/c', type: 'new' } ],
