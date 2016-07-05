@@ -11,8 +11,12 @@ test('init', function (t) {
 })
 
 test('async helpers', function (t) {
-  const state = new State({}, false)
-  t.equal(state.isState, true)
-  t.equal(vstamp.cnt, 0, 'vstamp.cnt is zero')
-  t.end()
+  const state = new State({})
+  state.get('field', {}).is((computed, val) => {
+    if (typeof val === 'object' && val.isBase) {
+      t.ok(true, 'fires for reference')
+      return true
+    }
+  }).then(() => t.end())
+  state.field.set(state.get('a', 'its a'))
 })
