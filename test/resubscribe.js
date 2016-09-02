@@ -14,7 +14,6 @@ test('resubscribe', function (t) {
   }, (state) => {
     original++
   }, void 0, void 0, 'attach')
-
   state.subscribe({
     a: { val: true }
   }, (state) => {
@@ -39,5 +38,38 @@ test('resubscribe', function (t) {
   instance.resubscribe()
   t.equal(cnt, 2, 'refire subscription')
   t.equal(original, 0, 'dont refire original subscription')
+  t.end()
+})
+
+test('resubscribe - switch + test', function (t) {
+  const state = new State({
+    b: {
+      bla: 'gur!!!'
+    },
+    field: {}
+  })
+  var cnt = 0
+  state.subscribe({
+    field: {
+      $remove: true,
+      $switch: {
+        exec: (state) => state.key,
+        a: { bla: { val: true } },
+        b: {
+          bla: {
+            $test: {
+              exec: (state) => state.val.indexOf('gur') !== -1,
+              $pass: { val: true }
+            }
+          }
+        }
+      }
+    }
+  }, (state) => {
+    cnt++
+  })
+  state.field.set(state.b)
+  state.resubscribe()
+  t.equal(cnt, 2, 'fited twice')
   t.end()
 })
