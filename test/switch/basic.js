@@ -87,7 +87,10 @@ test('switch - basic - direct', (t) => {
     field: {
       $remove: true,
       $switch: {
-        exec  (state, type, stamp, subs, tree, sType) {
+        exec  (state, subs, tree, key) {
+          t.equal(subs, subscription.field.$switch, 'passes subscription')
+          t.ok(typeof tree === 'object', 'passes tree')
+          t.equal(key, '$switch')
           if (state.key === 'a') {
             return 'optionA'
           } else if (state.key === 'b') {
