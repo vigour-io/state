@@ -3,6 +3,8 @@ const amount = 3e5
 
 console.log('¯\\_(ツ)_/¯ lets make npm great again! --->', amount/ 1000 + 'k')
 
+global.cnt = 0
+
 // only store dynamic deps rest is bullshit anyways dont care, only to see if we can handle some load
 const s = require('../../s')
 const state = s({
@@ -12,8 +14,16 @@ const state = s({
       dependants: true
     },
     on: {
-      version () {
-        console.log('ha update bitchez', this.path())
+      version (state, stamp) {
+        global.cnt++
+        if (this.vstamp !== stamp) {
+          this.vstamp = stamp
+          for (let i = 0, len = this.dependants.length; i < len; i++) {
+            if (this.dependants[i].vstamp !== stamp) {
+              this.dependants[i].emit('version', this, stamp)
+            }
+          }
+        }
       }
     }
   }
@@ -31,14 +41,17 @@ for (let i = 0; i < amount; i++) {
   }, false)
   let target = state[key]
   if (!target.dependants) {
-    target.dependants = []
+    target.dependants = {}
   }
   let deps = target.deps
   for (let j = 0; j < 20; j++) {
-    let field = state.get('moduleTimes' + ((Math.random() * amount) | 0), {
-      dependants: []
+
+    let key = 'moduleTimes' + ((Math.random() * amount) | 0)
+
+    let field = state[key] || state.get(key, {
+      dependants: {}
     })
-    field.dependants.push(target)
+    field.dependants[key] = target
     deps.push(field)
   }
 }
@@ -57,10 +70,7 @@ state.subscribe({
 }, (state, tree, stamp) => {
   if (stamp) {
     state = state._parent
-    state.emit('version', state, stamp)
-    for (let i = 0, len = state.dependants.length; i < len; i++) {
-      state.dependants[i].emit('version', state, stamp)
-    }
+    state.emit('version', state, state.stamp)
   }
 }, false, false)
 // second argument is stamp sort of a thing that i send for updates
