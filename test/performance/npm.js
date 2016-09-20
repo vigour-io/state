@@ -24,6 +24,7 @@ const state = new Obs({
     on: {
       version (obs, stamp) {
         global.cnt++
+        console.log('hello!', this.path())
         if (this.vstamp !== stamp) {
           this.vstamp = stamp // means version stamp
           for (let i in this.dependants) {
