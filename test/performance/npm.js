@@ -1,5 +1,5 @@
 'use strict'
-const amount = 3e5
+const amount = 1e5
 
 console.log('¯\\_(ツ)_/¯ lets make npm great again! --->', amount/ 1000 + 'k')
 
@@ -45,9 +45,7 @@ for (let i = 0; i < amount; i++) {
   }
   let deps = target.deps
   for (let j = 0; j < 20; j++) {
-
     let key = 'moduleTimes' + ((Math.random() * amount) | 0)
-
     let field = state[key] || state.get(key, {
       dependants: {}
     })
