@@ -1,7 +1,7 @@
 'use strict'
 const amount = 3e5
 
-console.log('¯\\_(ツ)_/¯ lets make npm great again! --->', amount/ 1000 + 'k')
+console.log('¯\\_(ツ)_/¯ lets make npm great again! --->', amount / 1000 + 'k')
 
 global.cnt = 0
 
@@ -11,8 +11,7 @@ const Obs = require('vigour-observable')
 const state = new Obs({
   child: {
     properties: {
-      deps: true,
-      dependants: true,
+      dependants: true
     },
     version: {
       on: {
@@ -45,7 +44,6 @@ for (let i = 0; i < amount; i++) {
   // all using carrets for updates
  let key = 'moduleTimes' + i
   state.setKey(key, {
-    deps: [],
     version: 1
   }, false)
   let target = state[key]
@@ -59,15 +57,10 @@ for (let i = 0; i < amount; i++) {
       dependants: {}
     })
     field.dependants[key] = target
-    deps.push(field)
   }
 }
 
 console.log('done takes a while to init it....', Date.now() - time + 'ms')
-
-// module.exports = function (target, subs, update, tree, stamp, attach, id) {
-
-// second argument is stamp sort of a thing that i send for updates
 
 var time = Date.now()
 console.log('ok now rdy for some wicked update')
