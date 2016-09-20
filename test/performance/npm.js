@@ -17,7 +17,7 @@ const state = s({
       version (state, stamp) {
         global.cnt++
         if (this.vstamp !== stamp) {
-          this.vstamp = stamp
+          this.vstamp = stamp // means version stamp
           for (let i in this.dependants) {
             if (this.dependants[i].vstamp !== stamp) {
               this.dependants[i].emit('version', this, stamp)
