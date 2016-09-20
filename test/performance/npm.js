@@ -18,7 +18,8 @@ const state = s({
         global.cnt++
         if (this.vstamp !== stamp) {
           this.vstamp = stamp
-          for (let i = 0, len = this.dependants.length; i < len; i++) {
+          for (let i in this.dependants) {
+            console.log('??', stamp)
             if (this.dependants[i].vstamp !== stamp) {
               this.dependants[i].emit('version', this, stamp)
             }
@@ -78,4 +79,4 @@ state.subscribe({
 var time = Date.now()
 console.log('ok now rdy for some wicked update')
 state['moduleTimes' + ((Math.random() * amount) | 0)].version.set(2)
-console.log('update time', Date.now() - time + 'ms')
+console.log('update time', Date.now() - time + 'ms', 'updated:', global.cnt)
