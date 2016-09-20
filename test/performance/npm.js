@@ -19,7 +19,6 @@ const state = s({
         if (this.vstamp !== stamp) {
           this.vstamp = stamp
           for (let i in this.dependants) {
-            console.log('??', stamp)
             if (this.dependants[i].vstamp !== stamp) {
               this.dependants[i].emit('version', this, stamp)
             }
