@@ -1,5 +1,5 @@
 'use strict'
-const amount = 1e5
+const amount = 3e5
 
 console.log('¯\\_(ツ)_/¯ lets make npm great again! --->', amount/ 1000 + 'k')
 
