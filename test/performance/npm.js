@@ -3,8 +3,7 @@ const amount = 3e5
 
 console.log('¯\\_(ツ)_/¯ lets make npm great again! --->', amount/ 1000 + 'k')
 
-
-// only store dynamic deps rest is bullshit anyways
+// only store dynamic deps rest is bullshit anyways dont care, only to see if we can handle some load
 const s = require('../../s')
 const state = s({
   child: {
@@ -35,7 +34,7 @@ for (let i = 0; i < amount; i++) {
     target.dependants = []
   }
   let deps = target.deps
-  for (let j = 0; j < 10; j++) {
+  for (let j = 0; j < 20; j++) {
     let field = state.get('moduleTimes' + ((Math.random() * amount) | 0), {
       dependants: []
     })
