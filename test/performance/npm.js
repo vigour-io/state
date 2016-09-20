@@ -11,7 +11,9 @@ const Obs = require('vigour-observable')
 const state = new Obs({
   child: {
     properties: {
-      dependants: true
+      dependants: true,
+      sha: true,
+      url: true
     },
     version: {
       on: {
@@ -44,7 +46,9 @@ for (let i = 0; i < amount; i++) {
   // all using carrets for updates
  let key = 'moduleTimes' + i
   state.setKey(key, {
-    version: 1
+    version: 1,
+    url: 'https://registry.npmjs.org/textextensions/-/textextensions-2.0.1.tgz',
+    sha: 'be8cf22d65379c151319f88f0335ad8f667abdca'
   }, false)
   let target = state[key]
   if (!target.dependants) {
