@@ -5,16 +5,25 @@ console.log('¯\\_(ツ)_/¯ lets make npm great again! --->', amount/ 1000 + 'k'
 
 global.cnt = 0
 
+const Obs = require('vigour-observable')
+
 // only store dynamic deps rest is bullshit anyways dont care, only to see if we can handle some load
-const s = require('../../s')
-const state = s({
+const state = new Obs({
   child: {
     properties: {
       deps: true,
-      dependants: true
+      dependants: true,
+    },
+    version: {
+      on: {
+        data (val, stamp) {
+          const obs = this.parent
+          obs.emit('version', obs, stamp)
+        }
+      }
     },
     on: {
-      version (state, stamp) {
+      version (obs, stamp) {
         global.cnt++
         if (this.vstamp !== stamp) {
           this.vstamp = stamp // means version stamp
@@ -27,7 +36,7 @@ const state = s({
       }
     }
   }
-})
+}, false)
 
 var time = Date.now()
 
@@ -54,23 +63,10 @@ for (let i = 0; i < amount; i++) {
   }
 }
 
-console.log('ok got a dirty cache make into state')
 console.log('done takes a while to init it....', Date.now() - time + 'ms')
 
 // module.exports = function (target, subs, update, tree, stamp, attach, id) {
 
-state.subscribe({
-  $any: {
-    version: {
-      val: true
-    }
-  }
-}, (state, tree, stamp) => {
-  if (stamp) {
-    state = state._parent
-    state.emit('version', state, state.stamp)
-  }
-}, false, false)
 // second argument is stamp sort of a thing that i send for updates
 
 var time = Date.now()
