@@ -138,8 +138,10 @@ test('reference - any - over reference on field', function (t) {
     state,
     {
       holder: {
+        $remove: true,
         collection: {
-          $any: { val: 1 }
+          val: 1,
+          $any: { val: true }
         }
       }
     }
@@ -147,6 +149,7 @@ test('reference - any - over reference on field', function (t) {
   s(
     'initial subscription',
     [
+      { path: 'holder/collection', type: 'new' },
       { path: 'holder/a/a1', type: 'new' },
       { path: 'holder/a/a2', type: 'new' }
     ]
