@@ -224,6 +224,7 @@ test('reference - any - over reference on field using test', function (t) {
         collection: {
           val: 1,
           $any: {
+            // val: 1,
             $test: {
               exec: () => true,
               $pass: {

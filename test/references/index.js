@@ -1,4 +1,4 @@
 'use strict'
-// require('./basic')
+require('./basic')
+require('./nested')
 require('./any')
-// require('./nested')
