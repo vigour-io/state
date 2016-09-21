@@ -119,6 +119,52 @@ test('reference - any - over reference', function (t) {
   t.end()
 })
 
+test('reference - any - over reference on field', function (t) {
+  const state = new State({
+    holder: {
+      a: {
+        a1: true,
+        a2: true
+      },
+      b: {
+        b1: true
+      },
+      collection: '$root.holder.a'
+    }
+  })
+
+  const s = subsTest(
+    t,
+    state,
+    {
+      holder: {
+        collection: {
+          $any: { val: 1 }
+        }
+      }
+    }
+  )
+  s(
+    'initial subscription',
+    [
+      { path: 'holder/a/a1', type: 'new' },
+      { path: 'holder/a/a2', type: 'new' }
+    ]
+  )
+  s(
+    'update 0',
+    [
+      { type: 'remove' },
+      { type: 'remove' },
+      { path: 'holder/b/b1', type: 'new' }
+    ],
+    {
+      holder: { collection: '$root.holder.b' }
+    }
+  )
+  t.end()
+})
+
 test('reference - any - target - struct', function (t) {
   const subscription = {
     a: {
