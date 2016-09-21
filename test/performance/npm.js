@@ -44,7 +44,7 @@ var time = Date.now()
 for (let i = 0; i < amount; i++) {
   // ref some random modules
   // all using carrets for updates
- let key = 'moduleTimes' + i
+  let key = 'moduleTimes' + i
   state.setKey(key, {
     version: 1,
     url: 'https://registry.npmjs.org/textextensions/-/textextensions-2.0.1.tgz',
@@ -54,7 +54,6 @@ for (let i = 0; i < amount; i++) {
   if (!target.dependants) {
     target.dependants = {}
   }
-  let deps = target.deps
   for (let j = 0; j < 20; j++) {
     let key = 'moduleTimes' + ((Math.random() * amount) | 0)
     let field = state[key] || state.get(key, {
@@ -66,7 +65,7 @@ for (let i = 0; i < amount; i++) {
 
 console.log('done takes a while to init it....', Date.now() - time + 'ms')
 
-var time = Date.now()
+time = Date.now()
 console.log('ok now rdy for some wicked update')
 state['moduleTimes' + ((Math.random() * amount) | 0)].version.set(2)
 console.log('update time', Date.now() - time + 'ms', 'updated:', global.cnt)
