@@ -127,7 +127,7 @@ test('reference - any - over reference on field', function (t) {
         a2: true
       },
       b: {
-        b1: true
+        a1: true
       },
       collection: '$root.holder.a'
     }
@@ -157,9 +157,10 @@ test('reference - any - over reference on field', function (t) {
   s(
     'update 0',
     [
+      // { path: 'holder/b/a1', type: 'update' }, // need to make this a remove
       { type: 'remove' },
       { type: 'remove' },
-      { path: 'holder/b/b1', type: 'new' }
+      { path: 'holder/b/a1', type: 'new' }
     ],
     {
       holder: { collection: '$root.holder.b' }
