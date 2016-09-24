@@ -27,7 +27,7 @@ test('self', function (t) {
 
   s(
     'initial subscription',
-    [{ path: 'field', type: 'new' }]
+    [{ path: 'field/field', type: 'new' }]
   )
 
   // s(
