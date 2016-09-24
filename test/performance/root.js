@@ -7,7 +7,10 @@ document.body.appendChild(stats.domElement)
 // -------------------------
 var subscribe = require('../../subscribe')
 var s = require('../../s')
-var state = s({ something: {} })
+var state = s({
+  something: {},
+  // dot: 100
+})
 var amount = 8e3
 // -------------------------
 var cnt = 0
@@ -20,6 +23,15 @@ document.body.appendChild(canvas)
 var context = canvas.getContext('2d')
 var dir = 2
 context.fillStyle = 'rgb(128,263,192)'
+
+var x = {}
+for (var i = 0; i < amount; i++) {
+  x[i] = i
+}
+state.something.set(x)
+
+
+global.fires = 0
 // -------------------------
 function goCanvas () {
   stats.begin()
@@ -30,16 +42,23 @@ function goCanvas () {
   }
   var x = {}
   for (var i = 0; i < amount; i++) {
-    x[i] = i + cnt
+    x[i] = { title: i + cnt }
   }
   state.something.set(x)
+
+  // console.log(fires)
+  // state.dot.set(Math.random())
   stats.end()
   window.requestAnimationFrame(goCanvas)
 }
 // -------------------------
+
 function listen (target, type, stamp) {
+  global.fires++
+  // console.log(target)
   var val = target.compute()
-  var i = target.key
+  var i = target.parent.key
+
   var x =
     Math.sin(val / 5 + cnt / 40) * 300 +
     i * 0.02 + 500 +
@@ -51,7 +70,20 @@ function listen (target, type, stamp) {
   context.fillRect(x, y, 1, 1)
 }
 // -------------------------
-var tree = subscribe(state, { something: { $any: { val: true } } }, listen)
+// lets opt the shit out of it
+
+var tree = subscribe(state, {
+  something: {
+    val: 1,
+    $remove: true,
+    $any: {
+      val: 1,
+      $remove: true,
+      title: { val: true },
+      $root: { dot: { val: true } }
+    }
+  }
+}, listen)
 // -------------------------
 console.log('TREE', tree)
 console.log('START ' + amount)
