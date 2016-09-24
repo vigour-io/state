@@ -8,7 +8,7 @@ document.body.appendChild(stats.domElement)
 var subscribe = require('../../subscribe')
 var s = require('../../s')
 var state = s({
-  something: {},
+  something: {}
   // dot: 100
 })
 var amount = 8e3
@@ -29,7 +29,6 @@ for (var i = 0; i < amount; i++) {
   x[i] = i
 }
 state.something.set(x)
-
 
 global.fires = 0
 // -------------------------
