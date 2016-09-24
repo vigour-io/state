@@ -18,7 +18,7 @@ var State = require('vigour-state')
 var state = new State()
 state.subscribe({
   field: { val: true }
-}, function (state, type) {
+}, (state, type) => {
   // type can be "new", "update" or "remove", in this case "new"
   // state is the target of the update, in this case state.field
   console.log(type, state)
@@ -32,7 +32,7 @@ var State = require('vigour-state')
 var state = new State()
 state.subscribe({
   $any: { title: { val: true } }
-}, function (state, type) {
+}, (state, type) => {
   console.log(type, state)
 })
 // fires an update, subscribed to any field with a title
@@ -58,7 +58,7 @@ state.subscribe({
       }
     }
   }
-}, function (state, type) {
+}, (state, type) => {
   console.log(type, state)
 })
 
@@ -101,7 +101,7 @@ state.subscribe({
      $root: { something: { val: true } }
    }
  }
-}, function (state, type) {
+}, (state, type) => {
   console.log(type, state)
 })
 // does not fire, since we don't have field.another yet
@@ -109,6 +109,33 @@ state.set({ something: true })
 
 // now it does fire
 state.set({ field: { another: true } })
+```
+
+####self
+```javascript
+var State = require('vigour-state')
+var state = new State({
+  a: {
+    field: 'bye'
+  },
+  field: {
+    val: '$root.a', // makes a reference to root.a
+    field: 'hello'
+  }
+})
+state.subscribe({
+  $self: {
+    field: {
+      field: {
+        val: true
+      }
+    }
+  }
+}, (state, type) => {
+  // fires for non-reference, field.field (hello) instead of a.field
+  console.log(type, state)
+})
+
 ```
 
 ####parent
@@ -121,7 +148,7 @@ state.subscribe({
      $parent: { something: { val: true } }
    }
  }
-}, function (state, type) {
+}, (state, type) => {
   console.log(type, state)
 })
 // does not fire, since we don't have field.another yet
@@ -162,7 +189,7 @@ state.subscribe({
       }
     }
   }
-}, function (state, type) {
+}, (state, type) => {
   console.log(type, state)
 })
 
@@ -193,5 +220,5 @@ var Observable = require('vigour-observable')
 var obs = new Observable({
   inject: require('vigour-state/inject')
 })
-obs.subscribe({ field: { val: true }}, function () {})
+obs.subscribe({ field: { val: true }}, () => {})
 ```
