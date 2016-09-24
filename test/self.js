@@ -15,8 +15,8 @@ test('self', function (t) {
       }
     },
     {
-      field: {
-        $self: {
+      $self: {
+        field: {
           field: {
             val: true
           }
