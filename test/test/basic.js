@@ -142,12 +142,14 @@ test('test - basic - val new/remove', function (t) {
       $any: {
         $test: {
           exec (state) {
-            return state.compute() === state.root.query.compute() || !state.root.query.compute()
+            return state.n.compute() === state.root.query.compute() || !state.root.query.compute()
           },
           $pass: {
-            val: 1
+            val: 1,
+            n: { val: true }
           },
           $: {
+            n: {},
             $root: { query: {} }
           }
         }
@@ -157,21 +159,23 @@ test('test - basic - val new/remove', function (t) {
 
   const state = {
     query: 'a',
-    letters: [ 'a', 'b', 'c', 'd' ]
+    letters: [ { n: 'a' }, { n: 'b' }, { n: 'c' }, { n: 'd' } ]
   }
 
   const s = subsTest(t, state, subs)
 
   s('initial subscription', [
-    { path: 'letters/0', type: 'new' }
+    { path: 'letters/0', type: 'new' },
+    { path: 'letters/0/n', type: 'new' }
   ])
 
   s(
     'change letters/1 to a',
     [
-      { path: 'letters/1', type: 'new' }
+      { path: 'letters/1', type: 'new' },
+      { path: 'letters/1/n', type: 'new' }
     ],
-    { letters: { 1: 'a' } }
+    { letters: { 1: { n: 'a' } } }
   )
 
   s(
@@ -179,7 +183,8 @@ test('test - basic - val new/remove', function (t) {
     [
       { path: 'letters/0', type: 'remove' },
       { path: 'letters/1', type: 'remove' },
-      { path: 'letters/2', type: 'new' }
+      { path: 'letters/2', type: 'new' },
+      { path: 'letters/2/n', type: 'new' }
     ],
     { query: 'c' }
   )
@@ -188,8 +193,11 @@ test('test - basic - val new/remove', function (t) {
     'change query to all',
     [
       { path: 'letters/0', type: 'new' },
+      { path: 'letters/0/n', type: 'new' },
       { path: 'letters/1', type: 'new' },
-      { path: 'letters/3', type: 'new' }
+      { path: 'letters/1/n', type: 'new' },
+      { path: 'letters/3', type: 'new' },
+      { path: 'letters/3/n', type: 'new' }
     ],
     { query: '' }
   )
