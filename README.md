@@ -179,7 +179,7 @@ state.subscribe({
         },
         // when the condition passes it subscribes to this pattern
         $pass: {
-          val: 1,
+          val: 1, // only fires for remove/create or reference change
           description: { val: true },
           title: { val: true },
           $root: {
