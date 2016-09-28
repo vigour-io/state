@@ -158,6 +158,7 @@ test('reference - any - over reference on field', function (t) {
     'update 0',
     [
       // { path: 'holder/b/a1', type: 'update' }, // need to make this a remove
+      { path: 'holder/collection', type: 'update' },
       { type: 'remove' },
       { type: 'remove' },
       { path: 'holder/b/a1', type: 'new' }
@@ -201,7 +202,7 @@ test('reference - any - target - struct', function (t) {
   t.end()
 })
 
-test('reference - any - over reference on field using test', function (t) {
+test('reference - any - over reference on field using $test', function (t) {
   const state = new State({
     holder: {
       a: {
@@ -247,7 +248,7 @@ test('reference - any - over reference on field using test', function (t) {
   s(
     'update 0',
     [
-      // { path: 'holder/b/a1', type: 'update' }, // need to make this a remove
+      { path: 'holder/collection', type: 'update' },
       { type: 'remove' },
       { type: 'remove' },
       { path: 'holder/b/a1', type: 'new' }
