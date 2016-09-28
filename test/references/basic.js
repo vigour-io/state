@@ -51,6 +51,18 @@ test('reference - double', function (t) {
     { b: { ref: '$root.c' } }
   )
 
+  s(
+    'change to primitve',
+    [{ path: 'b/ref', type: 'update' }],
+    { b: { ref: 'hello' } }
+  )
+
+  s(
+    'change to primitve again',
+    [],
+    { b: { ref: 'bye' } }
+  )
+
   t.end()
 })
 
