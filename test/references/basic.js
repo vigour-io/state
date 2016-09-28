@@ -27,31 +27,28 @@ test('reference - double', function (t) {
   const s = subsTest(
     t,
     {
-      a: {},
-      b: {
-        c: {
-          d: '$root.a'
-        }
-      }
+      a: 'a',
+      c: 'c',
+      b: { ref: '$root.a' }
     },
-    { b: { c: { d: { val: true } } } }
+    { b: { ref: { val: 1 } } }
   )
 
   s(
     'initial subscription',
-    [{ path: 'b/c/d', type: 'new' }]
+    [{ path: 'b/ref', type: 'new' }]
   )
 
   s(
-    'make a into a reference',
-    [{ path: 'b/c/d', type: 'update' }],
-    { a: '$root.x' }
+    'referenced field origin',
+    [],
+    { a: 'a-update' }
   )
 
   s(
-    'update x',
-    [{ path: 'b/c/d', type: 'update' }],
-    { x: 'hello its x' }
+    'change reference',
+    [{ path: 'b/ref', type: 'update' }],
+    { b: { ref: '$root.c' } }
   )
 
   t.end()
