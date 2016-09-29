@@ -30,11 +30,40 @@ test('self', function (t) {
     [{ path: 'field/field', type: 'new' }]
   )
 
-  // s(
-  //   'update nested field',
-  //   [ { path: 'other/yuzi', type: 'new' } ],
-  //   { other: { yuzi: true } }
-  // )
+  t.end()
+})
+
+test('self - any', function (t) {
+  const s = subsTest(
+    t,
+    {
+      items: {
+        a: {
+          val: '$root.b',
+          title: 'a title'
+        }
+      },
+      b: {
+        title: 'b title'
+      }
+    },
+    {
+      items: {
+        $self: {
+          $any: {
+            title: {
+              val: true
+            }
+          }
+        }
+      }
+    }
+  )
+
+  s(
+    'initial subscription',
+    [{ path: 'items/a/title', type: 'new' }]
+  )
 
   t.end()
 })
