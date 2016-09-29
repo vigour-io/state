@@ -67,3 +67,40 @@ test('self - any', function (t) {
 
   t.end()
 })
+
+test('self and non self', function (t) {
+  const s = subsTest(
+    t,
+    {
+      a: {
+        field: 'not so lullz'
+      },
+      field: {
+        val: '$root.a',
+        field: 'lullz'
+      }
+    },
+    {
+      field: {
+        field: {
+          val: true
+        }
+      },
+      $self: {
+        field: {
+          field: {
+            val: true
+          }
+        }
+      }
+    }
+  )
+
+  s(
+    'initial subscription',
+    [{ path: 'a/field', type: 'new' },
+    { path: 'field/field', type: 'new' }]
+  )
+
+  t.end()
+})
