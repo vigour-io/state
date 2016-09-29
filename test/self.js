@@ -44,16 +44,20 @@ test('self - any', function (t) {
         }
       },
       b: {
-        title: 'b title'
+        focus: 'b title'
       }
     },
     {
       items: {
         $self: {
           $any: {
-            title: {
-              val: true
-            }
+            // any allways has to use self in this case except when doing val: true or somehting
+            // need a special case for this
+            // check it in any itself
+            $origin: {
+              focus: { val: true }
+            },
+            title: { val: true }
           }
         }
       }
@@ -62,7 +66,10 @@ test('self - any', function (t) {
 
   s(
     'initial subscription',
-    [{ path: 'items/a/title', type: 'new' }]
+    [
+      { path: 'b/focus', type: 'new' },
+      { path: 'items/a/title', type: 'new' }
+    ]
   )
 
   t.end()
