@@ -49,6 +49,7 @@ test('self - any', function (t) {
     },
     {
       items: {
+        // $any: { $self: { title }, title }
         $self: {
           $any: {
             // any allways has to use self in this case except when doing val: true or somehting
