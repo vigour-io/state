@@ -21,9 +21,7 @@ test('force - basic', (t) => {
       }
     }
   })
-
   const arr = []
-
   // make it with switch instant
   state.subscribe({
     a: {
@@ -45,7 +43,6 @@ test('force - basic', (t) => {
     arr.push(state.path())
     // console.log('update',
   })
-
   var forceObj = {
     [state.a.sid()]: true, // option to add stamp when nessecary -- maybe clean
     [state.a.b.sid()]: true,
@@ -56,9 +53,12 @@ test('force - basic', (t) => {
     [state.b.c.d.sid()]: true,
     [state.b.c.d.e.sid()]: true
   }
-
   state.emit('subscription', forceObj)
-
-  console.log(arr)
-
+  t.same(arr, [
+    [ 'b', 'title' ],
+    [ 'b', 'c', 'd', 'e' ],
+    [ 'b', 'title' ],
+    [ 'b', 'c', 'd', 'e' ]
+  ])
+  t.end()
 })
