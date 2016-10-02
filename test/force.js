@@ -1,9 +1,8 @@
 'use strict'
 const test = require('tape')
 const State = require('../')
-const log = require('./util/log')
 
-test('force - basic', (t) => {
+test('force', (t) => {
   const state = new State({
     a: {
       b: {
@@ -41,10 +40,7 @@ test('force - basic', (t) => {
     }
   }, state => {
     arr.push(state.path())
-    // console.log('update',
   })
-
-  // allow array transformer maybe -- its a lot nicer
 
   var forceObj = {
     [state.a.sid()]: true, // option to add stamp when nessecary -- maybe clean
