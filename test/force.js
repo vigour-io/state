@@ -41,41 +41,18 @@ test('force - basic', (t) => {
       }
     }
   }, state => {
-    // console.log('update', state.path())
+    console.log('update', state.path())
   })
 
-  console.log(log(tree))
-  // make force generator
-  // so we send
-  // maybe index of
-  // even faster make indeces
-  // just array could be faster mostly force is not soo much
-  // 2 things do it specific -- OR -- do it deep
-  // specific maybe a bit heavy
-  // pretty big lists
-
-  console.log(' \nDO IT DO IT')
-
-  // generator for these thigns as well!
-  var force = [
-    state.a.sid(),
-    state.a.b.sid(),
-    state.a.b.c.sid(),
-    state.b.title.sid(),
-    state.b.c.sid(),
-    state.b.c.d.sid(),
-    state.b.c.d.e.sid()
-  ]
-
   var forceObj = {
-    [state.a.sid()]: state.stamp,
-    [state.a.b.sid()]: state.stamp,
-    [state.a.b.c.sid()]: state.stamp,
-    [state.a.b.c.d.sid()]: state.stamp,
-    [state.b.title.sid()]: state.stamp,
-    [state.b.c.sid()]: state.stamp,
-    [state.b.c.d.sid()]: state.stamp,
-    [state.b.c.d.e.sid()]: state.stamp
+    [state.a.sid()]: true, // option to add stamp when nessecary
+    [state.a.b.sid()]: true,
+    [state.a.b.c.sid()]: true,
+    [state.a.b.c.d.sid()]: true,
+    [state.b.title.sid()]: true,
+    [state.b.c.sid()]: true,
+    [state.b.c.d.sid()]: true,
+    [state.b.c.d.e.sid()]: true
   }
 
   for (var i = 0; i < 1e3; i++) {
@@ -83,24 +60,8 @@ test('force - basic', (t) => {
   }
 
   state.emit('subscription', forceObj)
-
-  function f (leafStamp, val) {
-    return val[leafStamp]
-  }
-
-  function f2 (sid, stamp, val) {
-    // do we need -- stamp ?
-    return val[sid] === stamp
-  }
-
-  // const f = require('../lib/subscribe/force')
-  var d = Date.now()
-  for (let i = 0; i < 1e6; i++) {
-    f2(state.b.title.sid(), state.a.stamp, forceObj)  // false
-  }
-  console.log('find', Date.now() - d, 'ms')
-
-  // for (let i = 0; i < 1e6; i++) {
-  //   f(state.b.title.sid(), state.a.stamp, forceObj)  // false
-  // }
+  // now extra hard part
+  // how to know which ONES to force
+  // a good idea would be to check where there is a change btu the stamp is the same
+  // in the set object
 })
