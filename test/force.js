@@ -22,9 +22,10 @@ test('force - basic', (t) => {
     }
   })
 
-  // make it with switch instant
+  const arr = []
 
-  const tree = state.subscribe({
+  // make it with switch instant
+  state.subscribe({
     a: {
       b: {
         c: {
@@ -41,11 +42,12 @@ test('force - basic', (t) => {
       }
     }
   }, state => {
-    console.log('update', state.path())
+    arr.push(state.path())
+    // console.log('update',
   })
 
   var forceObj = {
-    [state.a.sid()]: true, // option to add stamp when nessecary
+    [state.a.sid()]: true, // option to add stamp when nessecary -- maybe clean
     [state.a.b.sid()]: true,
     [state.a.b.c.sid()]: true,
     [state.a.b.c.d.sid()]: true,
@@ -55,13 +57,8 @@ test('force - basic', (t) => {
     [state.b.c.d.e.sid()]: true
   }
 
-  for (var i = 0; i < 1e3; i++) {
-    forceObj[i] = true
-  }
-
   state.emit('subscription', forceObj)
-  // now extra hard part
-  // how to know which ONES to force
-  // a good idea would be to check where there is a change btu the stamp is the same
-  // in the set object
+
+  console.log(arr)
+
 })
