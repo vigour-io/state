@@ -68,25 +68,19 @@ test('force - basic', (t) => {
   ]
 
   var forceObj = {
-    [state.a.sid() + state.a.stamp]: true,
-    [state.a.b.sid() + state.a.stamp]: true,
-    [state.a.b.c.sid() + state.a.stamp]: true,
-    [state.a.b.c.d.sid() + state.a.stamp]: true,
-    [state.b.title.sid() + state.a.stamp]: true,
-    [state.b.c.sid() + state.a.stamp]: true,
-    [state.b.c.d.sid() + state.a.stamp]: true,
-    [state.b.c.d.e.sid() + state.a.stamp]: true
+    [state.a.sid()]: state.stamp,
+    [state.a.b.sid()]: state.stamp,
+    [state.a.b.c.sid()]: state.stamp,
+    [state.a.b.c.d.sid()]: state.stamp,
+    [state.b.title.sid()]: state.stamp,
+    [state.b.c.sid()]: state.stamp,
+    [state.b.c.d.sid()]: state.stamp,
+    [state.b.c.d.e.sid()]: state.stamp
   }
 
-  // for (var i = 0; i < 1e3; i++) {
-  //   forceObj[i] = true
-  // }
-
-  // for (var i = 0; i < 1e3; i++) {
-  //   force.push((Math.random() * 1000000) | 0)
-  // }
-
-  console.log(force)
+  for (var i = 0; i < 1e3; i++) {
+    forceObj[i] = true
+  }
 
   state.emit('subscription', forceObj)
 
@@ -94,51 +88,19 @@ test('force - basic', (t) => {
     return val[leafStamp]
   }
 
-  force.sort()
-  function arr (leafStamp, val) {
-    // start in middle
-    for (let i = 0, len = val.length; i < len && leafStamp < val[i + 1]; i++) {
-      if (val[i] === leafStamp) {
-        return true
-      }
-    }
+  function f2 (sid, stamp, val) {
+    // do we need -- stamp ?
+    return val[sid] === stamp
   }
-
 
   // const f = require('../lib/subscribe/force')
   var d = Date.now()
-  for (let i = 0; i < 1e5; i++) {
-    f(123213123, forceObj)  // false
-  }
-  console.log('falsy', Date.now() - d, 'ms')
-
-
-  var d = Date.now()
-  for (let i = 0; i < 1e5; i++) {
-    arr(15236, force)  // false
-  }
-  console.log('arr falsy', Date.now() - d, 'ms')
-
-  var d = Date.now()
-  for (let i = 0; i < 1e5; i++) {
-    f(state.b.title.sid() + state.a.stamp, forceObj)  // false
+  for (let i = 0; i < 1e6; i++) {
+    f2(state.b.title.sid(), state.a.stamp, forceObj)  // false
   }
   console.log('find', Date.now() - d, 'ms')
 
-  var d = Date.now()
-  for (let i = 0; i < 1e5; i++) {
-    arr(state.b.title.sid(), force)  // false
-  }
-  console.log('find arr', Date.now() - d, 'ms')
-
-
-  // state.on('x', () => {})
-
-  // var d = Date.now()
-  // for (let i = 0; i < 1e5; i++) {
-  //   // state.emit('x', forceObj)
-  //   state.emit('subscription')
-  //   // state.emit('subscription', forceObj)
+  // for (let i = 0; i < 1e6; i++) {
+  //   f(state.b.title.sid(), state.a.stamp, forceObj)  // false
   // }
-  // console.log(Date.now() - d, 'ms')
 })
