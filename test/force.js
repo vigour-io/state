@@ -43,6 +43,9 @@ test('force - basic', (t) => {
     arr.push(state.path())
     // console.log('update',
   })
+
+  // allow array transformer maybe -- its a lot nicer
+
   var forceObj = {
     [state.a.sid()]: true, // option to add stamp when nessecary -- maybe clean
     [state.a.b.sid()]: true,
