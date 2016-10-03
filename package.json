@@ -1,6 +1,6 @@
 {
   "name": "vigour-state",
-  "version": "4.7.0",
+  "version": "4.8.0",
   "description": "Reactive state management",
   "main": "lib/index.js",
   "scripts": {
