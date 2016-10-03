@@ -2,7 +2,10 @@
 const test = require('tape')
 const State = require('../')
 
-test('force', (t) => {
+test('force - basic', (t) => {
+  // ADD ROOT SUBSCRIPTION
+  // ADD SWITCH
+
   const state = new State({
     a: {
       b: {
