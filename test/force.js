@@ -134,7 +134,7 @@ test('force - switch, root and test', t => {
       [ 'items', '0', 'description' ],
       [ 'items', '1', 'title' ],
       [ 'items', '1', 'description' ]
-    ], 'refires collection over switch, root, test and any'
+    ], 'refires collection over switch, root, test and any and $parent'
   )
 
   t.end()
