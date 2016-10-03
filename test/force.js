@@ -70,7 +70,7 @@ test('force - switch, root and test', t => {
       c: { d: 'hello' }
     },
     items: [
-      { title: '#1', description: 'its #1' },
+      { title: '#1', description: 'its #1', flups: 'its flups!' },
       { title: '#2', description: 'its #2' }
     ],
     field: '$root.b'
@@ -93,7 +93,12 @@ test('force - switch, root and test', t => {
                     title: { val: true }
                   },
                   $pass: {
-                    title: { val: true },
+                    title: {
+                      val: true,
+                      $parent: {
+                        flups: { val: true }
+                      }
+                    },
                     description: { val: true }
                   }
                 }
@@ -106,15 +111,18 @@ test('force - switch, root and test', t => {
   }
 
   state.subscribe(subs, state => arr.push(state.path()))
-  var forceObj = {
+
+  const forceObj = {
     [state.items.sid()]: true,
     [state.items[0].sid()]: true,
     [state.items[1].sid()]: true,
     [state.items[0].title.sid()]: true,
     [state.items[1].title.sid()]: true,
     [state.items[0].description.sid()]: true,
-    [state.items[1].description.sid()]: true
+    [state.items[1].description.sid()]: true,
+    [state.items[0].flups.sid()]: true
   }
+
   arr = []
   state.emit('subscription', forceObj)
 
@@ -122,10 +130,11 @@ test('force - switch, root and test', t => {
     arr,
     [
       [ 'items', '0', 'title' ],
+      [ 'items', '0', 'flups' ],
       [ 'items', '0', 'description' ],
       [ 'items', '1', 'title' ],
       [ 'items', '1', 'description' ]
-    ], 'refires collection over switch, root and test'
+    ], 'refires collection over switch, root, test and any'
   )
 
   t.end()
