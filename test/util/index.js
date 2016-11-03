@@ -1,7 +1,7 @@
 'use strict'
 const subscribe = require('../../lib/subscribe')
 const s = require('../../s')
-const isNumber = require('vigour-util/is/number')
+const isNumber = require('lodash.isfinite')
 const vstamp = require('vigour-stamp')
 const logger = require('./log')
 
